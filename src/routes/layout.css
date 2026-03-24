@@ -2,31 +2,31 @@
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 @plugin 'daisyui' {
-  themes: light --default;
+    themes: light --default;
 }
 
 /* variables */
 :root {
-  --font-size: 16px;
-  --font-color: #616161;
+    --font-size: 16px;
+    --font-color: #616161;
 }
 
 /* defaults */
 html,
 body {
-  color: var(--font-color);
+    color: var(--font-color);
 }
 
 /* overrides */
 .input,
 input {
-  @apply font-(--font-size) text-(--font-color) placeholder-gray-400 ring-0 outline-none focus-within:border-gray-300;
+    @apply font-(--font-size) text-(--font-color) placeholder-gray-400 ring-0 outline-none focus-within:border-gray-300;
 }
 
 .input .icon {
-  @apply opacity-50;
+    @apply opacity-50;
 }
 
 .btn {
-  @apply text-base font-normal text-(--font-color);
+    @apply text-base font-normal text-(--font-color) ring-0 outline-none;
 }
