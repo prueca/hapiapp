@@ -14,10 +14,6 @@
 
 <style lang="postcss">
     @reference 'tailwindcss';
-
-    .nav {
-        @apply border-b border-b-gray-200;
-    }
     .center {
         @apply mx-auto max-w-300;
     }
