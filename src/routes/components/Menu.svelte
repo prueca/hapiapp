@@ -6,7 +6,7 @@
 
 <div class="dropdown dropdown-end lg:hidden">
     <button tabIndex={0} class="btn btn-square btn-ghost btn-xl">
-        <Icon icon="gg:menu-right" width="36" />
+        <Icon icon="gg:menu-right" width="32" />
     </button>
     <ul tabIndex="-1" class="dropdown-content menu menu-sm rounded-box bg-base-100">
         <div class="greetings">Hello there, John Doe!</div>
