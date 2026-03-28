@@ -1,7 +1,7 @@
 <div class="filters">
-    <button class="active btn">All</button>
-    <button class="btn">Active</button>
-    <button class="btn">Inactive</button>
+    <button class="blue btn">All</button>
+    <button class="green btn">Status</button>
+    <button class="red btn">Status</button>
 </div>
 
 <style lang="postcss">
@@ -13,8 +13,14 @@
     .btn {
         @apply grow rounded-lg border-none bg-transparent text-slate-400;
 
-        &.active {
-            @apply bg-(--green) text-white shadow-md;
+        &.green {
+            @apply bg-(--green) text-white;
+        }
+        &.blue {
+            @apply bg-(--blue) text-white;
+        }
+        &.red {
+            @apply bg-(--red) text-white;
         }
     }
 </style>

@@ -24,7 +24,8 @@
     --font-color: #616161;
 
     --primary: #a98b96;
-    --secondary: #97bb7c;
+    --secondary: #ffe1af;
+    --tertiary: #e2b59a;
 
     --shadow-primary:
         rgba(169, 139, 150, 0.5) 0px 20px 25px -5px, rgba(169, 139, 150, 0.5) 0px 10px 10px -5px;
