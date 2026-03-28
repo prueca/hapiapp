@@ -15,7 +15,7 @@
                 </div>
                 <div class="card-actions">
                     <button class="btn btn-lg">
-                        <Icon icon="ic:twotone-camera" width="20" />
+                        <Icon icon="ph:camera-duotone" width="20" />
                         <span>Capture</span>
                     </button>
                     <button class="btn flex btn-lg">

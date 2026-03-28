@@ -7,7 +7,7 @@
 <div class="freezer">
     <div class="flex items-center justify-between">
         <div class="freezer-id">{props.id}</div>
-        <button class="btn btn-ghost btn-sm">
+        <button class="ellipsis-btn btn btn-ghost btn-sm">
             <Icon icon="octicon:ellipsis-16" width="20" />
         </button>
     </div>
@@ -20,10 +20,12 @@
     @reference 'tailwindcss';
 
     .freezer {
-        @apply mb-4 rounded border border-slate-200 bg-slate-50 p-4 md:mb-0;
+        @apply mb-4 rounded-xl border border-slate-200 bg-slate-50 p-4;
     }
-
     .freezer-name {
         @apply mt-2;
+    }
+    .ellipsis-btn {
+        @apply rounded-lg text-slate-400;
     }
 </style>

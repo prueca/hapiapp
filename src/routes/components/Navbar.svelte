@@ -14,11 +14,7 @@
 
 <style lang="postcss">
     @reference 'tailwindcss';
-
-    .nav {
-        @apply border-b border-b-gray-200;
-    }
     .content-wrapper {
-        @apply p-0;
+        @apply border-b border-b-gray-200 p-0;
     }
 </style>

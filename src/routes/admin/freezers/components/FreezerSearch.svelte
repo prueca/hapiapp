@@ -18,7 +18,7 @@
     @reference 'tailwindcss';
 
     .search-bar {
-        @apply mb-8 flex w-full;
+        @apply mb-8;
     }
 
     .input {

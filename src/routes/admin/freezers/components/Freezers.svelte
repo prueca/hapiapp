@@ -16,11 +16,7 @@
 <style lang="postcss">
     @reference 'tailwindcss';
 
-    .list {
-        @apply md:mb-8 md:grid md:grid-cols-2 md:gap-4 lg:grid-cols-3;
-    }
-
     .load-btn {
-        @apply relative mx-auto block w-full max-w-xs;
+        @apply relative mx-auto block w-full max-w-xs rounded-xl;
     }
 </style>
