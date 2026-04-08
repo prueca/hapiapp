@@ -26,16 +26,20 @@
     ]
 </script>
 
-<!-- Open the modal using ID.showModal() method -->
 <dialog id="freezer-details" class="modal" open={getFreezerDetailsFlag()}>
     <div class="modal-box">
-        <button
-            class="close-btn btn btn-circle btn-ghost"
-            onclick={() => toggleFreezerDetails(false)}
-        >
-            <Icon icon="solar:close-square-bold" width="24" />
-        </button>
+        <!-- close button -->
+        <form method="dialog" onsubmit={() => toggleFreezerDetails(false)}>
+            <button
+                class="close-btn btn btn-circle btn-ghost"
+                onclick={() => toggleFreezerDetails(false)}
+            >
+                <Icon icon="solar:close-square-bold" width="24" />
+            </button>
+        </form>
+        <!-- freezer status -->
         <div class="freezer-status">Active</div>
+        <!-- freezer details -->
         <div class="freezer-details">
             {#each details as item}
                 <div class="details-item">
@@ -49,10 +53,12 @@
             <div class="font-medium">Report</div>
             <div class="divider"></div>
         </div>
+        <!-- cabcon -->
         <div class="cabcon">
             <div class="cabcon-label">CABCON</div>
             <div class="cabcon-code">CABCONJAN2020</div>
         </div>
+        <!-- modal actions -->
         <div class="modal-action">
             <div class="flex items-center gap-4">
                 <button class="btn btn-lg" onclick={() => toggleFreezerDetails(false)}>
@@ -67,7 +73,8 @@
             </div>
         </div>
     </div>
-    <form method="dialog" class="modal-backdrop">
+    <!-- closes modal when clicked outside -->
+    <form method="dialog" class="modal-backdrop" onsubmit={() => toggleFreezerDetails(false)}>
         <button>close</button>
     </form>
 </dialog>
@@ -112,6 +119,6 @@
     }
 
     .close-btn {
-        @apply absolute top-2 right-2 border-0 bg-white/0;
+        @apply absolute top-4 right-4 border-0 bg-white/0;
     }
 </style>
