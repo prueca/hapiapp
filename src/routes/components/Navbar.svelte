@@ -1,13 +1,13 @@
 <script lang="ts">
     import Brand from './Brand.svelte'
-    import Menu from './Menu.svelte'
+    import LogoutButton from './LogoutButton.svelte'
 </script>
 
 <div class="nav">
     <div class="content-wrapper">
         <div class="navbar justify-between bg-base-100">
             <Brand />
-            <Menu />
+            <LogoutButton />
         </div>
     </div>
 </div>

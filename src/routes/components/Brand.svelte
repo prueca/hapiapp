@@ -5,7 +5,7 @@
 
 <a href="/">
     <div class="brand-container">
-        <div class="w-8">
+        <div class="w-6">
             <img src={logo} alt="Selecta Logo" />
         </div>
         <div class="app-name">{PUBLIC_APP_NAME}</div>
@@ -16,10 +16,10 @@
     @reference 'tailwindcss';
 
     .brand-container {
-        @apply ml-2 flex items-center gap-4;
+        @apply ml-2 flex items-center gap-2;
 
         .app-name {
-            @apply text-2xl;
+            @apply text-xl;
         }
     }
 </style>
