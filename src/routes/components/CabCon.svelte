@@ -2,56 +2,40 @@
     import Icon from '@iconify/svelte'
 </script>
 
-<div class="w-full">
-    <div class="content-wrapper">
-        <div class="card bg-base-100">
-            <div class="card-body">
-                <h2 class="card-title">Lorem Store</h2>
-                <div class="cabcon">
-                    <div class="cabcon-code">CABCONJAN2020</div>
-                    <button class="copy-btn btn btn-circle btn-ghost btn-sm">
-                        <Icon icon="si:copy-duotone" width="24" />
-                    </button>
-                </div>
-                <div class="card-actions">
-                    <button class="btn btn-lg">
-                        <Icon icon="ph:camera-duotone" width="20" />
-                        <span>Capture</span>
-                    </button>
-                    <button class="btn btn-lg">
-                        <Icon icon="ph:scan-duotone" width="20" />
-                        <span>Scan</span>
-                    </button>
-                </div>
+<div>
+    <div class="cabcon-code">CABCONJAN2020</div>
+    <div class="btn-group">
+        <button class="btn btn-link">
+            <div class="btn-content">
+                <Icon class="block" icon="solar:card-broken" width="32" />
+                <div>Cabcon</div>
             </div>
-        </div>
+        </button>
+        <button class="btn btn-link">
+            <div class="btn-content">
+                <Icon icon="solar:camera-broken" width="32" />
+                <div>Capture</div>
+            </div>
+        </button>
     </div>
 </div>
 
 <style lang="postcss">
     @reference 'tailwindcss';
 
-    .card {
-        @apply w-full rounded-xl bg-(--primary) text-(--accent);
+    .cabcon-code {
+        @apply mb-6 text-xl font-semibold;
     }
 
-    .cabcon {
-        @apply flex items-center gap-2;
-
-        .cabcon-code {
-            @apply text-2xl font-semibold;
-        }
-
-        .copy-btn {
-            @apply border-0 bg-white/0 text-(--accent);
-        }
+    .btn-group {
+        @apply flex w-full items-center justify-around;
     }
 
-    .card-actions {
-        @apply mt-4 gap-4;
+    .btn {
+        @apply no-underline;
+    }
 
-        .btn {
-            @apply w-31 rounded-lg border-none bg-(--secondary) text-base text-(--primary);
-        }
+    .btn-content {
+        @apply flex flex-col items-center justify-center;
     }
 </style>

@@ -12,7 +12,7 @@
 
 /* variables */
 :root {
-    --font-size: 16px;
+    --font-size: 18px;
     --font-color: #616161;
     --font-family: 'Geist', sans-serif;
 
@@ -46,7 +46,7 @@ input {
 }
 
 .content-wrapper {
-    @apply mx-auto max-w-107.5 p-4;
+    @apply mx-auto max-w-200 p-4;
 }
 .themed-btn {
     @apply rounded-lg border-none bg-(--primary) text-(--accent);

@@ -3,7 +3,7 @@
     import LogoutButton from './LogoutButton.svelte'
 </script>
 
-<div class="nav">
+<div>
     <div class="content-wrapper">
         <div class="navbar justify-between bg-base-100">
             <Brand />
@@ -16,6 +16,6 @@
     @reference 'tailwindcss';
 
     .content-wrapper {
-        @apply border-b border-b-gray-200 p-0;
+        @apply p-0;
     }
 </style>
