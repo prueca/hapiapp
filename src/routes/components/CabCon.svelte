@@ -7,13 +7,13 @@
     <div class="btn-group">
         <button class="btn btn-link">
             <div class="btn-content">
-                <Icon class="block" icon="solar:card-broken" width="32" />
+                <Icon class="block" icon="solar:card-outline" width="32" />
                 <div>Cabcon</div>
             </div>
         </button>
         <button class="btn btn-link">
             <div class="btn-content">
-                <Icon icon="solar:camera-broken" width="32" />
+                <Icon icon="solar:camera-outline" width="32" />
                 <div>Capture</div>
             </div>
         </button>
@@ -24,7 +24,7 @@
     @reference 'tailwindcss';
 
     .cabcon-code {
-        @apply mb-6 text-xl font-semibold;
+        @apply mb-6 font-semibold;
     }
 
     .btn-group {
