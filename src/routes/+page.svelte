@@ -1,12 +1,12 @@
 <script lang="ts">
     import Dock from './components/Dock.svelte'
-    import Navbar from './components/Navbar.svelte'
+    import TopBar from './components/TopBar'
     import TabbedContent from './components/TabbedContent.svelte'
-    import FreezerList from './components/Freezers/List.svelte'
+    import FreezerList from './components/FreezerList'
 </script>
 
 <div>
-    <Navbar />
+    <TopBar />
     <TabbedContent />
     <FreezerList />
     <Dock />

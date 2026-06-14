@@ -17,6 +17,6 @@
     @reference 'tailwindcss';
 
     .section-title {
-        @apply mb-4 text-xl;
+        @apply mb-4 text-lg;
     }
 </style>
