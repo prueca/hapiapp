@@ -3,7 +3,7 @@
     import CabCon from './CabCon.svelte'
 </script>
 
-<div class="bg-base-200">
+<div class="bg-gray-100">
     <div class="content-wrapper">
         <div class="store">
             <Icon icon="material-symbols:store-outline-rounded" width="22" />

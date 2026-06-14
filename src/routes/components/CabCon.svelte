@@ -5,16 +5,16 @@
 <div>
     <div class="cabcon-code">CABCONJAN2020</div>
     <div class="btn-group">
-        <button class="btn btn-link">
+        <button class="btn">
             <div class="btn-content">
-                <Icon class="block" icon="solar:card-outline" width="32" />
-                <div>Cabcon</div>
+                <Icon class="block" icon="solar:card-outline" width="28" />
+                <div class="text-sm">Cabcon</div>
             </div>
         </button>
-        <button class="btn btn-link">
+        <button class="btn">
             <div class="btn-content">
-                <Icon icon="solar:camera-outline" width="32" />
-                <div>Capture</div>
+                <Icon icon="solar:camera-outline" width="28" />
+                <div class="text-sm">Capture</div>
             </div>
         </button>
     </div>
@@ -28,14 +28,14 @@
     }
 
     .btn-group {
-        @apply flex w-full items-center justify-around;
+        @apply flex w-full items-center justify-around gap-4;
     }
 
     .btn {
-        @apply no-underline;
+        @apply rounded-lg border-none bg-(--c1) py-4 text-white no-underline shadow-(--gradient-shadow);
     }
 
     .btn-content {
-        @apply flex flex-col items-center justify-center;
+        @apply flex items-center justify-center gap-2;
     }
 </style>
