@@ -6,9 +6,24 @@
     <div class="content-wrapper">
         <div class="section-title">Freezers</div>
         <div class="list">
-            <Item id="123456789" name="8cu Haier Curved Sliding Glass" />
-            <Item id="123456789" name="8cu Haier Curved Sliding Glass" />
-            <Item id="123456789" name="8cu Haier Curved Sliding Glass" />
+            <Item
+                id="123456789"
+                name="8cu Haier Curved Sliding Glass"
+                dateAssigned="01 Jan 2020"
+                cabcon="2020JANCAB"
+            />
+            <Item
+                id="123456789"
+                name="8cu Haier Curved Sliding Glass"
+                dateAssigned="01 Jan 2020"
+                cabcon="2020JANCAB"
+            />
+            <Item
+                id="123456789"
+                name="8cu Haier Curved Sliding Glass"
+                dateAssigned="01 Jan 2020"
+                cabcon="2020JANCAB"
+            />
         </div>
     </div>
 </div>
