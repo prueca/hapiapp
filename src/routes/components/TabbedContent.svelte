@@ -5,7 +5,7 @@
 
 <div class="bg-gray-100">
     <div class="content-wrapper">
-        <div class="store">
+        <div class="store-name">
             <Icon icon="material-symbols:store-outline-rounded" width="22" />
             <div>Lorem Ipsum Store</div>
         </div>
@@ -36,7 +36,7 @@
 <style lang="postcss">
     @reference 'tailwindcss';
 
-    .store {
+    .store-name {
         @apply mb-4 flex items-center gap-2;
     }
 </style>
