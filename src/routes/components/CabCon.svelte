@@ -32,7 +32,7 @@
     }
 
     .btn {
-        @apply rounded-lg border-none bg-(--c1) text-white no-underline shadow-(--gradient-shadow);
+        @apply rounded-lg border-none bg-(--c1) text-white no-underline shadow-(--c1-shadow);
     }
 
     .btn-content {
