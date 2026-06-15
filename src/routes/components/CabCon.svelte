@@ -3,13 +3,7 @@
 </script>
 
 <div>
-    <!-- <div class="cabcon-code">CABCONJAN2020</div> -->
-    <div class="cabcon">
-        <div class="cabcon-code">CABCONJAN2020</div>
-        <button class="copy-btn btn btn-ghost btn-xs">
-            <Icon icon="lucide-lab:copy-text" width="22" />
-        </button>
-    </div>
+    <div class="cabcon-code">CABCONJAN2020</div>
     <div class="btn-group">
         <button class="btn">
             <div class="btn-content">
@@ -29,20 +23,8 @@
 <style lang="postcss">
     @reference 'tailwindcss';
 
-    /* .cabcon-code {
+    .cabcon-code {
         @apply mb-6 font-semibold;
-    } */
-
-    .cabcon {
-        @apply mb-6 flex items-center gap-2;
-
-        .cabcon-code {
-            @apply font-semibold;
-        }
-
-        .copy-btn {
-            @apply p-0;
-        }
     }
 
     .btn-group {

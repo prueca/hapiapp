@@ -48,5 +48,5 @@ input {
 }
 
 .content-wrapper {
-    @apply mx-auto max-w-200 p-4;
+    @apply mx-auto max-w-150 p-4;
 }

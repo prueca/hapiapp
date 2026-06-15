@@ -6,12 +6,12 @@
 
 <div class="freezer">
     <div class="flex items-center justify-between">
-        <div>{props.name}</div>
-        <button class="ellipsis-btn btn p-0 btn-ghost btn-sm">
+        <div>{props.id}</div>
+        <button class="ellipsis-btn btn p-0 btn-link btn-sm">
             <Icon icon="octicon:ellipsis-16" width="20" />
         </button>
     </div>
-    <div class="freezer-id">{props.id}</div>
+    <div class="freezer-name">{props.name}</div>
     <div class="data">
         <div class="lbl">Cabcon</div>
         <div class="val">{props.cabcon}</div>
@@ -28,7 +28,7 @@
     .freezer {
         @apply mb-4 rounded-lg border border-slate-200 bg-slate-50 px-4 py-2;
     }
-    .freezer-id {
+    .freezer-name {
         @apply mb-4;
     }
     .data {

@@ -23,6 +23,6 @@
     @reference 'tailwindcss';
 
     .dock {
-        @apply bg-(--c1) text-white;
+        @apply left-1/2 max-w-150 -translate-x-1/2 bg-(--c1) text-white;
     }
 </style>
