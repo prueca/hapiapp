@@ -7,13 +7,13 @@
     <div class="btn-group">
         <button class="btn">
             <div class="btn-content">
-                <Icon class="block" icon="solar:card-outline" width="28" />
+                <Icon class="block" icon="solar:card-outline" width="22" />
                 <div class="text-sm">Cabcon</div>
             </div>
         </button>
         <button class="btn">
             <div class="btn-content">
-                <Icon icon="solar:camera-outline" width="28" />
+                <Icon icon="solar:camera-outline" width="22" />
                 <div class="text-sm">Capture</div>
             </div>
         </button>
@@ -32,7 +32,7 @@
     }
 
     .btn {
-        @apply rounded-lg border-none bg-(--c1) py-4 text-white no-underline shadow-(--gradient-shadow);
+        @apply rounded-lg border-none bg-(--c1) text-white no-underline shadow-(--gradient-shadow);
     }
 
     .btn-content {
