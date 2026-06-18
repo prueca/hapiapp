@@ -1,6 +1,7 @@
 <script lang="ts">
     import Icon from '@iconify/svelte'
     import Cabcon from './Cabcon.svelte'
+    import Account from './Account.svelte'
 </script>
 
 <div class="content-wrapper bg-gray-100">
@@ -26,7 +27,7 @@
             <span class="px-2 md:px-4">Account</span>
         </label>
         <div class="tab-content border-base-300 bg-base-100 p-6">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae, quos.
+            <Account />
         </div>
     </div>
 </div>
