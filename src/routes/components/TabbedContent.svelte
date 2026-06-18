@@ -1,6 +1,6 @@
 <script lang="ts">
     import Icon from '@iconify/svelte'
-    import Cabcon from './Cabcon.svelte'
+    import Cabcon from './CabconCode.svelte'
     import Account from './Account.svelte'
 </script>
 
