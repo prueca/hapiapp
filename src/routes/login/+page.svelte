@@ -27,7 +27,7 @@
             <!-- username -->
             <div class="field">
                 <div class="field-label">Username</div>
-                <label class="input input-xl">
+                <label class="input">
                     <Icon class="icon" icon="mi:user" width="20" />
                     <input type="email" placeholder="Enter username" />
                 </label>
@@ -36,7 +36,7 @@
             <!-- company code -->
             <div class="field">
                 <div class="field-label">Company code</div>
-                <label class="input input-xl">
+                <label class="input">
                     <Icon class="icon" icon="streamline:business-card" width="20" />
                     <input type="text" placeholder="Enter company code" />
                 </label>
@@ -45,7 +45,7 @@
             <!-- password -->
             <div class="field">
                 <div class="field-label">Password</div>
-                <label class="input input-xl">
+                <label class="input">
                     <Icon class="icon" icon="material-symbols:key-outline-rounded" width="20" />
                     <input type={showPassword ? 'text' : 'password'} placeholder="Enter password" />
                     <button class="cursor-pointer" onclick={revealPassword}>
@@ -68,7 +68,7 @@
             </div>
 
             <!-- login button -->
-            <button class="login-btn btn btn-xl"> Login </button>
+            <button class="login-btn btn"> Login </button>
         </div>
     </div>
 </div>

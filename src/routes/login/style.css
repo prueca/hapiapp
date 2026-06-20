@@ -24,11 +24,11 @@
     @apply mb-4 space-y-4;
 
     .field .field-label {
-        @apply mb-1;
+        @apply mb-1 text-sm;
     }
 
     .field .input {
-        @apply w-full;
+        @apply w-full rounded-lg;
     }
 }
 
@@ -38,11 +38,11 @@
 
         .forgot-password,
         .remember-me {
-            @apply text-slate-500;
+            @apply text-sm text-(--font-color);
         }
     }
 
     .login-btn {
-        @apply w-full text-xl;
+        @apply w-full rounded-lg border-none bg-(--c1) text-white;
     }
 }

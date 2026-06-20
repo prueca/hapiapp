@@ -16,11 +16,17 @@
     --font-color: #616161;
     --font-family: 'Geist', sans-serif;
 
-    --c1: #fa7166;
-    --c2: #58c3b1;
+    /* --c1: #fa7166; */
+    /* --c2: #58c3b1; */
+
+    /* --c1-shadow:
+        rgba(250, 113, 102, 0.5) 0px 10px 25px -5px, rgba(250, 113, 102, 0.5) 0px 8px 10px -5px; */
+
+    --c1: #e16660;
+    --c2: #fb7b77;
 
     --c1-shadow:
-        rgba(250, 113, 102, 0.5) 0px 10px 25px -5px, rgba(250, 113, 102, 0.5) 0px 8px 10px -5px;
+        rgba(225, 102, 96, 0.5) 0px 10px 25px -5px, rgba(225, 102, 96, 0.5) 0px 8px 10px -5px;
 }
 
 /* defaults */
