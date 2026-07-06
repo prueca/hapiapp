@@ -1,0 +1,48 @@
+@reference 'tailwindcss';
+
+.center {
+    @apply flex h-screen items-center justify-center;
+
+    .form-container {
+        @apply w-full max-w-[420px] px-4;
+
+        .message {
+            @apply mb-4;
+        }
+    }
+}
+
+.logo-container {
+    @apply mx-auto mb-8 w-40;
+
+    .logo-container img {
+        @apply h-full w-full object-contain;
+    }
+}
+
+.fields-container {
+    @apply mb-4 space-y-4;
+
+    .field .field-label {
+        @apply mb-1 text-sm;
+    }
+
+    .field .input {
+        @apply w-full rounded-lg;
+    }
+}
+
+.bottom-section {
+    .options {
+        @apply my-4 flex items-center justify-between;
+
+        .forgot-password,
+        .remember-me {
+            @apply text-sm text-(--font-color);
+        }
+    }
+
+    .login-btn {
+        @apply w-full rounded-lg border-none bg-(--c1) text-white;
+    }
+}
