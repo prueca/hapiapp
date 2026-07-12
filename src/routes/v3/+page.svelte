@@ -8,9 +8,7 @@
 </script>
 
 <div>
-    <TopBar />
     <MerchantName />
-    <!-- <ScanButton /> -->
     <TabbedContent />
     <Dock />
     <FloatingScanButton />
