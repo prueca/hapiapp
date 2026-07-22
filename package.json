@@ -43,6 +43,8 @@
 	"dependencies": {
 		"barcode-detector": "^3.2.1",
 		"daisyui": "^5.5.19",
-		"lodash": "^4.18.1"
+		"ky": "^2.0.2",
+		"lodash": "^4.18.1",
+		"zod": "^4.4.3"
 	}
 }
