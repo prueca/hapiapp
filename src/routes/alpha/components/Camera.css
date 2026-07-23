@@ -1,0 +1,45 @@
+@reference 'tailwindcss';
+
+.content-wrapper {
+    @apply p-0;
+}
+
+.camera-section {
+    @apply relative flex h-[48vh] items-center justify-center bg-gray-800;
+}
+
+.overlay {
+    @apply pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-between bg-linear-to-b from-black/70 via-transparent to-transparent p-4 backdrop-blur-sm sm:p-6;
+}
+
+.brand-logo {
+    @apply flex items-center gap-3;
+}
+
+.brand-text {
+    @apply text-sm leading-none font-medium text-gray-200 sm:text-base;
+}
+
+.cabcon-code {
+    @apply text-base font-medium whitespace-nowrap text-white sm:text-lg;
+}
+
+.video-wrapper {
+    @apply flex h-full w-full items-center justify-center overflow-hidden px-0;
+}
+
+.error-message {
+    @apply pointer-events-none absolute bottom-28 left-1/2 z-50 max-w-[90vw] -translate-x-1/2 transform rounded-xl bg-red-500/95 px-6 py-3 text-center text-sm font-medium text-white shadow-lg backdrop-blur-md;
+}
+
+.controls {
+    @apply absolute inset-x-0 bottom-0 z-20 flex items-center justify-evenly gap-8 bg-linear-to-t from-black/80 via-black/30 to-transparent p-5 sm:p-6;
+}
+
+.btn-wrapper {
+    @apply flex flex-col items-center justify-center gap-2;
+}
+
+.btn-label {
+    @apply text-xs text-white;
+}
