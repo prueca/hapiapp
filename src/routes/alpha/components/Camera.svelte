@@ -1,5 +1,6 @@
 <script lang="ts">
     import './Camera.css'
+    import Icon from '@iconify/svelte'
     import logo from '$lib/assets/Selecta_Logo_2003.svg?url'
     import { onMount } from 'svelte'
     import camera from '../Camera.state.svelte'
@@ -27,6 +28,9 @@
             <video bind:this={camera.video} autoplay playsinline class="h-full w-full object-cover">
             </video>
         </div>
+
+        <!-- scan -->
+        <div class="scan-box"></div>
 
         <!-- error message -->
         <div class="error-message" class:hidden={camera.error === ''}>
