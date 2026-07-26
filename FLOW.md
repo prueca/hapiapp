@@ -59,6 +59,57 @@ All flows share the same submission result handling:
 
 ---
 
+## Cabcon Submission Process
+
+**Code of the Month Validation**
+
+->> Api call to retrieve the current Cabcon Code of the Month
+
+->> Retrieve the code of the month that is watermarked on the captured image
+
+->> Validate the equality of retrieved code of the month (via api call) with the code of the month watermarked from the image (via tesseract)
+
+**Barcode Validation**
+
+->> Retrieve the barcode from the captured image (via html5qrcode)
+
+->> Make api call to retrieve freezer with the barcode
+
+**Submit**
+
+->> Logically freezer/s are assigned automatically where it is deployed to merchant's premises as stated in the general cabcon submission
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant S as Submission Service
+    participant A as API
+    participant R as Reader (Tesseract / html5qrcode)
+
+    alt Good Internet Connection
+        U->>S: Capture Freezer Images
+        S->>A: Retrieve Code of the Month
+        A-->>S: Return current code
+        S->>R: Extract watermarked code from image
+        R-->>S: Return watermark code
+        S->>S: Validate codes match
+
+        alt Code matched
+            S->>R: Extract barcode from image
+            R-->>S: Return barcode
+            S->>A: Retrieve freezer by barcode
+            A-->>S: Return freezer data
+            S->>S: Assign freezers to merchant premises
+            S-->>U: Cabcon Submitted Successfully - Matched Result
+        else Code mismatch
+            S-->>U: Mismatch Result (barcode/code not found)
+        end
+    else Poor Internet Connection
+        U->>S: Submit Manually (no network)
+        S-->>U: Manually Submitted - Pending sync
+    end
+```
+
 ## Hapistore Cabcon Submission (Home Page)
 
 User navigates to freezer card, click on the capture button and redirects to capture page.
