@@ -159,8 +159,11 @@ class Camera {
                 return
             }
 
+            const blob = await (await fetch(dataURL)).blob()
+            const url = URL.createObjectURL(blob)
+
             const link = document.createElement('a')
-            link.href = dataURL
+            link.href = url
             link.download = `captured_${store}_${Date.now()}.png`
 
             document.body.appendChild(link)

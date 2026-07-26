@@ -1,9 +1,9 @@
+import dotenv from 'dotenv'
 import tailwindcss from '@tailwindcss/vite'
 import { sveltekit } from '@sveltejs/kit/vite'
 import { defineConfig } from 'vite'
 import fs from 'node:fs'
 import path from 'node:path'
-import dotenv from 'dotenv'
 
 dotenv.config()
 
