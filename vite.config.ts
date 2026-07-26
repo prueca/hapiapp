@@ -3,6 +3,9 @@ import { sveltekit } from '@sveltejs/kit/vite'
 import { defineConfig } from 'vite'
 import fs from 'node:fs'
 import path from 'node:path'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 export default defineConfig({
     plugins: [tailwindcss(), sveltekit()],
@@ -10,8 +13,8 @@ export default defineConfig({
         host: true, // 0.0.0.0 — accessible from local network
         strictPort: true, // use the exact port, won't auto-increment
         https: {
-            key: fs.readFileSync(path.resolve(__dirname, 'private.key')),
-            cert: fs.readFileSync(path.resolve(__dirname, 'cert.pem'))
+            key: fs.readFileSync(path.resolve(__dirname, String(process.env.TLS_KEY_PATH))),
+            cert: fs.readFileSync(path.resolve(__dirname, String(process.env.TLS_CERT_PATH)))
         }
     }
 })
