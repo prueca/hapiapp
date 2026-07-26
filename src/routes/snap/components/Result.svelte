@@ -23,8 +23,8 @@
             <div>{formattedDate} {formattedTime}</div>
         </div>
         <div class="flex">
-            <div>Capturing image for</div>
-            <div>{camera.store}</div>
+            <div>Scan result:</div>
+            <div>{camera.scanResult}</div>
         </div>
     </div>
 </div>

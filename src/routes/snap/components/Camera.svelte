@@ -1,6 +1,5 @@
 <script lang="ts">
     import './Camera.css'
-    import Icon from '@iconify/svelte'
     import logo from '$lib/assets/Selecta_Logo_2003.svg?url'
     import { onMount } from 'svelte'
     import camera from '../Camera.state.svelte'
@@ -19,7 +18,7 @@
                 <span class="brand-text">Hapi App</span>
             </div>
 
-            <!-- cabcon-code -->
+            <!-- cabcon code -->
             <div class="cabcon-code">CABCONJAN2020</div>
         </div>
 

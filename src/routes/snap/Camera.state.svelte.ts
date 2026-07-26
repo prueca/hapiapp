@@ -1,3 +1,4 @@
+import { BrowserMultiFormatReader } from '@zxing/browser'
 import logo from '$lib/assets/Selecta_Logo_2003.svg?url'
 import _ from 'lodash'
 
@@ -6,6 +7,7 @@ class Camera {
     stream: MediaStream | null = $state(null)
     store: string = $state('')
     error: string = $state('')
+    scanResult: string = $state('')
 
     async on() {
         try {
@@ -151,6 +153,14 @@ class Camera {
             ctx.fillText('CABCONJAN2020', canvasWidth - paddingX, headerCenterY)
 
             ctx.textAlign = 'start'
+
+            try {
+                const reader = new BrowserMultiFormatReader()
+                const result = reader.decodeFromCanvas(ctx.canvas)
+                this.scanResult = result.getText()
+            } catch {
+                this.scanResult = 'Error'
+            }
 
             const dataURL = canvas.toDataURL('image/png')
 
