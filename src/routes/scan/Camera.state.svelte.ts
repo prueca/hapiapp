@@ -79,7 +79,7 @@ class Camera {
             const [result] = await detector.detect(video)
 
             if (result) {
-                this.scanResult = `Scan Result: ${result.rawValue}`
+                this.scanResult = result.rawValue
             }
         }
 
