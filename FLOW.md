@@ -211,54 +211,70 @@ flowchart TD
 
 # Asset Tracking Flow
 
-Track the deployment lifecycle of freezers — all originate straight from distributors' warehouses and are moved through to franchisee premises.
+Track the deployment lifecycle of freezers through their logistics chain: **Distributor → Dealer → Franchisee**. All units originate from the distributor's warehouse, pass through the dealer for batch preparation, and end up deployed at franchisee premises.
 
-## Deployment Path
+## Deployment Initiation
 
-Two scenarios initiate the freeze lifecycle:
+Either party can trigger the deployment process:
 
-1. **Distributor-Initiated** — Distributor lists all freezer assets in warehouse inventory and assigns them for deployment; Dealer notified via dashboard, approves or rejects; once approved, freezers are dispatched in batches to existing franchisee premises and new franchisee premises (see Deployment Types below).
-2. **Dealer-Initiated** — Dealer requests additional freeze assets from the system for store/warehouse storage at their premises; distribution fulfills the request after approval confirmation; once confirmed dispatches batched, assigned freezers to that dealer premise directly.
+1. **Distributor-Initiated** — Distributor creates a freezer deployment list from warehouse inventory and submits it to the Dealer. The Dealer reviews on their dashboard and either approves or rejects. If rejected, the process ends. If approved, freezers are dispatched from distributor to dealer, then on to franchisee premises.
+2. **Dealer-Initiated** — Dealer submits a request for additional freezer assets. Distributor reviews and confirms dispatch. Freezers follow the same logistics path: distributor ships to dealer, dealer prepares the batch, then ships to franchisee.
 
 ## Deployment Types
 
-1. Deploy freezer(s) from the distributor to brand-new franchises.
-2. Upgrade an existing franchise's current freezer with a new one.
-3. Downgrade — assign a different model than previously installed.
-4. Replace a broken/fractured unit at any store.
+At the deployment-to-franchisee step, one of four scenarios applies:
+
+1. **New franchise** — first-time setup with new units at a brand-new premises
+2. **Upgrade** — swap existing freezer for a higher-tier model
+3. **Downgrade** — replace existing unit with a lower-tier model
+4. **Replace** — like-for-like replacement of a broken or fractured unit
 
 ## Diagrams
 
-### Distribution-Initiated Sequence
+### Distributor-Initiated Flow
 
-Freezers originate from distributor warehouses and ship to franchisee premises under two scenarios. This diagram covers the **Distribution-Initiated** path — distributor lists all freeze assets in inventory, submits assignment for deployment, dealer approves, then dispatches to new or existing franchisees based on deployment type (see Deployment Types →).
+Distributor submits deployment list → Dealer approves/rejects → Distributor dispatches from warehouse → Dealer receives and prepares batch → deploys to new or existing franchisee premises.
 
 ```mermaid
 sequenceDiagram
     participant Dist as Distributor
     participant Deal as Dealer
+    participant NF as New Franchisee
+    participant EF as Existing Franchisee
 
-    Note over Dist: Distribution-Initiated — Freezers originate from distributor warehouse
-
-    Dist->>Deal: List all freeze assets in inventory for assignment; submit deploy list
-
-    Deal-->>Dist: Confirm / approve via dashboard (batched to existing vs. new franchisees)
+    note over Dist,Deal: Distributor initiates deployment
+    Dist->>Deal: Submit freezer deployment list
+    note right of Deal: Approve or reject
+    Dist->>Deal: Dispatch freezers from warehouse
+    Deal->>Deal: Receive and prepare batch
+    note left of NF: New franchise: new units + setup guide
+    Deal->>NF: Deploy to new premises
+    note left of EF: Upgrade/downgrade/replace: swap unit
+    Deal->>EF: Deploy to existing premises
 ```
 
-### Dealer Request Sequence
+> **If Dealer rejects** — process ends. Deployment types: new franchise, upgrade downgrade, or replace broken unit.
 
-**Dealer-Initiated** — the dealer submits a request to add more freeze assets into their premises for store/warehouse storage. The sequence diagram shows Dealer → Distributor path directly — no scheduler in between, distribution fulfills after approval confirms dispatch. The batched freezer assignment is assigned according to the four Deployment Types (see Distribution Trigger Path).
+### Dealer-Initiated Flow
+
+Dealer submits asset request → Distributor approves → Distributor dispatches from warehouse → Dealer receives and prepares batch → deploys to new or existing franchisee premises.
 
 ```mermaid
 sequenceDiagram
     participant Dist as Distributor
     participant Deal as Dealer
+    participant NF as New Franchisee
+    participant EF as Existing Franchisee
 
-    Note over Deal,Dist: Dealer Request for Additional Assets — no scheduler
-
-    Deal->>Dist: Submit freeze asset deployment request
-
-    Dist-->>Deal: Confirm assignment; approve scheduled dispatch
+    note over Deal,Dist: Dealer requests additional assets
+    Deal->>Dist: Submit freezer request
+    Dist-->>Deal: Approve and confirm dispatch
+    Dist->>Deal: Dispatch freezers from warehouse
+    Deal->>Deal: Receive and prepare batch
+    note left of NF: New franchise: new units + setup guide
+    Deal->>NF: Deploy to new premises
+    note left of EF: Upgrade/downgrade/replace: swap unit
+    Deal->>EF: Deploy to existing premises
 ```
 
 ---
