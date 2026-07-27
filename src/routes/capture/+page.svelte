@@ -163,7 +163,7 @@
     }
 </script>
 
-<div class="flex h-screen flex-col overflow-hidden bg-gray-950">
+<div id="section-capture" class="flex h-screen flex-col overflow-hidden bg-gray-950">
     <!-- CAMERA SECTION → Flex 2/4 of viewport (50%) -->
     <div class="relative flex h-[48vh] items-center justify-center bg-gray-800">
         <!-- OVERLAY HEADER -->
@@ -237,7 +237,34 @@
     <div class="h-px w-full bg-gray-800/50"></div>
 
     <!-- NEW UI SECTION → Flex 1/2 of viewport (remaining 50%) -->
-    <div class="flex h-[48vh] flex-col items-center justify-center overflow-y-auto bg-gray-50 p-4">
-        <!-- TODO: Add your new UI components here (tabs, lists, grids, etc.) -->
+    <div
+        id="section-validation"
+        class="flex h-[48vh] flex-col items-center justify-center overflow-y-auto bg-gray-50 p-4"
+    >
+        <!-- TOP: Upload + Validate buttons side by side -->
+        <div class="flex items-center justify-center gap-3">
+            <button
+                type="button"
+                class="btn rounded-lg border-none bg-white px-5 py-2.5 text-base font-medium text-gray-700 active:bg-gray-50"
+                >Upload</button
+            >
+            <button
+                type="button"
+                class="btn rounded-lg border-none bg-white px-5 py-2.5 text-base font-medium text-gray-700 active:bg-gray-50"
+                >Validate</button
+            >
+        </div>
+
+        <!-- MIDDLE: 4 lines blank preview space -->
+        <div class="h-[24vh] w-full"></div>
+
+        <!-- BOTTOM: Submit button alone -->
+        <div class="mt-auto mb-2 flex items-center justify-center gap-3">
+            <button
+                type="button"
+                class="btn rounded-lg border bg-green-600 px-6 py-3 text-lg font-bold text-white shadow-md transition-all active:bg-green-700"
+                >Submit</button
+            >
+        </div>
     </div>
 </div>

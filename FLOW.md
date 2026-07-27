@@ -206,3 +206,75 @@ flowchart TD
 
     I --> K[Manual entry completed Pending sync]
 ```
+
+---
+
+# Asset Tracking Flow
+
+Track the deployment lifecycle of freezers through their logistics chain: **Distributor → Dealer → Franchisee**. All units originate from the distributor's warehouse, pass through the dealer for batch preparation, and end up deployed at franchisee premises.
+
+## Deployment Initiation
+
+Either party can trigger the deployment process:
+
+1. **Distributor-Initiated** — Distributor creates a freezer deployment list from warehouse inventory and submits it to the Dealer. The Dealer reviews on their dashboard and either approves or rejects. If rejected, the process ends. If approved, freezers are dispatched from distributor to dealer, then on to franchisee premises.
+2. **Dealer-Initiated** — Dealer submits a request for additional freezer assets. Distributor reviews and confirms dispatch. Freezers follow the same logistics path: distributor ships to dealer, dealer prepares the batch, then ships to franchisee.
+
+## Deployment Types
+
+At the deployment-to-franchisee step, one of four scenarios applies:
+
+1. **New franchise** — first-time setup with new units at a brand-new premises
+2. **Upgrade** — swap existing freezer for a higher-tier model
+3. **Downgrade** — replace existing unit with a lower-tier model
+4. **Replace** — like-for-like replacement of a broken or fractured unit
+
+## Diagrams
+
+### Distributor-Initiated Flow
+
+Distributor submits deployment list → Dealer approves/rejects → Distributor dispatches from warehouse → Dealer receives and prepares batch → deploys to new or existing franchisee premises.
+
+```mermaid
+sequenceDiagram
+    participant Dist as Distributor
+    participant Deal as Dealer
+    participant NF as New Franchisee
+    participant EF as Existing Franchisee
+
+    note over Dist,Deal: Distributor initiates deployment
+    Dist->>Deal: Submit freezer deployment list
+    note right of Deal: Approve or reject
+    Dist->>Deal: Dispatch freezers from warehouse
+    Deal->>Deal: Receive and prepare batch
+    note left of NF: New franchise: new units + setup guide
+    Deal->>NF: Deploy to new premises
+    note left of EF: Upgrade/downgrade/replace: swap unit
+    Deal->>EF: Deploy to existing premises
+```
+
+> **If Dealer rejects** — process ends. Deployment types: new franchise, upgrade downgrade, or replace broken unit.
+
+### Dealer-Initiated Flow
+
+Dealer submits asset request → Distributor approves → Distributor dispatches from warehouse → Dealer receives and prepares batch → deploys to new or existing franchisee premises.
+
+```mermaid
+sequenceDiagram
+    participant Dist as Distributor
+    participant Deal as Dealer
+    participant NF as New Franchisee
+    participant EF as Existing Franchisee
+
+    note over Deal,Dist: Dealer requests additional assets
+    Deal->>Dist: Submit freezer request
+    Dist-->>Deal: Approve and confirm dispatch
+    Dist->>Deal: Dispatch freezers from warehouse
+    Deal->>Deal: Receive and prepare batch
+    note left of NF: New franchise: new units + setup guide
+    Deal->>NF: Deploy to new premises
+    note left of EF: Upgrade/downgrade/replace: swap unit
+    Deal->>EF: Deploy to existing premises
+```
+
+---
