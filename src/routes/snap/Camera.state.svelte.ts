@@ -1,4 +1,5 @@
 import { BrowserMultiFormatReader } from '@zxing/browser'
+import type { Result } from '@zxing/library'
 import logo from '$lib/assets/Selecta_Logo_2003.svg?url'
 import _ from 'lodash'
 
@@ -7,7 +8,7 @@ class Camera {
     stream: MediaStream | null = $state(null)
     store: string = $state('')
     error: string = $state('')
-    scanResult: string = $state('')
+    scanResult: string = $state('Scanning for barcode...')
 
     async on() {
         try {
@@ -18,6 +19,7 @@ class Camera {
 
             if (this.video && this.stream) {
                 this.video.srcObject = this.stream
+                this.scan()
             }
         } catch (err) {
             const errObj = err as DOMException
@@ -38,6 +40,18 @@ class Camera {
 
             console.error('Error accessing camera:', err)
         }
+    }
+
+    async scan() {
+        const reader = new BrowserMultiFormatReader()
+
+        const callback = (result: Result | undefined) => {
+            if (result) {
+                this.scanResult = `Scan Result: ${result.getText()}`
+            }
+        }
+
+        await reader.decodeFromVideoDevice(undefined, undefined, callback)
     }
 
     async capture() {
@@ -153,14 +167,6 @@ class Camera {
             ctx.fillText('CABCONJAN2020', canvasWidth - paddingX, headerCenterY)
 
             ctx.textAlign = 'start'
-
-            try {
-                const reader = new BrowserMultiFormatReader()
-                const result = reader.decodeFromCanvas(ctx.canvas)
-                this.scanResult = result.getText()
-            } catch {
-                this.scanResult = 'Error'
-            }
 
             const dataURL = canvas.toDataURL('image/png')
 

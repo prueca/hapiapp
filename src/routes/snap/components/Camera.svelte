@@ -24,7 +24,13 @@
 
         <!-- video -->
         <div class="video-wrapper">
-            <video bind:this={camera.video} autoplay playsinline class="h-full w-full object-cover">
+            <video
+                id="video"
+                bind:this={camera.video}
+                autoplay
+                playsinline
+                class="h-full w-full object-cover"
+            >
             </video>
         </div>
 
