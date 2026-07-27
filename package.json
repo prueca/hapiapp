@@ -41,8 +41,7 @@
 		"vite": "^7.3.1"
 	},
 	"dependencies": {
-		"@zxing/browser": "^0.2.1",
-		"@zxing/library": "^0.23.0",
+		"barcode-detector": "^3.2.1",
 		"daisyui": "^5.5.19",
 		"lodash": "^4.18.1"
 	}

@@ -1,5 +1,4 @@
-import { BrowserMultiFormatReader } from '@zxing/browser'
-import type { Result } from '@zxing/library'
+import { BarcodeDetector } from 'barcode-detector'
 import logo from '$lib/assets/Selecta_Logo_2003.svg?url'
 import _ from 'lodash'
 
@@ -43,15 +42,33 @@ class Camera {
     }
 
     async scan() {
-        const reader = new BrowserMultiFormatReader()
+        const detector = new BarcodeDetector({
+            formats: ['any']
+        })
 
-        const callback = (result: Result | undefined) => {
-            if (result) {
-                this.scanResult = `Scan Result: ${result.getText()}`
-            }
+        const video = document.querySelector<HTMLVideoElement>('#video')
+
+        if (!video) {
+            return
         }
 
-        await reader.decodeFromVideoDevice(undefined, undefined, callback)
+        await new Promise<void>((resolve) => {
+            if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+                resolve()
+            } else {
+                video.addEventListener('loadeddata', () => resolve(), { once: true })
+            }
+        })
+
+        const [result] = await detector.detect(video)
+
+        if (result) {
+            this.scanResult = `Scan Result: ${result.rawValue}`
+        }
+
+        const scan = this.scan.bind(this)
+
+        requestAnimationFrame(scan)
     }
 
     async capture() {
