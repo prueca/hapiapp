@@ -5,9 +5,15 @@ import _ from 'lodash'
 class Camera {
     video: HTMLVideoElement | undefined
     stream: MediaStream | null = $state(null)
-    store: string = $state('')
-    error: string = $state('')
+
+    storeName: string = $state('Lorem Ipsum')
+    dateTime: Date = $state(new Date())
+
     scanResult: string = $state('Scanning for barcode...')
+    error: string = $state('')
+
+    private lastTime = 0
+    private interval = 1000
 
     async on() {
         try {
@@ -18,7 +24,8 @@ class Camera {
 
             if (this.video && this.stream) {
                 this.video.srcObject = this.stream
-                this.scan()
+                const scan = this.scan.bind(this)
+                requestAnimationFrame(scan)
             }
         } catch (err) {
             const errObj = err as DOMException
@@ -41,29 +48,39 @@ class Camera {
         }
     }
 
-    async scan() {
-        const detector = new BarcodeDetector({
-            formats: ['any']
-        })
-
-        const video = document.querySelector<HTMLVideoElement>('#video')
-
-        if (!video) {
-            return
+    async scan(timestamp: number) {
+        if (!this.lastTime) {
+            this.lastTime = timestamp
         }
 
-        await new Promise<void>((resolve) => {
-            if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-                resolve()
-            } else {
-                video.addEventListener('loadeddata', () => resolve(), { once: true })
+        const elapsed = timestamp - this.lastTime
+
+        if (elapsed >= this.interval) {
+            this.lastTime = timestamp - (elapsed % this.interval)
+
+            const detector = new BarcodeDetector({
+                formats: ['any']
+            })
+
+            const video = document.querySelector<HTMLVideoElement>('#video')
+
+            if (!video) {
+                return
             }
-        })
 
-        const [result] = await detector.detect(video)
+            await new Promise<void>((resolve) => {
+                if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+                    resolve()
+                } else {
+                    video.addEventListener('loadeddata', () => resolve(), { once: true })
+                }
+            })
 
-        if (result) {
-            this.scanResult = `Scan Result: ${result.rawValue}`
+            const [result] = await detector.detect(video)
+
+            if (result) {
+                this.scanResult = `Scan Result: ${result.rawValue}`
+            }
         }
 
         const scan = this.scan.bind(this)
@@ -78,9 +95,9 @@ class Camera {
                 return
             }
 
-            const store = _.chain(this.store).trim().replace(/\s+/g, '_').toLower().value()
+            const storeName = _.chain(this.storeName).trim().replace(/\s+/g, '_').toLower().value()
 
-            if (!store) {
+            if (!storeName) {
                 this.error = 'Store name is must be provided.'
                 return
             }
@@ -133,7 +150,7 @@ class Camera {
             const paddingX = Math.floor(canvasWidth * 0.04)
             const headerHeight = canvasWidth > 0 ? Math.round(canvasHeight * 0.15) : 80
 
-            const gradient = ctx.createLinearGradient(0, 0, 0, headerHeight)
+            let gradient = ctx.createLinearGradient(0, 0, 0, headerHeight)
             gradient.addColorStop(0, 'rgba(0, 0, 0, 0.75)')
             gradient.addColorStop(1, 'rgba(0, 0, 0, 0)')
             ctx.fillStyle = gradient
@@ -183,6 +200,28 @@ class Camera {
             // Align CABCONJAN2020 to same centerY as logo and Hapi App
             ctx.fillText('CABCONJAN2020', canvasWidth - paddingX, headerCenterY)
 
+            const fadeHeight = 150
+            gradient = ctx.createLinearGradient(0, canvasHeight - fadeHeight, 0, canvasHeight)
+            gradient.addColorStop(0, 'rgba(0, 0, 0, 0)')
+            gradient.addColorStop(1, 'rgba(0, 0, 0, 0.75)')
+            ctx.fillStyle = gradient
+            ctx.fillRect(0, canvasHeight - fadeHeight, canvasWidth, fadeHeight)
+
+            ctx.font = `400 ${codeFontSize}px 'Geist', sans-serif`
+            ctx.textAlign = 'left'
+            ctx.fillStyle = '#ffffff'
+
+            if (this.scanResult !== 'Scanning for barcode...') {
+                ctx.fillText(this.scanResult, paddingX, canvasHeight - 85)
+            }
+
+            ctx.fillText(this.storeName, paddingX, canvasHeight - 55)
+
+            const formattedTime = this.dateTime.toLocaleTimeString()
+            const formattedDate = this.dateTime.toLocaleDateString()
+            ctx.font = `400 ${codeFontSize - 4}px 'Geist', sans-serif`
+            ctx.fillText(`${formattedDate} ${formattedTime}`, paddingX, canvasHeight - 25)
+
             ctx.textAlign = 'start'
 
             const dataURL = canvas.toDataURL('image/png')
@@ -197,7 +236,7 @@ class Camera {
 
             const link = document.createElement('a')
             link.href = url
-            link.download = `captured_${store}_${Date.now()}.png`
+            link.download = `captured_${storeName}_${Date.now()}.png`
 
             document.body.appendChild(link)
             link.click()

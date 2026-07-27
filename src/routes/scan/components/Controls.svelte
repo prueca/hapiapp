@@ -13,7 +13,7 @@
                     width="32"
                 />
                 <input
-                    bind:value={camera.store}
+                    bind:value={camera.storeName}
                     type="text"
                     placeholder="What's your store name?"
                 />
