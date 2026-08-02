@@ -6,10 +6,10 @@ class Camera {
     video: HTMLVideoElement | undefined
     stream: MediaStream | null = $state(null)
 
-    storeName: string = $state('Lorem Ipsum')
+    storeName: string = $state('')
     dateTime: Date = $state(new Date())
 
-    scanResult: string = $state('Scanning for barcode...')
+    scanResult: string = $state('Searching for barcode...')
     error: string = $state('')
 
     private lastTime = 0
@@ -181,7 +181,7 @@ class Camera {
             const headerCenterY = headerHeight * 0.3
             const logoTop = headerCenterY - logoH / 2
 
-            ctx.drawImage(logoImg, paddingX, logoTop, LOGO_WIDTH, logoH)
+            ctx.drawImage(logoImg, paddingX, logoTop + 12, LOGO_WIDTH, logoH)
 
             const appTextFontSize = Math.max(headerHeight * 0.2, 16)
             ctx.font = `400 ${appTextFontSize}px 'Geist', sans-serif`
@@ -190,7 +190,7 @@ class Camera {
             ctx.shadowColor = 'rgba(0, 0, 0, 0.6)'
             ctx.shadowBlur = 4
             // Hapi App vertically centered with logo center
-            ctx.fillText('Hapi App', paddingX + LOGO_WIDTH + 12, headerCenterY)
+            ctx.fillText('Hapi App', paddingX + LOGO_WIDTH + 12, headerCenterY + 12)
             ctx.shadowBlur = 0
 
             const codeFontSize = Math.max(headerHeight * 0.18, 14)
@@ -198,7 +198,7 @@ class Camera {
             ctx.textAlign = 'right'
             ctx.fillStyle = '#ffffff'
             // Align CABCONJAN2020 to same centerY as logo and Hapi App
-            ctx.fillText('CABCONJAN2020', canvasWidth - paddingX, headerCenterY)
+            ctx.fillText('CABCONJAN2020', canvasWidth - paddingX, headerCenterY + 12)
 
             const fadeHeight = 150
             gradient = ctx.createLinearGradient(0, canvasHeight - fadeHeight, 0, canvasHeight)
@@ -208,19 +208,21 @@ class Camera {
             ctx.fillRect(0, canvasHeight - fadeHeight, canvasWidth, fadeHeight)
 
             ctx.font = `400 ${codeFontSize}px 'Geist', sans-serif`
-            ctx.textAlign = 'left'
             ctx.fillStyle = '#ffffff'
 
-            if (this.scanResult !== 'Scanning for barcode...') {
-                ctx.fillText(this.scanResult, paddingX, canvasHeight - 85)
+            if (this.scanResult !== 'Searching for barcode...') {
+                ctx.textAlign = 'left'
+                ctx.fillText(this.scanResult, paddingX, canvasHeight - 45)
             }
-
-            ctx.fillText(this.storeName, paddingX, canvasHeight - 55)
 
             const formattedTime = this.dateTime.toLocaleTimeString()
             const formattedDate = this.dateTime.toLocaleDateString()
-            ctx.font = `400 ${codeFontSize - 4}px 'Geist', sans-serif`
-            ctx.fillText(`${formattedDate} ${formattedTime}`, paddingX, canvasHeight - 25)
+            ctx.font = `400 ${codeFontSize}px 'Geist', sans-serif`
+            ctx.textAlign = 'right'
+            ctx.fillText(`${formattedDate} ${formattedTime}`, canvasWidth - 12, canvasHeight - 20)
+
+            ctx.textAlign = 'left'
+            ctx.fillText(this.storeName, paddingX, canvasHeight - 20)
 
             ctx.textAlign = 'start'
 

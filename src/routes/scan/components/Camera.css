@@ -4,12 +4,16 @@
     @apply p-0;
 }
 
-.camera-section {
-    @apply relative flex h-screen items-center justify-center;
+.camera-view {
+    @apply relative h-[240px] w-full;
 }
 
-.overlay {
-    @apply pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-between p-4;
+.video {
+    @apply absolute h-full w-full object-cover;
+}
+
+.top-overlay {
+    @apply pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-between px-4 py-2;
 }
 
 .brand-logo {
@@ -24,19 +28,11 @@
     @apply text-base font-medium whitespace-nowrap text-white sm:text-lg;
 }
 
-.video-wrapper {
-    @apply flex h-full w-full items-center justify-center overflow-hidden px-0;
-}
+.scan-guide {
+    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[50%];
 
-.error-message {
-    @apply pointer-events-none absolute bottom-28 left-1/2 z-50 max-w-[90vw] -translate-x-1/2 transform rounded-xl bg-red-500/95 px-6 py-3 text-center text-sm font-medium text-white shadow-lg backdrop-blur-md;
-}
-
-.scan-box {
-    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[90%];
-
-    width: 90vw;
-    height: 180px;
+    width: calc(100% - 40px);
+    height: 100px;
 
     &:before,
     &:after {
@@ -47,17 +43,25 @@
 
     &:before {
         background:
-            linear-gradient(#fff, #fff) top left / 40px 3px no-repeat,
-            linear-gradient(#fff, #fff) top left / 3px 40px no-repeat,
-            linear-gradient(#fff, #fff) bottom right / 40px 3px no-repeat,
-            linear-gradient(#fff, #fff) bottom right / 3px 40px no-repeat;
+            linear-gradient(#fff, #fff) top left / 25px 3px no-repeat,
+            linear-gradient(#fff, #fff) top left / 3px 25px no-repeat,
+            linear-gradient(#fff, #fff) bottom right / 25px 3px no-repeat,
+            linear-gradient(#fff, #fff) bottom right / 3px 25px no-repeat;
     }
 
     &:after {
         background:
-            linear-gradient(#fff, #fff) top right / 40px 3px no-repeat,
-            linear-gradient(#fff, #fff) top right / 3px 40px no-repeat,
-            linear-gradient(#fff, #fff) bottom left / 40px 3px no-repeat,
-            linear-gradient(#fff, #fff) bottom left / 3px 40px no-repeat;
+            linear-gradient(#fff, #fff) top right / 25px 3px no-repeat,
+            linear-gradient(#fff, #fff) top right / 3px 25px no-repeat,
+            linear-gradient(#fff, #fff) bottom left / 25px 3px no-repeat,
+            linear-gradient(#fff, #fff) bottom left / 3px 25px no-repeat;
     }
+}
+
+.bottom-overlay {
+    @apply absolute bottom-0 flex w-full justify-between gap-2 px-4 py-2 text-xs text-white;
+}
+
+.error-message {
+    @apply pointer-events-none absolute bottom-18 left-1/2 z-50 max-w-[320px] min-w-[240px] -translate-x-1/2 transform rounded-xl bg-red-500/95 px-6 py-3 text-center text-sm font-medium text-white shadow-lg backdrop-blur-md;
 }
