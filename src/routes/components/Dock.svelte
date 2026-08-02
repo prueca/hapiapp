@@ -1,5 +1,12 @@
 <script lang="ts">
     import Icon from '@iconify/svelte'
+    import OtherMenu from './OtherMenu.svelte'
+
+    let isOpen = $state(false)
+
+    function toggle() {
+        isOpen = !isOpen
+    }
 </script>
 
 <div class="dock">
@@ -13,11 +20,15 @@
         <span class="dock-label">Products</span>
     </button>
 
-    <button>
+    <button onclick={toggle}>
         <Icon icon="fa7-solid:ellipsis" width="24" />
         <span class="dock-label">Others</span>
     </button>
 </div>
+
+{#if isOpen}
+    <OtherMenu />
+{/if}
 
 <style lang="postcss">
     @reference 'tailwindcss';
