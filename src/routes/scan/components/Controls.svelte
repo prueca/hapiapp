@@ -5,6 +5,12 @@
 
 <div class="content-wrapper">
     <div class="center">
+        <div class="error-message" class:hidden={camera.error === ''}>
+            <div class="flex items-start gap-4">
+                <Icon class="opacity-100" icon="typcn:warning-outline" width="22" />
+                <span>{camera.error}</span>
+            </div>
+        </div>
         <label class="input">
             <input
                 bind:value={camera.storeName}
@@ -26,6 +32,10 @@
 
     .center {
         @apply my-8 text-center;
+    }
+
+    .error-message {
+        @apply mx-auto mb-6 max-w-64 rounded-lg bg-[#fefce8] px-4 py-2 text-left text-sm text-[#854d0e];
     }
 
     .input {

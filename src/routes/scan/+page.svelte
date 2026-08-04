@@ -1,12 +1,12 @@
 <script lang="ts">
     import Camera from './components/Camera.svelte'
-    import Result from './components/Result.svelte'
+    import ScanResult from './components/ScanResult.svelte'
     import Controls from './components/Controls.svelte'
 </script>
 
 <div class="relative">
     <Camera />
-    <Result />
+    <ScanResult />
     <Controls />
 </div>
 

@@ -47,10 +47,5 @@
             <div class="store-name">{camera.storeName}</div>
             <div class="date-time">{`${formattedDate} ${formattedTime}`}</div>
         </div>
-
-        <!-- error message -->
-        <div class="error-message" class:hidden={camera.error === ''}>
-            <p>{camera.error}</p>
-        </div>
     </div>
 </div>
