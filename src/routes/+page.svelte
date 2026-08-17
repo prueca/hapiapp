@@ -4,6 +4,15 @@
     import MerchantName from './components/MerchantName.svelte'
     import TabbedContent from './components/TabbedContent.svelte'
     import ScanButton from './components/ScanButton.svelte'
+
+    /**
+     * You can access logged in user data via props
+     *
+     * ```
+     * let { data } = $props()
+     * const { user, account } = data
+     * ```
+     */
 </script>
 
 <div>
