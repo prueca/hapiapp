@@ -1,15 +1,20 @@
 import api from '$lib/api'
 import _ from 'lodash'
 import z from 'zod'
-import { goto } from '$app/navigation'
+
+type Account = {
+    id: string
+    type: string
+    name: string
+    address: string
+    companyCode: string
+}
 
 class LoginForm {
-    username = $state('johndoe123')
-    companyCode = $state('ID-MU')
-    password = $state('easy1')
-
+    username = $state('User1234')
+    password = $state('hapi123')
+    accounts = $state<Account[]>([])
     showPassword = $state(false)
-
     error: null | string = $state(null)
 
     revealPassword() {
@@ -22,11 +27,10 @@ class LoginForm {
 
             const schema = z.object({
                 username: z.string().nonempty(),
-                companyCode: z.string().nonempty(),
                 password: z.string().nonempty()
             })
 
-            const json = _.pick(this, ['username', 'companyCode', 'password'])
+            const json = _.pick(this, ['username', 'password'])
             const parsed = schema.safeParse(json)
 
             if (!parsed.success) {
@@ -34,8 +38,19 @@ class LoginForm {
                 return
             }
 
-            await api.post('users/auth', { json }).json()
-            goto('/')
+            const res = await api.post('users/login', { json })
+
+            if (res.status !== 200) {
+                return
+            }
+
+            type LoginResponse = {
+                accounts: Account[]
+            }
+
+            const data: LoginResponse = await res.json()
+
+            this.accounts = data.accounts
         } catch (e: any) {
             const status = _.get(e, 'response.status', null)
 
