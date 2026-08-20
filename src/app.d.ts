@@ -36,6 +36,7 @@ declare global {
         interface Locals {
             user: User | null
             account: Account | null
+            isAuthenticated: boolean
         }
     }
 }
