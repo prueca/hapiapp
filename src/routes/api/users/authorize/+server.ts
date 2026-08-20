@@ -1,0 +1,146 @@
+import {
+    AUTHORIZATION_TOKEN_COOKIE,
+    AUTHORIZATION_TOKEN_SECRET,
+    ACCESS_TOKEN_COOKIE,
+    ACCESS_TOKEN_SECRET,
+    ACCESS_TOKEN_VALIDITY
+} from '$env/static/private'
+import { json, error, isHttpError, type Cookies } from '@sveltejs/kit'
+import { StatusCodes, ReasonPhrases } from 'http-status-codes'
+import jwt, { type SignOptions } from 'jsonwebtoken'
+import moment from 'moment'
+import z from 'zod'
+import _ from 'lodash'
+
+import User from '$lib/db/User'
+import Account from '$lib/db/Account'
+import Access from '$lib/db/Access'
+
+const schema = z.object({
+    companyCode: z.string().nonempty()
+})
+
+const INVALID_AUTHORIZATION = 'Invalid user or account'
+
+const verifyAuthToken = (cookies: Cookies) => {
+    const authToken = cookies.get(AUTHORIZATION_TOKEN_COOKIE)
+
+    if (!authToken) {
+        error(StatusCodes.UNAUTHORIZED, INVALID_AUTHORIZATION)
+    }
+
+    try {
+        type TokenPayload = {
+            username: string
+        }
+
+        const payload = jwt.verify(authToken, AUTHORIZATION_TOKEN_SECRET as string) as TokenPayload
+
+        return payload
+    } catch {
+        error(StatusCodes.UNAUTHORIZED, INVALID_AUTHORIZATION)
+    }
+}
+
+const verifyAccess = async (username: string, companyCode: string) => {
+    const access = await Access.findOne({
+        include: [
+            {
+                model: User,
+                as: 'user',
+                required: true,
+                where: { username }
+            },
+            {
+                model: Account,
+                as: 'account',
+                required: true,
+                where: { companyCode }
+            }
+        ]
+    })
+
+    if (!access || !access.user || !access.account) {
+        error(StatusCodes.UNAUTHORIZED, INVALID_AUTHORIZATION)
+    }
+
+    return {
+        user: access.user,
+        account: access.account
+    }
+}
+
+const authorize = async (cookies: Cookies, user: User, account: Account) => {
+    const jwtPayload = {
+        user: _.pick(user, ['id', 'role', 'username', 'firstName', 'middleName', 'lastName']),
+        account: _.pick(account, ['id', 'type', 'companyCode', 'name', 'type', 'address'])
+    }
+
+    const accessToken = jwt.sign(jwtPayload, ACCESS_TOKEN_SECRET as string, {
+        expiresIn: ACCESS_TOKEN_VALIDITY as SignOptions['expiresIn']
+    })
+
+    const match = (ACCESS_TOKEN_VALIDITY as string).match(/^(\d+)([A-Za-z])$/)
+
+    if (!match) {
+        error(StatusCodes.INTERNAL_SERVER_ERROR, 'Invalid access token validity')
+    }
+
+    const [, amount, unit] = match as [string, moment.DurationInputArg1, moment.DurationInputArg2]
+
+    const accessTokenExpiry = moment().add(Number(amount), unit)
+
+    cookies.set(ACCESS_TOKEN_COOKIE, accessToken, {
+        path: '/',
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        maxAge: accessTokenExpiry.diff(moment(), 's')
+    })
+}
+
+export const POST = async ({ request, cookies }) => {
+    try {
+        let payload = await request.json()
+        payload = schema.safeParse(payload)
+
+        if (!payload.success) {
+            error(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST)
+        }
+
+        const { companyCode } = payload.data
+
+        /**
+         * Verify authorization token.
+         *
+         * This returns a payload containing the username.
+         */
+
+        const { username } = verifyAuthToken(cookies)
+
+        /**
+         * Verify access.
+         *
+         * This returns the user and account record.
+         */
+
+        const { user, account } = await verifyAccess(username, companyCode)
+
+        /**
+         * Generate access token.
+         *
+         * Token expires in 30 days.
+         * Token is stored in an HTTP-only cookie.
+         */
+
+        authorize(cookies, user, account)
+
+        return json({ success: true })
+    } catch (e: any) {
+        if (isHttpError(e)) throw e
+
+        const message = e.message ?? ReasonPhrases.INTERNAL_SERVER_ERROR
+
+        error(StatusCodes.INTERNAL_SERVER_ERROR, message)
+    }
+}
