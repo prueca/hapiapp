@@ -32,7 +32,7 @@ body {
     font-family: var(--font-family);
     min-height: 100vh;
 
-    @apply bg-slate-100;
+    @apply bg-gray-100;
 }
 
 /* overrides */

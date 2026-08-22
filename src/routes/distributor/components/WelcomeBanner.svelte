@@ -32,7 +32,7 @@
             <div class="mb-1 text-xl">Good day, {user.firstName}</div>
             <div class="text-sm">Logged in as {loggedInAs}</div>
         </div>
-        <Icon icon="streamline-flex:smiley-blessed-solid" width="42" />
+        <Icon icon="streamline-flex:smiley-blessed-solid" width="48" />
     </div>
     <div>
         <div class="mb-1 text-sm">{account.name}</div>
