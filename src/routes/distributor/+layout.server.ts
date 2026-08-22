@@ -12,4 +12,6 @@ export const load = async ({ locals }) => {
     if (locals.account?.type !== accountTypes.DISTRIBUTOR) {
         throw error(StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED)
     }
+
+    return locals
 }

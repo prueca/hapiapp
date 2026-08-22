@@ -3,11 +3,13 @@
     import TopBar from '../components/TopBar'
     import Dashboard from './components/Dashboard.svelte'
     import WelcomeBanner from './components/WelcomeBanner.svelte'
+
+    let { data } = $props()
 </script>
 
 <div class="content-wrapper">
     <TopBar />
-    <WelcomeBanner />
+    <WelcomeBanner {data} />
     <Dashboard />
     <Dock />
 </div>
