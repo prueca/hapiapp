@@ -15,11 +15,11 @@ class LoginState {
 
     /**
      * 0 = no pending request
-     * 1 = logging in
-     * 2 = authenticating
+     * 1 = authentication
+     * 2 = authorization
      */
 
-    status: 0 | 1 | 2 | 3 = $state(0)
+    status: 0 | 1 | 2 = $state(0)
 
     togglePasswordMask() {
         this.showPassword = !this.showPassword
