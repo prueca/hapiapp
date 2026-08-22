@@ -2,6 +2,7 @@
     import accountIcon from '$lib/assets/icons/passport-svgrepo-com.svg'
     import userIcon from '$lib/assets/icons/users-group-two-rounded-svgrepo-com.svg'
     import freezerIcon from '$lib/assets/icons/fridge-svgrepo-com.svg'
+    import deploymentIcon from '$lib/assets/icons/truck-fast-svgrepo-com.svg'
     import cabconIcon from '$lib/assets/icons/cardholder-svgrepo-com.svg'
     import productIcon from '$lib/assets/icons/notes-svgrepo-com.svg'
     import orderIcon from '$lib/assets/icons/bag-smile-svgrepo-com.svg'
@@ -14,43 +15,49 @@
         <div class="text-xs text-gray-400">Manage orders, freezers, products and more...</div>
     </h1>
     <div class="dashboard-menu">
-        <a href="/distributor/dashboard/accounts" class="menu-item">
+        <a href="/distributor/accounts" class="menu-item">
             <div class="image-wrapper">
                 <img src={accountIcon} alt="" width="32" height="32" />
             </div>
             <div class="item-label">Accounts</div>
         </a>
-        <a href="/distributor/dashboard/users" class="menu-item">
+        <a href="/distributor/users" class="menu-item">
             <div class="image-wrapper">
                 <img src={userIcon} alt="" width="32" height="32" />
             </div>
             <div class="item-label">Users</div>
         </a>
-        <a href="/distributor/dashboard/freezer" class="menu-item">
+        <a href="/distributor/freezer" class="menu-item">
             <div class="image-wrapper">
                 <img src={freezerIcon} alt="" width="32" height="32" />
             </div>
             <div class="item-label">Freezers</div>
         </a>
-        <a href="/distributor/dashboard/cabcon" class="menu-item">
+        <a href="/distributor/freezer" class="menu-item">
+            <div class="image-wrapper">
+                <img src={deploymentIcon} alt="" width="32" height="32" />
+            </div>
+            <div class="item-label">Deployments</div>
+        </a>
+        <a href="/distributor/cabcon" class="menu-item">
             <div class="image-wrapper">
                 <img src={cabconIcon} alt="" width="32" height="32" />
             </div>
             <div class="item-label">Cabcon</div>
         </a>
-        <a href="/distributor/dashboard/products" class="menu-item">
+        <a href="/distributor/products" class="menu-item">
             <div class="image-wrapper">
                 <img src={productIcon} alt="" width="32" height="32" />
             </div>
             <div class="item-label">Products</div>
         </a>
-        <a href="/distributor/dashboard/orders" class="menu-item">
+        <a href="/distributor/orders" class="menu-item">
             <div class="image-wrapper">
                 <img src={orderIcon} alt="" width="32" height="32" />
             </div>
             <div class="item-label">Orders</div>
         </a>
-        <a href="/distributor/dashboard/bad-orders" class="menu-item">
+        <a href="/distributor/bad-orders" class="menu-item">
             <div class="image-wrapper">
                 <img src={badOrderIcon} alt="" width="32" height="32" />
             </div>
@@ -78,7 +85,7 @@
         @apply flex flex-col items-center text-center;
 
         .image-wrapper {
-            @apply rounded-lg bg-gray-100 p-2;
+            @apply rounded-lg bg-gray-100 p-3;
         }
 
         img {
