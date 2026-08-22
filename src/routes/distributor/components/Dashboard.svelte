@@ -1,11 +1,11 @@
 <script lang="ts">
-    import accountIcon from '$lib/icons/passport-svgrepo-com.svg'
-    import userIcon from '$lib/icons/users-group-two-rounded-svgrepo-com.svg'
-    import freezerIcon from '$lib/icons/fridge-svgrepo-com.svg'
-    import cabconIcon from '$lib/icons/cardholder-svgrepo-com.svg'
-    import productIcon from '$lib/icons/notes-svgrepo-com.svg'
-    import orderIcon from '$lib/icons/bag-smile-svgrepo-com.svg'
-    import badOrderIcon from '$lib/icons/bag-cross-svgrepo-com.svg'
+    import accountIcon from '$lib/assets/icons/passport-svgrepo-com.svg'
+    import userIcon from '$lib/assets/icons/users-group-two-rounded-svgrepo-com.svg'
+    import freezerIcon from '$lib/assets/icons/fridge-svgrepo-com.svg'
+    import cabconIcon from '$lib/assets/icons/cardholder-svgrepo-com.svg'
+    import productIcon from '$lib/assets/icons/notes-svgrepo-com.svg'
+    import orderIcon from '$lib/assets/icons/bag-smile-svgrepo-com.svg'
+    import badOrderIcon from '$lib/assets/icons/bag-cross-svgrepo-com.svg'
 </script>
 
 <div class="dashboard">
