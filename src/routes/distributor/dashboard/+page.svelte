@@ -18,31 +18,31 @@
     <div class="dashboard">
         <h1 class="dashboard-title">Dashboard</h1>
         <div class="dashboard-menu">
-            <a href="/distributor/accounts" class="menu-item">
+            <a href="/distributor/dashboard/accounts" class="menu-item">
                 <img src={accountIcon} alt="" width="48" height="48" />
                 <div class="item-label">Accounts</div>
             </a>
-            <a href="/distributor/users" class="menu-item">
+            <a href="/distributor/dashboard/users" class="menu-item">
                 <img src={userIcon} alt="" width="48" height="48" />
                 <div class="item-label">Users</div>
             </a>
-            <a href="/distributor/freezer" class="menu-item">
+            <a href="/distributor/dashboard/freezer" class="menu-item">
                 <img src={freezerIcon} alt="" width="48" height="48" />
                 <div class="item-label">Freezers</div>
             </a>
-            <a href="/distributor/cabcon" class="menu-item">
+            <a href="/distributor/dashboard/cabcon" class="menu-item">
                 <img src={cabconIcon} alt="" width="48" height="48" />
                 <div class="item-label">Cabcon</div>
             </a>
-            <a href="/distributor/products" class="menu-item">
+            <a href="/distributor/dashboard/products" class="menu-item">
                 <img src={productIcon} alt="" width="48" height="48" />
                 <div class="item-label">Products</div>
             </a>
-            <a href="/distributor/orders" class="menu-item">
+            <a href="/distributor/dashboard/orders" class="menu-item">
                 <img src={orderIcon} alt="" width="48" height="48" />
                 <div class="item-label">Orders</div>
             </a>
-            <a href="/distributor/bad-orders" class="menu-item">
+            <a href="/distributor/dashboard/bad-orders" class="menu-item">
                 <img src={badOrderIcon} alt="" width="48" height="48" />
                 <div class="item-label">Bad Orders</div>
             </a>
