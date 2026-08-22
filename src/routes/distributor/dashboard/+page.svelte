@@ -11,12 +11,12 @@
     import badOrderIcon from '$lib/icons/bag-cross-svgrepo-com.svg'
 </script>
 
-<div>
+<div class="content-wrapper">
     <TopBar />
     <MerchantName />
 
-    <div class="content-wrapper">
-        <h1 class="content-title">Dashboard</h1>
+    <div class="dashboard">
+        <h1 class="dashboard-title">Dashboard</h1>
         <div class="dashboard-menu">
             <a href="/distributor/accounts" class="menu-item">
                 <img src={accountIcon} alt="" width="48" height="48" />
@@ -55,11 +55,11 @@
 <style lang="postcss">
     @reference 'tailwindcss';
 
-    .content-wrapper {
-        @apply relative -mt-10;
+    .dashboard {
+        @apply relative -mt-10 p-4;
     }
 
-    .content-title {
+    .dashboard-title {
         @apply mb-10 text-3xl;
     }
 

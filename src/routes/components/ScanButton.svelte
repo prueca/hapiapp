@@ -2,28 +2,21 @@
     import Icon from '@iconify/svelte'
 </script>
 
-<div class="component">
-    <div class="content-wrapper">
-        <div class="fab absolute">
-          <button class="btn btn-lg btn-circle btn-primary">
+<div class="scan-btn">
+    <div class="fab absolute">
+        <button class="btn btn-circle btn-lg btn-primary">
             <div class="icon">
                 <Icon icon="solar:camera-outline" width="32" />
             </div>
-          </button>
-        </div>
+        </button>
     </div>
 </div>
-
 
 <style lang="postcss">
     @reference 'tailwindcss';
 
-    .component {
-        @apply fixed bottom-20 right-0 left-0;
-    }
-
-    .content-wrapper {
-        @apply relative;
+    .scan-btn {
+        @apply fixed relative right-0 bottom-20 left-0;
     }
 
     .fab {
@@ -31,10 +24,10 @@
     }
 
     .btn {
-        @apply size-14 block text-center items-center justify-center bg-(--c1) border-none text-white shadow-(--c1-shadow);
+        @apply block size-14 items-center justify-center border-none bg-(--c1) text-center text-white shadow-(--c1-shadow);
 
         .icon {
-            @apply flex items-center justify-center mb-1;
+            @apply mb-1 flex items-center justify-center;
         }
     }
 </style>
