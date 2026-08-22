@@ -85,7 +85,7 @@
         @apply flex flex-col items-center text-center;
 
         .image-wrapper {
-            @apply rounded-lg bg-gray-100 p-3;
+            @apply rounded-full bg-gray-100 p-3;
         }
 
         img {

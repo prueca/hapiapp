@@ -50,7 +50,7 @@ input {
 }
 
 .content-wrapper {
-    @apply mx-auto max-w-150;
+    @apply relative mx-auto max-w-150;
 }
 
 .frosted {

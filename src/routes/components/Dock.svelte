@@ -11,18 +11,18 @@
 
 <div class="dock">
     <button class="dock-active">
-        <Icon icon="material-symbols:home-outline-rounded" width="24" />
-        <span class="dock-label">Home</span>
+        <Icon icon="lineicons:dashboard-square-1" width="24" />
+        <span class="dock-label">Dashboard</span>
     </button>
 
     <button>
-        <Icon icon="ant-design:product-outlined" width="24" />
+        <Icon icon="solar:notes-outline" width="24" />
         <span class="dock-label">Products</span>
     </button>
 
     <button onclick={toggle}>
-        <Icon icon="fa7-solid:ellipsis" width="24" />
-        <span class="dock-label">Others</span>
+        <Icon icon="solar:menu-dots-square-outline" width="24" />
+        <span class="dock-label">More</span>
     </button>
 </div>
 
