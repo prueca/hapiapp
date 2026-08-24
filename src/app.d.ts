@@ -1,7 +1,7 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
 declare global {
-    interface PlainObject {
+    interface Json {
         [key: string]: any
     }
 
@@ -9,7 +9,7 @@ declare global {
         data: T
     }
 
-    interface User {
+    interface LocalsUser {
         id: string
         role: string
         username: string
@@ -18,7 +18,7 @@ declare global {
         lastName: string
     }
 
-    interface Account {
+    interface LocalsAccount {
         id: string
         type: string
         name: string
@@ -34,8 +34,8 @@ declare global {
         // interface Platform {}
 
         interface Locals {
-            user: User | null
-            account: Account | null
+            user: LocalsUser | null
+            account: LocalsAccount | null
             isAuthenticated: boolean
         }
     }

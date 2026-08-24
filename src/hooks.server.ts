@@ -43,8 +43,8 @@ export const handle: Handle = async ({ event, resolve }) => {
         }
 
         type TokenPayload = JwtPayload & {
-            user: User
-            account: Account
+            user: LocalsUser
+            account: LocalsAccount
         }
 
         const payload = jwt.verify(accessToken, ACCESS_TOKEN_SECRET as string) as TokenPayload

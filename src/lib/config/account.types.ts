@@ -5,5 +5,5 @@ const FRANCHISEE = 'franchisee'
 export default {
     DISTRIBUTOR,
     DEALER,
-    FRANCHISEE,
-}
+    FRANCHISEE
+} as const

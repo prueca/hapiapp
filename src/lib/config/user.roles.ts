@@ -11,5 +11,5 @@ export default {
     DEALER_ADMIN,
     DEALER_USER,
     FRANCHISEE_ADMIN,
-    FRANCHISEE_USER,
-}
+    FRANCHISEE_USER
+} as const

@@ -65,10 +65,17 @@ class Account extends Model {
     declare sapCode: string
     declare companyCode: string
     declare associateId: string
+    declare parent?: Account
+    declare children?: Account[]
 
-    static associate(models: PlainObject) {
+    static associate(models: Json) {
         this.belongsTo(models.Account, {
             as: 'parent',
+            foreignKey: 'associateId'
+        })
+
+        this.hasMany(models.Account, {
+            as: 'children',
             foreignKey: 'associateId'
         })
     }
