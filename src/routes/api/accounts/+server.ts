@@ -106,14 +106,14 @@ const fetch = async (account: SubjectAccount, children = false) => {
 }
 
 export const POST = async ({ locals, request }) => {
-    const body = await request.json()
-    const payload = schema.safeParse(body)
+    const payload = await request.json()
+    const validation = schema.safeParse(payload)
 
-    if (!payload.success) {
+    if (!validation.success) {
         error(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST)
     }
 
-    const { account, children } = payload.data
+    const { account, children } = validation.data
     const ok = await verifyAccess(locals, account)
 
     if (!ok) {

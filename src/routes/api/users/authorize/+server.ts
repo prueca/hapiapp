@@ -102,14 +102,14 @@ const authorize = async (cookies: Cookies, user: User, account: Account) => {
 
 export const POST = async ({ request, cookies }) => {
     try {
-        let payload = await request.json()
-        payload = schema.safeParse(payload)
+        const payload = await request.json()
+        const validation = schema.safeParse(payload)
 
-        if (!payload.success) {
+        if (!validation.success) {
             error(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST)
         }
 
-        const { companyCode } = payload.data
+        const { companyCode } = validation.data
 
         /**
          * Verify authorization token.

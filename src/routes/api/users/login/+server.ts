@@ -24,14 +24,14 @@ const INVALID_LOGIN = 'Invalid username or password'
 
 export const POST = async ({ request, cookies }) => {
     try {
-        let payload = await request.json()
-        payload = schema.safeParse(payload)
+        const payload = await request.json()
+        const validation = schema.safeParse(payload)
 
-        if (!payload.success) {
+        if (!validation.success) {
             error(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST)
         }
 
-        const { username, password } = payload.data
+        const { username, password } = validation.data
 
         /**
          * Check username validity
