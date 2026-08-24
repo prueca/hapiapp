@@ -1,3 +1,4 @@
+import '$lib/db'
 import {
     AUTHORIZATION_TOKEN_COOKIE,
     AUTHORIZATION_TOKEN_SECRET,
@@ -7,9 +8,12 @@ import { json, error, isHttpError } from '@sveltejs/kit'
 import { StatusCodes, ReasonPhrases } from 'http-status-codes'
 import * as argon2 from 'argon2'
 import jwt, { type SignOptions } from 'jsonwebtoken'
-import db from '$lib/db'
 import z from 'zod'
 import _ from 'lodash'
+
+import User from '$lib/db/User'
+import Account from '$lib/db/Account'
+import Access from '$lib/db/Access'
 
 const schema = z.object({
     username: z.string().nonempty(),
@@ -33,7 +37,7 @@ export const POST = async ({ request, cookies }) => {
          * Check username validity
          */
 
-        const user = await db.User.findOne({
+        const user = await User.findOne({
             where: { username }
         })
 
@@ -79,11 +83,11 @@ export const POST = async ({ request, cookies }) => {
          * Return all accounts accessible to the user.
          */
 
-        let accessRecords = await db.Access.findAll({
+        let accessRecords = await Access.findAll({
             where: { userId: user.id },
             include: [
                 {
-                    model: db.Account,
+                    model: Account,
                     as: 'account',
                     required: true
                 }

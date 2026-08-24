@@ -1,3 +1,4 @@
+import '$lib/db'
 import { json, error } from '@sveltejs/kit'
 import { StatusCodes, ReasonPhrases } from 'http-status-codes'
 import accountTypes from '$lib/config/account.types'
@@ -5,6 +6,11 @@ import z from 'zod'
 import _ from 'lodash'
 
 import Account from '$lib/db/Account'
+
+type SubjectAccount = {
+    type: (typeof accountTypes)[keyof typeof accountTypes]
+    id: string
+}
 
 const schema = z.object({
     account: z.object({
@@ -14,13 +20,7 @@ const schema = z.object({
     children: z.boolean().optional()
 })
 
-const verifyAccess = async (
-    locals: App.Locals,
-    account: {
-        type: (typeof accountTypes)[keyof typeof accountTypes]
-        id: string
-    }
-) => {
+const verifyAccess = async (locals: App.Locals, account: SubjectAccount) => {
     const xy = `${locals.account?.type}:${account.type}`
     let descendant: Account | null = null
 
@@ -61,25 +61,7 @@ const verifyAccess = async (
     return false
 }
 
-export const POST = async ({ locals, request }) => {
-    if (!locals.isAuthenticated) {
-        throw error(StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED)
-    }
-
-    const body = await request.json()
-    const payload = schema.safeParse(body)
-
-    if (!payload.success) {
-        error(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST)
-    }
-
-    const { account, children } = payload.data
-    const ok = await verifyAccess(locals, account)
-
-    if (!ok) {
-        error(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND)
-    }
-
+const fetch = async (account: SubjectAccount, children = false) => {
     const opts: Json = {
         where: _.pick(account, ['type', 'id']),
         attributes: ['type', 'id', 'name', 'companyCode']
@@ -120,7 +102,25 @@ export const POST = async ({ locals, request }) => {
         }
     }
 
-    const data = await Account.findOne(opts)
+    return Account.findOne(opts)
+}
+
+export const POST = async ({ locals, request }) => {
+    const body = await request.json()
+    const payload = schema.safeParse(body)
+
+    if (!payload.success) {
+        error(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST)
+    }
+
+    const { account, children } = payload.data
+    const ok = await verifyAccess(locals, account)
+
+    if (!ok) {
+        error(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND)
+    }
+
+    const data = await fetch(account, children)
 
     return json({ data })
 }
