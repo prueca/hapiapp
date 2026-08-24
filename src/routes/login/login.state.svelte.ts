@@ -15,11 +15,11 @@ class LoginState {
 
     /**
      * 0 = no pending request
-     * 1 = logging in
-     * 2 = authenticating
+     * 1 = authentication
+     * 2 = authorization
      */
 
-    status: 0 | 1 | 2 | 3 = $state(0)
+    status: 0 | 1 | 2 = $state(0)
 
     togglePasswordMask() {
         this.showPassword = !this.showPassword
@@ -75,7 +75,7 @@ class LoginState {
         }
     }
 
-    async authenticate(companyCode: string) {
+    async authorize(companyCode: string) {
         try {
             if (this.status !== 1) return
 
@@ -84,7 +84,7 @@ class LoginState {
             this.toggleAccountSelection()
 
             const json = { companyCode }
-            await api.post('users/authenticate', { json })
+            await api.post('users/authorize', { json })
 
             goto('/')
         } catch (e: any) {

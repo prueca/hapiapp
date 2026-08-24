@@ -3,34 +3,28 @@
     import Icon from '@iconify/svelte'
 </script>
 
-<div class="content-wrapper">
-    <div class="center">
-        <div class="error-message" class:hidden={camera.error === ''}>
-            <div class="flex items-start gap-4">
-                <Icon class="opacity-100" icon="typcn:warning-outline" width="22" />
-                <span>{camera.error}</span>
-            </div>
+<div class="controls">
+    <div class="error-message" class:hidden={camera.error === ''}>
+        <div class="flex items-start gap-4">
+            <Icon class="opacity-100" icon="typcn:warning-outline" width="22" />
+            <span>{camera.error}</span>
         </div>
-        <label class="input">
-            <input
-                bind:value={camera.storeName}
-                type="text"
-                placeholder="What's your store name?"
-            />
-        </label>
-        <div class="btn-wrapper">
-            <button class="capture-btn btn" onclick={() => camera.capture()}>
-                <Icon class="opacity-100" icon="material-symbols:camera-outline" width="22" />
-                <span>Capture</span>
-            </button>
-        </div>
+    </div>
+    <label class="input">
+        <input bind:value={camera.storeName} type="text" placeholder="What's your store name?" />
+    </label>
+    <div class="btn-wrapper">
+        <button class="capture-btn btn" onclick={() => camera.capture()}>
+            <Icon class="opacity-100" icon="material-symbols:camera-outline" width="22" />
+            <span>Capture</span>
+        </button>
     </div>
 </div>
 
 <style lang="postcss">
     @reference 'tailwindcss';
 
-    .center {
+    .controls {
         @apply my-8 text-center;
     }
 

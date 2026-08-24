@@ -31,6 +31,8 @@ body {
     font-size: var(--font-size);
     font-family: var(--font-family);
     min-height: 100vh;
+
+    @apply bg-gray-100;
 }
 
 /* overrides */
@@ -48,7 +50,7 @@ input {
 }
 
 .content-wrapper {
-    @apply mx-auto max-w-150 p-4;
+    @apply relative mx-auto max-w-150;
 }
 
 .frosted {

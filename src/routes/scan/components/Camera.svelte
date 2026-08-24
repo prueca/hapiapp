@@ -21,31 +21,29 @@
     })
 </script>
 
-<div class="content-wrapper">
-    <div class="camera-view">
-        <!-- brand and cabcon code -->
-        <div class="top-overlay frosted">
-            <div class="brand-logo">
-                <span class="w-6">
-                    <img src={logo} alt="Selecta Logo" />
-                </span>
-                <span class="brand-text">Hapi App</span>
-            </div>
-            <div class="cabcon-code">CABCONJAN2020</div>
+<div class="camera-view">
+    <!-- brand and cabcon code -->
+    <div class="top-overlay frosted">
+        <div class="brand-logo">
+            <span class="w-6">
+                <img src={logo} alt="Selecta Logo" />
+            </span>
+            <span class="brand-text">Hapi App</span>
         </div>
+        <div class="cabcon-code">CABCONJAN2020</div>
+    </div>
 
-        <!-- video -->
-        <video id="video" bind:this={camera.video} autoplay playsinline class="video"></video>
+    <!-- video -->
+    <video id="video" bind:this={camera.video} autoplay playsinline class="video"></video>
 
-        <!-- scan guide -->
-        <div class="px-4">
-            <div class="scan-guide"></div>
-        </div>
+    <!-- scan guide -->
+    <div class="px-4">
+        <div class="scan-guide"></div>
+    </div>
 
-        <!-- store name and date -->
-        <div class="bottom-overlay frosted">
-            <div class="store-name">{camera.storeName}</div>
-            <div class="date-time">{`${formattedDate} ${formattedTime}`}</div>
-        </div>
+    <!-- store name and date -->
+    <div class="bottom-overlay frosted">
+        <div class="store-name">{camera.storeName}</div>
+        <div class="date-time">{`${formattedDate} ${formattedTime}`}</div>
     </div>
 </div>

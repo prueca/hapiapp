@@ -15,7 +15,7 @@
      */
 </script>
 
-<div>
+<div class="content-wrapper">
     <TopBar />
     <MerchantName />
     <TabbedContent />

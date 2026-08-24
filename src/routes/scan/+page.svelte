@@ -4,7 +4,7 @@
     import Controls from './components/Controls.svelte'
 </script>
 
-<div class="relative">
+<div class="content-wrapper">
     <Camera />
     <ScanResult />
     <Controls />

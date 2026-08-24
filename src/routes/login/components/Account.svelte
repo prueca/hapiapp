@@ -18,7 +18,7 @@
     let { account }: Props = $props()
 </script>
 
-<button class="account" type="button" onclick={() => loginState.authenticate(account.companyCode)}>
+<button class="account" type="button" onclick={() => loginState.authorize(account.companyCode)}>
     <div class="w-full">
         <div class="account-name">{account.name}</div>
         <div class="account-details">

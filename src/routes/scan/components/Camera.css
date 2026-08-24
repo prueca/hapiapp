@@ -1,9 +1,5 @@
 @reference 'tailwindcss';
 
-.content-wrapper {
-    @apply p-0;
-}
-
 .camera-view {
     @apply relative h-[240px] w-full;
 }

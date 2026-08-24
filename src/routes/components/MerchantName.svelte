@@ -2,32 +2,29 @@
     import Icon from '@iconify/svelte'
 </script>
 
-<div class="content-wrapper">
-    <div class="merchant-name">
-        <Icon icon="material-symbols:store-outline-rounded" width="22" />
-        <div>Lorem Ipsum Store</div>
-    </div>
+<div class="merchant-name">
+    <Icon icon="material-symbols:store-outline-rounded" width="22" />
+    <div>Lorem Ipsum Store</div>
 </div>
 
 <style lang="postcss">
     @reference 'tailwindcss';
 
-    .content-wrapper {
+    .merchant-name {
         /* https://grabient.com/IwOgDBA0C0oOxgMyRAFlQNkmSAmEGAnMqGKjmhqisGLimIQBzYpOFYhyqFA?angle=225 */
 
-        background: linear-gradient(225deg, #ff6f70 0.000%, #ffa091 20.000%, #ffc7b1 40.000%, #ffe4d0 60.000%, #fff6ee 80.000%, #fffcff 100.000%);
-
-        mask-image: linear-gradient(
-            to bottom,
-            black 0%,
-            black 25%,
-            transparent 100%
+        background: linear-gradient(
+            225deg,
+            #ff6f70 0%,
+            #ffa091 20%,
+            #ffc7b1 40%,
+            #ffe4d0 60%,
+            #fff6ee 80%,
+            #fffcff 100%
         );
 
-        @apply pb-16;
-    }
+        mask-image: linear-gradient(to bottom, black 0%, black 25%, transparent 100%);
 
-    .merchant-name {
-        @apply flex items-center gap-2;
+        @apply flex items-center gap-2 p-4 pb-16;
     }
 </style>
