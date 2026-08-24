@@ -9,6 +9,7 @@ import {
 import { json, error, isHttpError, type Cookies } from '@sveltejs/kit'
 import { StatusCodes, ReasonPhrases } from 'http-status-codes'
 import jwt, { type SignOptions } from 'jsonwebtoken'
+import payload from '$lib/payload'
 import moment from 'moment'
 import z from 'zod'
 import _ from 'lodash'
@@ -102,14 +103,7 @@ const authorize = async (cookies: Cookies, user: User, account: Account) => {
 
 export const POST = async ({ request, cookies }) => {
     try {
-        const payload = await request.json()
-        const validation = schema.safeParse(payload)
-
-        if (!validation.success) {
-            error(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST)
-        }
-
-        const { companyCode } = validation.data
+        const { companyCode } = await payload(request, schema)
 
         /**
          * Verify authorization token.

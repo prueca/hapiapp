@@ -2,6 +2,7 @@ import '$lib/db'
 import { json, error } from '@sveltejs/kit'
 import { StatusCodes, ReasonPhrases } from 'http-status-codes'
 import accountTypes from '$lib/config/account.types'
+import payload from '$lib/payload'
 import z from 'zod'
 import _ from 'lodash'
 
@@ -106,14 +107,7 @@ const fetch = async (account: SubjectAccount, children = false) => {
 }
 
 export const POST = async ({ locals, request }) => {
-    const payload = await request.json()
-    const validation = schema.safeParse(payload)
-
-    if (!validation.success) {
-        error(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST)
-    }
-
-    const { account, children } = validation.data
+    const { account, children } = await payload(request, schema)
     const ok = await verifyAccess(locals, account)
 
     if (!ok) {
