@@ -8,7 +8,6 @@ import { json, error, isHttpError } from '@sveltejs/kit'
 import { StatusCodes, ReasonPhrases } from 'http-status-codes'
 import * as argon2 from 'argon2'
 import jwt, { type SignOptions } from 'jsonwebtoken'
-import payload from '$lib/payload'
 import z from 'zod'
 import _ from 'lodash'
 
@@ -25,7 +24,14 @@ const INVALID_LOGIN = 'Invalid username or password'
 
 export const POST = async ({ request, cookies }) => {
     try {
-        const { username, password } = await payload(request, schema)
+        const payload = await request.json()
+        const validation = schema.safeParse(payload)
+
+        if (!validation.success) {
+            error(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST)
+        }
+
+        const { username, password } = validation.data
 
         /**
          * Check username validity
