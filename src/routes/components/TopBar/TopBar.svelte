@@ -3,7 +3,7 @@
     import LogoutButton from './LogoutButton.svelte'
 </script>
 
-<div class="navbar justify-between px-4">
+<div class="navbar mb-2 justify-between px-4">
     <Brand />
     <LogoutButton />
 </div>

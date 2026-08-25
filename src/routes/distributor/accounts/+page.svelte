@@ -1,8 +1,8 @@
 <script lang="ts">
     import Dock from '../../components/Dock.svelte'
     import TopBar from '../../components/TopBar'
-    import WelcomeBanner from '../components/WelcomeBanner.svelte'
     import AccountList from './components/AccountList.svelte'
+    import Chart from './components/Chart.svelte'
 
     let { data } = $props()
 </script>
@@ -10,7 +10,7 @@
 <div class="content-wrapper">
     <div class="mb-21">
         <TopBar />
-        <WelcomeBanner {data} />
+        <Chart />
         <AccountList {data} />
     </div>
     <Dock />

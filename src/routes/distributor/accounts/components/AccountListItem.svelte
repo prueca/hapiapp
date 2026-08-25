@@ -30,6 +30,6 @@
     @reference 'tailwindcss';
 
     .account-list-item {
-        @apply not-last:mb-4 not-last:border-b not-last:border-b-gray-200 not-last:pb-4;
+        @apply not-last:mb-4 not-last:border-b not-last:border-b-gray-100 not-last:pb-4;
     }
 </style>
