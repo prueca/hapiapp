@@ -106,13 +106,20 @@ export const load = async ({ locals }) => {
         return { ...locals, accounts: [] }
     }
 
-    const ancestor = await fetch(account, true)
+    const promise = new Promise(async (resolve) => {
+        const ancestor = await fetch(account, true)
 
-    if (!ancestor) {
-        return { ...locals, accounts: [] }
+        if (!ancestor) {
+            return resolve([])
+        }
+
+        const accounts = _.map(flatten(ancestor), (x) => x?.toJSON())
+
+        resolve(accounts)
+    })
+
+    return {
+        ...locals,
+        accounts: promise
     }
-
-    const accounts = _.map(flatten(ancestor), (x) => x?.toJSON())
-
-    return { ...locals, accounts }
 }
