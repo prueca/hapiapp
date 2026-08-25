@@ -8,9 +8,11 @@
 </script>
 
 <div class="content-wrapper">
-    <TopBar />
-    <WelcomeBanner {data} />
-    <Dashboard />
+    <div class="mb-17">
+        <TopBar />
+        <WelcomeBanner {data} />
+        <Dashboard />
+    </div>
     <Dock />
 </div>
 

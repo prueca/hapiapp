@@ -2,11 +2,12 @@ import api from '$lib/api'
 import _ from 'lodash'
 import z from 'zod'
 import { goto } from '$app/navigation'
+import accountTypes from '$lib/config/account.types'
 
 class LoginState {
     username = $state('User1234')
     password = $state('hapi123')
-    accounts = $state<Account[]>([])
+    accounts = $state<AuthAccount[]>([])
 
     showPassword = $state(false)
     openAccountSelection = $state(false)
@@ -55,7 +56,7 @@ class LoginState {
             this.status = 1
 
             const res = await api.post('users/login', { json })
-            const response: Data<{ accounts: Account[] }> = await res.json()
+            const response: Data<{ accounts: AuthAccount[] }> = await res.json()
             this.accounts = response.data.accounts
 
             this.toggleAccountSelection()
@@ -84,9 +85,23 @@ class LoginState {
             this.toggleAccountSelection()
 
             const json = { companyCode }
-            await api.post('users/authorize', { json })
+            const res = await api.post('users/authorize', { json })
+            const response: Data<{ user: AuthUser; account: AuthAccount }> = await res.json()
+            const { account } = response.data
 
-            goto('/')
+            switch (account.type) {
+                case accountTypes.DISTRIBUTOR:
+                    goto('/distributor')
+                    break
+
+                case accountTypes.DEALER:
+                    goto('/dealer')
+                    break
+
+                case accountTypes.FRANCHISEE:
+                    goto('/franchisee')
+                    break
+            }
         } catch (e: any) {
             const status = _.get(e, 'response.status', null)
 

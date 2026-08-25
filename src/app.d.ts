@@ -1,5 +1,9 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
+
+import accountTypes from '$lib/config/account.types'
+import userRoles from '$lib/config/user.roles'
+
 declare global {
     interface Json {
         [key: string]: any
@@ -9,18 +13,18 @@ declare global {
         data: T
     }
 
-    interface LocalsUser {
+    interface AuthUser {
         id: string
-        role: string
+        role: (typeof userRoles)[keyof typeof userRoles]
         username: string
         firstName: string
         middleName: string
         lastName: string
     }
 
-    interface LocalsAccount {
+    interface AuthAccount {
         id: string
-        type: string
+        type: (typeof accountTypes)[keyof typeof accountTypes]
         name: string
         address: string
         companyCode: string
@@ -34,8 +38,8 @@ declare global {
         // interface Platform {}
 
         interface Locals {
-            user: LocalsUser | null
-            account: LocalsAccount | null
+            user: AuthUser | null
+            account: AuthAccount | null
             isAuthenticated: boolean
         }
     }

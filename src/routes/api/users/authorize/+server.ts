@@ -71,7 +71,7 @@ const verifyAccess = async (username: string, companyCode: string) => {
     }
 }
 
-const authorize = async (cookies: Cookies, user: User, account: Account) => {
+const authorize = (cookies: Cookies, user: User, account: Account) => {
     const jwtPayload = {
         user: _.pick(user, ['id', 'role', 'username', 'firstName', 'middleName', 'lastName']),
         account: _.pick(account, ['id', 'type', 'companyCode', 'name', 'type', 'address'])
@@ -136,7 +136,12 @@ export const POST = async ({ request, cookies }) => {
 
         authorize(cookies, user, account)
 
-        return json({ success: true })
+        return json({
+            data: {
+                user,
+                account
+            }
+        })
     } catch (e: any) {
         if (isHttpError(e)) throw e
 
