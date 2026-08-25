@@ -3,6 +3,14 @@ import _ from 'lodash'
 import z from 'zod'
 import { goto } from '$app/navigation'
 
+type Account = {
+    id: string
+    type: string
+    name: string
+    address: string
+    companyCode: string
+}
+
 class LoginState {
     username = $state('User1234')
     password = $state('hapi123')
