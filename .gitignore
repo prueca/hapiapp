@@ -24,3 +24,7 @@ vite.config.ts.timestamp-*
 /cert/
 /**/cert.pem
 /**/private.key
+
+# ---
+_mock
+scripts
