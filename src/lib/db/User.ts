@@ -2,7 +2,6 @@ import sequelize from './sequelize'
 import { DataTypes, Model } from 'sequelize'
 import ulid from '$lib/ulid'
 import userRoles from '$lib/config/user.roles'
-import Account from './Account'
 
 const attributes = {
     id: {
@@ -69,10 +68,10 @@ class User extends Model {
     declare middleName: string | null
     declare lastName: string | null
     declare address: string | null
-    declare phoneNo: string | null
+    declare phone: string | null
     declare username: string
     declare password: string
-    declare status: string
+    declare active: boolean
 }
 
 User.init(attributes, options)
