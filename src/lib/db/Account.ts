@@ -10,40 +10,44 @@ const attributes = {
         defaultValue: ulid.generate,
         validate: {
             isValid: ulid.validator()
-         }
-     },
+        }
+    },
     name: {
         type: DataTypes.STRING,
         allowNull: false
-     },
+    },
     address: {
         type: DataTypes.TEXT
-     },
+    },
     phone: {
         type: DataTypes.STRING(32)
-     },
+    },
     isrCode: {
         type: DataTypes.STRING(20),
         field: 'isr_code'
-     },
+    },
     sapCode: {
         type: DataTypes.STRING(20),
         field: 'sap_code'
-     },
+    },
     companyCode: {
         type: DataTypes.STRING(20),
         field: 'company_code'
-     },
+    },
     type: {
-        type: DataTypes.ENUM(accountTypes.DISTRIBUTOR, accountTypes.DEALER, accountTypes.FRANCHISEE),
+        type: DataTypes.ENUM(
+            accountTypes.DISTRIBUTOR,
+            accountTypes.DEALER,
+            accountTypes.FRANCHISEE
+        ),
         field: 'type',
         allowNull: false
-      },
-    status: {
-        type: DataTypes.STRING(20),
-        allowNull: false,
-        defaultValue: 'active'
-      },
+    },
+    active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+        allowNull: false
+    },
     associateId: {
         type: DataTypes.STRING(26),
         field: 'associate_id',
@@ -51,8 +55,8 @@ const attributes = {
         defaultValue: null,
         validate: {
             isValid: ulid.validator(true)
-         }
-     }
+        }
+    }
 }
 
 const options = {
@@ -80,12 +84,12 @@ class Account extends Model {
         this.belongsTo(models.Account, {
             as: 'parent',
             foreignKey: 'associateId'
-         })
+        })
 
         this.hasMany(models.Account, {
             as: 'children',
             foreignKey: 'associateId'
-         })
+        })
     }
 }
 
