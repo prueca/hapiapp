@@ -8,16 +8,12 @@
 </script>
 
 <div class="content-wrapper">
-    {#await data.accounts}
-        <p>Loading...</p>
-    {:then accounts}
-        <div class="mb-21">
-            <TopBar />
-            <Chart />
-            <AccountList {accounts} />
-        </div>
-        <Dock />
-    {/await}
+    <div class="mb-21">
+        <TopBar />
+        <Chart />
+        <AccountList accounts={data.accounts} />
+    </div>
+    <Dock />
 </div>
 
 <style lang="postcss">

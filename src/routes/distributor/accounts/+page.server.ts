@@ -114,7 +114,7 @@ export const load = async ({ locals }) => {
 
         const accounts = _.map(flatten(ancestor), (x) => x?.toJSON())
 
-        resolve(accounts)
+        setTimeout(() => resolve(accounts), 5000)
     })
 
     return {
