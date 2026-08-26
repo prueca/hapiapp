@@ -1,15 +1,29 @@
 <script lang="ts">
     import AccountListItem from './AccountListItem.svelte'
     import Skeleton from '../../../components/Skeleton.svelte'
+    import Search from './Search.svelte'
 
     let { accounts } = $props()
 </script>
 
 <div class="px-4">
-    <div class="mb-2">Accounts</div>
+    <div class="mb-2 flex items-center justify-between">
+        <span class="text-lg">Accounts</span>
+        <div class="flex items-center">
+            <button type="button" class="delete-account btn btn-ghost btn-xs">
+                <span>&minus;</span>
+                <span>Delete</span>
+            </button>
+            <div class="divider-sm divider mx-0 mt-0.5 divider-horizontal h-5"></div>
+            <button type="button" class="create-account btn btn-ghost btn-xs">
+                <span>&plus;</span>
+                <span>Create</span>
+            </button>
+        </div>
+    </div>
     <div class="overflow-hidden rounded-lg bg-white">
         <!-- search -->
-        <div class="border-b border-b-gray-100 p-4">search section</div>
+        <Search />
 
         {#await accounts}
             <!-- loading skeletons  -->
@@ -27,4 +41,10 @@
 
 <style lang="postcss">
     @reference 'tailwindcss';
+
+    .create-account,
+    .delete-account,
+    .select-account {
+        @apply flex items-center gap-2 rounded-md text-sm;
+    }
 </style>
