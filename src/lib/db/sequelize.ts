@@ -1,4 +1,4 @@
-import { DB_URL } from '$env/static/private'
+import { DB_URL, DB_SSL } from '$env/static/private'
 import { Sequelize } from 'sequelize'
 
 const sequelize = new Sequelize(DB_URL as string, {
@@ -8,10 +8,7 @@ const sequelize = new Sequelize(DB_URL as string, {
     },
     logging: false,
     dialectOptions: {
-        ssl: {
-            require: true,
-            rejectUnauthorized: false
-        }
+        ssl: DB_SSL === '1' ? { require: true, rejectUnauthorized: false } : false
     }
 })
 
