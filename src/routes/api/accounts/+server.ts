@@ -1,4 +1,3 @@
-import '$lib/db'
 import { json, error } from '@sveltejs/kit'
 import { StatusCodes, ReasonPhrases } from 'http-status-codes'
 import accountTypes from '$lib/config/account.types'

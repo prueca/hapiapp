@@ -1,3 +1,4 @@
+import '$lib/db'
 import { ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_SECRET, IGNORE_AUTH } from '$env/static/private'
 import type { Handle } from '@sveltejs/kit'
 import { StatusCodes, ReasonPhrases } from 'http-status-codes'
@@ -43,8 +44,8 @@ export const handle: Handle = async ({ event, resolve }) => {
         }
 
         type TokenPayload = JwtPayload & {
-            user: LocalsUser
-            account: LocalsAccount
+            user: AuthUser
+            account: AuthAccount
         }
 
         const payload = jwt.verify(accessToken, ACCESS_TOKEN_SECRET as string) as TokenPayload

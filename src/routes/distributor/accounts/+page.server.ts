@@ -1,4 +1,3 @@
-import '$lib/db'
 import accountTypes from '$lib/config/account.types'
 import _ from 'lodash'
 

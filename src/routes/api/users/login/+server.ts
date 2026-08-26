@@ -1,4 +1,3 @@
-import '$lib/db'
 import {
     AUTHORIZATION_TOKEN_COOKIE,
     AUTHORIZATION_TOKEN_SECRET,
