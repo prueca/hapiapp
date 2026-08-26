@@ -43,8 +43,7 @@
     @reference 'tailwindcss';
 
     .create-account,
-    .delete-account,
-    .select-account {
+    .delete-account {
         @apply flex items-center gap-2 rounded-md text-sm;
     }
 </style>
