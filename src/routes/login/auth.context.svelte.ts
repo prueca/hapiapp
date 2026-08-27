@@ -4,7 +4,7 @@ import z from 'zod'
 import { goto } from '$app/navigation'
 import accountTypes from '$lib/config/account.types'
 
-class LoginState {
+class AuthContext {
     username = $state('User1234')
     password = $state('hapi123')
     accounts = $state<AuthAccount[]>([])
@@ -123,4 +123,4 @@ class LoginState {
     }
 }
 
-export default new LoginState()
+export default new AuthContext()
