@@ -40,7 +40,7 @@
         </a>
         <a href="/distributor/products" class="menu-item">
             <span class="text-(--c1)">
-                <Icon icon="reicon:notes-filled" width="42" />
+                <Icon icon="solar:notes-bold" width="42" />
             </span>
             <div class="item-label">Products</div>
         </a>

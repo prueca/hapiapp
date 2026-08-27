@@ -9,7 +9,7 @@
     <div class="flex items-center justify-between">
         <div>
             <!-- account name -->
-            <div class="mb-1 font-semibold">{item.name}</div>
+            <div class="mb-1 font-medium">{item.name}</div>
 
             <div class="flex gap-2 text-xs text-gray-400">
                 <!-- account type -->

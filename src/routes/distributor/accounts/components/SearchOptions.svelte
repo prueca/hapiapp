@@ -1,9 +1,14 @@
 <script lang="ts">
-    // import Icon from '@iconify/svelte'
+    import search from '../search.context.svelte'
+
+    const submit = () => {
+        search.toggleSearchOptions()
+        search.submit()
+    }
 </script>
 
 <div class="account-selection">
-    <div class="modal">
+    <div class="modal" class:modal-open={search.openSearchOptions}>
         <div class="modal-box">
             <div class="heading">
                 <p class="mb-4 text-lg font-bold">Search and filter accounts...</p>
@@ -40,7 +45,7 @@
                     </select>
                 </fieldset>
 
-                <!-- sort key -->
+                <!-- sort order -->
                 <fieldset class="fieldset">
                     <label class="label">Sort Order</label>
                     <select class="select w-full">
@@ -50,8 +55,10 @@
                 </fieldset>
             </div>
             <div class="modal-action">
-                <button class="cancel-btn btn"> Cancel </button>
-                <button class="search-btn btn"> Search </button>
+                <button class="cancel-btn btn" onclick={() => search.toggleSearchOptions()}>
+                    Cancel
+                </button>
+                <button class="search-btn btn" onclick={() => submit()}> Search </button>
             </div>
         </div>
     </div>
