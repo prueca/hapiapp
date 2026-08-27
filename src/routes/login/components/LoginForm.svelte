@@ -1,7 +1,7 @@
 <script lang="ts">
     import logo from '$lib/assets/Selecta_Logo_2003.svg'
     import Icon from '@iconify/svelte'
-    import loginState from '../login.state.svelte'
+    import auth from '../auth.context.svelte'
 </script>
 
 <div class="login-form">
@@ -11,12 +11,9 @@
     </div>
 
     <!-- message -->
-    <div
-        class="message alert hidden alert-soft alert-error"
-        class:hidden={loginState.error === null}
-    >
+    <div class="message alert hidden alert-soft alert-error" class:hidden={auth.error === null}>
         <Icon class="icon" icon="material-symbols:warning-outline-rounded" width="20" />
-        <span>{loginState.error}</span>
+        <span>{auth.error}</span>
     </div>
 
     <div class="fields-container">
@@ -25,7 +22,7 @@
             <div class="field-label">Username</div>
             <label class="input">
                 <Icon class="icon" icon="mi:user" width="20" />
-                <input bind:value={loginState.username} type="email" placeholder="Enter username" />
+                <input bind:value={auth.username} type="email" placeholder="Enter username" />
             </label>
         </div>
 
@@ -35,11 +32,11 @@
             <label class="input">
                 <Icon class="icon" icon="material-symbols:key-outline-rounded" width="20" />
                 <input
-                    bind:value={loginState.password}
-                    type={loginState.showPassword ? 'text' : 'password'}
+                    bind:value={auth.password}
+                    type={auth.showPassword ? 'text' : 'password'}
                     placeholder="Enter password"
                 />
-                <button class="cursor-pointer" onclick={() => loginState.togglePasswordMask()}>
+                <button class="cursor-pointer" onclick={() => auth.togglePasswordMask()}>
                     <Icon class="icon" icon="bx:show" width="20" />
                 </button>
             </label>
@@ -53,11 +50,11 @@
         </div>
 
         <!-- login button -->
-        <button class="login-btn btn" onclick={() => loginState.login()}>
-            {#if loginState.status === 1}
+        <button class="login-btn btn" onclick={() => auth.login()}>
+            {#if auth.status === 1}
                 <span class="loading loading-spinner"></span>
                 <span>Please wait...</span>
-            {:else if loginState.status === 2}
+            {:else if auth.status === 2}
                 <span class="loading loading-spinner"></span>
                 <span>Logging in...</span>
             {:else}

@@ -1,22 +1,22 @@
 <script lang="ts">
     import Account from './Account.svelte'
-    import loginState from '../login.state.svelte'
+    import auth from '../auth.context.svelte'
 </script>
 
 <div class="account-selection">
-    <div class="modal" class:modal-open={loginState.openAccountSelection}>
+    <div class="modal" class:modal-open={auth.openAccountSelection}>
         <div class="modal-box">
             <div class="heading">
                 <p class="mb-1 text-xl font-bold">Login As...</p>
                 <p class="text-sm text-gray-400">Pick an account to login</p>
             </div>
             <div class="account-list">
-                {#each loginState.accounts as account}
+                {#each auth.accounts as account}
                     <Account {account} />
                 {/each}
             </div>
             <div class="modal-action">
-                <button class="cancel-btn btn" onclick={() => loginState.toggleAccountSelection()}>
+                <button class="cancel-btn btn" onclick={() => auth.toggleAccountSelection()}>
                     Cancel
                 </button>
             </div>

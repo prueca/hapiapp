@@ -36,7 +36,7 @@
 </script>
 
 <div class="chart">
-    <div class="mb-2">Graphical Chart</div>
+    <div class="mb-2 text-lg">Graphical Chart</div>
     <div class="rounded-lg bg-white p-4">
         <div class="chart-wrapper">
             <Pie {data} {options} />

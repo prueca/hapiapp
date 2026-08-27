@@ -1,6 +1,6 @@
 <script lang="ts">
     import Icon from '@iconify/svelte'
-    import loginState from '../login.state.svelte'
+    import auth from '../auth.context.svelte'
     import _ from 'lodash'
 
     type Account = {
@@ -18,7 +18,7 @@
     let { account }: Props = $props()
 </script>
 
-<button class="account" type="button" onclick={() => loginState.authorize(account.companyCode)}>
+<button class="account" type="button" onclick={() => auth.authorize(account.companyCode)}>
     <div class="w-full">
         <div class="account-name">{account.name}</div>
         <div class="account-details">

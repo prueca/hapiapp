@@ -17,8 +17,10 @@
     --font-family: 'Geist', sans-serif;
 
     --c1: #e16660; /* red */
-    --c2: #f3f4f6; /* light gray */
-    --c3: #ffffff; /* white */
+    --c2: #ff9671; /* orange */
+    --c3: #ffc75f; /* yellow orange */
+    --c4: #f3f4f6; /* light gray */
+    --c5: #ffffff; /* white */
 
     --c1-shadow:
         rgba(225, 102, 96, 0.5) 0px 10px 25px -5px, rgba(225, 102, 96, 0.5) 0px 8px 10px -5px;
@@ -30,9 +32,9 @@ body {
     color: var(--font-color);
     font-size: var(--font-size);
     font-family: var(--font-family);
-    min-height: 100vh;
+    min-height: 100dvh;
 
-    @apply bg-gray-100;
+    @apply bg-(--c4);
 }
 
 /* overrides */
