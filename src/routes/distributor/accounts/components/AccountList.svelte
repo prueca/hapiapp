@@ -2,6 +2,7 @@
     import AccountListItem from './AccountListItem.svelte'
     import Skeleton from '../../../components/Skeleton.svelte'
     import Search from './Search.svelte'
+    import SearchOptions from './SearchOptions.svelte'
 
     let { accounts } = $props()
 </script>
@@ -24,6 +25,7 @@
     <div class="overflow-hidden rounded-lg bg-white">
         <!-- search -->
         <Search />
+        <SearchOptions />
 
         {#await accounts}
             <!-- loading skeletons  -->

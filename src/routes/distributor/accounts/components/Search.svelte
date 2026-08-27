@@ -5,10 +5,15 @@
 <div class="border-b border-b-gray-100 p-4">
     <div class="flex gap-2">
         <!-- Search -->
-        <label class="input w-full rounded-md">
-            <Icon icon="bytesize:search" width="20" />
-            <input type="search" class="grow" placeholder="Search" />
-        </label>
+        <div class="join w-full">
+            <div class="grow">
+                <label class="input w-full rounded-l-md">
+                    <Icon icon="bytesize:search" width="20" />
+                    <input type="search" class="grow" placeholder="Search" />
+                </label>
+            </div>
+            <button type="button" class="btn rounded-r-md"> Search </button>
+        </div>
 
         <!-- Account type -->
         <!-- <select class="account-type">
