@@ -30,9 +30,9 @@ body {
     color: var(--font-color);
     font-size: var(--font-size);
     font-family: var(--font-family);
-    min-height: 100vh;
+    min-height: 100dvh;
 
-    @apply bg-gray-100;
+    @apply bg-(--c2);
 }
 
 /* overrides */

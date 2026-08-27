@@ -94,7 +94,7 @@ const fetch = async (account: SubjectAccount, children = false) => {
 }
 
 const flatten = (account: Account): Account[] => {
-    return [account, ...(account.children ?? []).flatMap((b) => [b, ...(b.children ?? [])])]
+    return [...(account.children ?? []).flatMap((b) => [b, ...(b.children ?? [])])]
 }
 
 export const load = async ({ locals }) => {
