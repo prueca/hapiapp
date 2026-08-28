@@ -32,7 +32,7 @@ const schema = z.object({
         type: z.enum([accountTypes.DISTRIBUTOR, accountTypes.DEALER, accountTypes.FRANCHISEE]),
         id: z.ulid()
     }),
-    limit: z.number().optional(),
+    limit: z.number().min(1).optional(),
     nextCursor: z.string().optional(),
     filter: z
         .object({
@@ -176,8 +176,15 @@ const fetch = async (account: SubjectAccount, options?: FetchOptions) => {
     }
 
     try {
-        return await Account.findAll(findOptions)
-    } catch (error: any) {
+        const items = await Account.findAll(findOptions)
+        let nextCursor: string | undefined
+
+        if (options?.limit && items.length > options.limit) {
+            nextCursor = items.pop()?.id
+        }
+
+        return { items, nextCursor }
+    } catch (e: any) {
         error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
     }
 }
