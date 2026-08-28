@@ -1,9 +1,15 @@
+import type Account from '$lib/db/Account'
+
 class SearchContext {
+    accounts: Promise<Account[]> | Account[] | null = $state(null)
+
     query = $state('')
     openSearchOptions = $state(false)
 
     submit() {
-        console.log('Sending request...')
+        this.accounts = new Promise((resolve) => {
+            setTimeout(() => resolve([]), 4000)
+        })
     }
 
     toggleSearchOptions() {

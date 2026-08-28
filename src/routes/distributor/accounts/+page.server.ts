@@ -102,10 +102,10 @@ export const load = async ({ locals }) => {
     const ok = await verifyAccess(locals, _.pick(account, ['type', 'id']))
 
     if (!ok) {
-        return { ...locals, accounts: [] }
+        return { ...locals, accounts: [] as Account[] }
     }
 
-    const promise = new Promise(async (resolve) => {
+    const promise = new Promise<Account[]>(async (resolve) => {
         const ancestor = await fetch(account, true)
 
         if (!ancestor) {
@@ -114,7 +114,7 @@ export const load = async ({ locals }) => {
 
         const accounts = _.map(flatten(ancestor), (x) => x?.toJSON())
 
-        resolve(accounts)
+        setTimeout(() => resolve(accounts), 4000)
     })
 
     return {

@@ -3,8 +3,7 @@
     import Skeleton from '../../../components/Skeleton.svelte'
     import Search from './Search.svelte'
     import SearchOptions from './SearchOptions.svelte'
-
-    let { accounts } = $props()
+    import search from '../search.context.svelte'
 </script>
 
 <div class="px-4">
@@ -27,7 +26,7 @@
         <Search />
         <SearchOptions />
 
-        {#await accounts}
+        {#await search.accounts}
             <!-- loading skeletons  -->
             <Skeleton class="h-36 w-full rounded-none" />
         {:then accounts}
