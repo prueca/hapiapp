@@ -5,6 +5,11 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import _ from 'lodash'
 
 export const load = async ({ locals }) => {
+    console.log({
+        from: 'distributor/+layout.server.ts',
+        locals
+    })
+
     if (!locals.isAuthenticated) {
         return redirect(StatusCodes.SEE_OTHER, '/login')
     }
