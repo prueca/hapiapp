@@ -2,11 +2,7 @@
 
 <script lang="ts">
     import accounts from '../accounts.context.svelte'
-
-    const submit = () => {
-        accounts.toggleSearchOptions()
-        accounts.load()
-    }
+    import accountTypes from '$lib/config/account.types'
 </script>
 
 <div class="account-selection">
@@ -32,37 +28,49 @@
                 <!-- account type -->
                 <fieldset class="fieldset">
                     <label class="label">Account Type</label>
-                    <select class="select w-full">
-                        <option disabled={true} selected>Pick account type</option>
-                        <option>All</option>
-                        <option>Dealer</option>
-                        <option>Franchisse</option>
+                    <select
+                        class="select w-full"
+                        bind:value={accounts.accountType}
+                        onchange={() => accounts.filter()}
+                    >
+                        <option value="" disabled={true} selected>Pick account type</option>
+                        <option value="">All</option>
+                        <option value={accountTypes.DEALER}>Dealer</option>
+                        <option value={accountTypes.FRANCHISEE}>Franchisse</option>
                     </select>
                 </fieldset>
 
                 <!-- sort key -->
                 <fieldset class="fieldset">
                     <label class="label">Sort By</label>
-                    <select class="select w-full">
-                        <option>Name</option>
-                        <option>Company Code</option>
+                    <select
+                        class="select w-full"
+                        bind:value={accounts.sortBy}
+                        onchange={() => accounts.filter()}
+                    >
+                        <option value="id" selected>ID</option>
+                        <option value="name">Name</option>
+                        <option value="companyCode">Company Code</option>
                     </select>
                 </fieldset>
 
                 <!-- sort order -->
                 <fieldset class="fieldset">
                     <label class="label">Sort Order</label>
-                    <select class="select w-full">
-                        <option>Descending</option>
-                        <option>Ascending</option>
+                    <select
+                        class="select w-full"
+                        bind:value={accounts.sortOrder}
+                        onchange={() => accounts.filter()}
+                    >
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
                     </select>
                 </fieldset>
             </div>
             <div class="modal-action">
-                <button class="cancel-btn btn" onclick={() => accounts.toggleSearchOptions()}>
-                    Cancel
+                <button class="close-btn btn" onclick={() => accounts.toggleSearchOptions()}>
+                    Close
                 </button>
-                <button class="search-btn btn" onclick={() => submit()}> Search </button>
             </div>
         </div>
     </div>
@@ -79,11 +87,7 @@
             @apply rounded-lg;
         }
     }
-
-    .search-btn {
-        @apply cursor-pointer rounded-lg border-none bg-(--c1) text-white;
-    }
-    .cancel-btn {
+    .close-btn {
         @apply cursor-pointer rounded-lg border-none;
     }
 </style>

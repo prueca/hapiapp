@@ -9,6 +9,10 @@ class AccountsContext {
     filtered: Account[] = $state([])
 
     query = $state('')
+    accountType = $state('')
+    sortBy = $state('id')
+    sortOrder = $state('asc')
+
     openSearchOptions = $state(false)
 
     async load() {
@@ -27,18 +31,32 @@ class AccountsContext {
             .filter((x) => {
                 const accountName = _.toLower(x.name)
                 const companyCode = _.toLower(x.companyCode as string)
-                const query = _.toLower(this.query)
-                const found = _.includes(accountName, query) || _.includes(companyCode, query)
+                const query = _.toLower(this.query).trim()
 
-                console.log({
-                    accountName,
-                    companyCode,
-                    query,
-                    found
-                })
+                if (query && this.accountType) {
+                    const matches =
+                        (_.includes(accountName, query) || _.includes(companyCode, query)) &&
+                        x.type === this.accountType
 
-                return found
+                    return matches
+                }
+
+                if (query) {
+                    const matches = _.includes(accountName, query) || _.includes(companyCode, query)
+
+                    return matches
+                }
+
+                if (this.accountType) {
+                    const matches = x.type === this.accountType
+
+                    return matches
+                }
+
+                return true
             })
+            .orderBy([this.sortBy, this.sortOrder])
+            .take(10)
             .value()
     }
 
