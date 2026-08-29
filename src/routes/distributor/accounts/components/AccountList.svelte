@@ -35,7 +35,7 @@
         {:else}
             <!-- list -->
             <div class="p-4">
-                {#each accounts.list as item}
+                {#each accounts.filtered as item}
                     <AccountListItem {item} />
                 {/each}
             </div>

@@ -10,9 +10,9 @@
 
     let { data } = $props()
 
-    setContext('auth', {
-        user: data.user,
-        account: data.account
+    setContext<{ user: AuthUser; account: AuthAccount }>('auth', {
+        user: data.user!,
+        account: data.account!
     })
 </script>
 

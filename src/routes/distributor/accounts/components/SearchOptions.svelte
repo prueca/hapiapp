@@ -24,6 +24,8 @@
                         id="name"
                         class="input w-full"
                         placeholder="Account name or company code"
+                        bind:value={accounts.query}
+                        onkeyup={() => accounts.filter()}
                     />
                 </fieldset>
 
