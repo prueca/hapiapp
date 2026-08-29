@@ -3,6 +3,7 @@ import { DataTypes, Model } from 'sequelize'
 import ulid from '$lib/ulid'
 import Deployment from './Deployment'
 import Cabcon from './Cabcon'
+import Account from './Account'
 
 const attributes = {
     id: {
@@ -11,25 +12,33 @@ const attributes = {
         defaultValue: ulid.generate,
         validate: {
             isValid: ulid.validator()
-          }
-      },
+        }
+    },
     model: {
         type: DataTypes.STRING(100),
         allowNull: false
-       },
+    },
     capacity: {
         type: DataTypes.STRING(20)
-       },
+    },
     barcode: {
         type: DataTypes.STRING(40)
-       },
+    },
     brand: {
         type: DataTypes.STRING(50)
-       },
+    },
     yearModel: {
         type: DataTypes.INTEGER,
         field: 'year_model'
-       }
+    },
+    distributorId: {
+        type: DataTypes.STRING(26),
+        field: 'distributor_id',
+        allowNull: false,
+        validate: {
+            isValid: ulid.validator()
+        }
+    }
 }
 
 const options = {
@@ -46,6 +55,8 @@ class Freezer extends Model {
     declare barcode: string | null
     declare brand: string | null
     declare yearModel: number | null
+    declare distributorId: string
+    declare distributor?: Account
     declare deployments?: Deployment[]
     declare cabcons?: Cabcon[]
 
@@ -53,13 +64,18 @@ class Freezer extends Model {
         this.hasMany(models.Deployment, {
             as: 'deployments',
             foreignKey: 'freezerId'
-          })
+        })
 
         this.hasMany(models.Cabcon, {
             as: 'cabcons',
             foreignKey: 'freezerId'
-          })
-      }
+        })
+
+        this.belongsTo(models.Account, {
+            as: 'distributor',
+            foreignKey: 'distributorId'
+        })
+    }
 }
 
 Freezer.init(attributes, options)
