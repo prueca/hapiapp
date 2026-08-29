@@ -4,14 +4,12 @@
     import Dashboard from './components/Dashboard.svelte'
     import WelcomeBanner from './components/WelcomeBanner.svelte'
     import accountTypes from '$lib/config/account.types'
-
-    let { data } = $props()
 </script>
 
 <div class="content-wrapper">
     <div class="mb-17">
         <TopBar />
-        <WelcomeBanner {data} />
+        <WelcomeBanner />
         <Dashboard />
     </div>
     <Dock accountType={accountTypes.DISTRIBUTOR} />

@@ -1,10 +1,9 @@
 <script lang="ts">
+    import { getContext } from 'svelte'
     import Icon from '@iconify/svelte'
     import roles from '$lib/config/user.roles'
 
-    let { data } = $props()
-    let user = $derived(data.user)
-    let account = $derived(data.account)
+    const { user, account } = getContext<{ user: AuthUser; account: AuthAccount }>('auth')
 
     let loggedInAs = $derived.by(() => {
         switch (user.role) {
