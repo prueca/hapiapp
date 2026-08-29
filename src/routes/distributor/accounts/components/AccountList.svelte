@@ -1,9 +1,12 @@
 <script lang="ts">
+    import { onMount } from 'svelte'
     import AccountListItem from './AccountListItem.svelte'
     import Skeleton from '../../../components/Skeleton.svelte'
     import Search from './Search.svelte'
     import SearchOptions from './SearchOptions.svelte'
     import search from '../search.context.svelte'
+
+    onMount(() => search.submit())
 </script>
 
 <div class="px-4">
@@ -26,17 +29,17 @@
         <Search />
         <SearchOptions />
 
-        {#await search.accounts}
+        {#if search.loading}
             <!-- loading skeletons  -->
             <Skeleton class="h-36 w-full rounded-none" />
-        {:then accounts}
+        {:else}
             <!-- list -->
             <div class="p-4">
-                {#each accounts as item}
+                {#each search.accounts as item}
                     <AccountListItem {item} />
                 {/each}
             </div>
-        {/await}
+        {/if}
     </div>
 </div>
 

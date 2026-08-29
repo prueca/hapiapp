@@ -7,7 +7,7 @@ import _ from 'lodash'
 
 import Account from '$lib/db/Account'
 
-type SubjectAccount = {
+type ScopedAccount = {
     type: (typeof accountTypes)[keyof typeof accountTypes]
     id: string
 }
@@ -25,10 +25,6 @@ type FetchOptions = {
 }
 
 const schema = z.object({
-    account: z.object({
-        type: z.enum([accountTypes.DISTRIBUTOR, accountTypes.DEALER, accountTypes.FRANCHISEE]),
-        id: z.ulid()
-    }),
     query: z.string().optional(),
     nextCursor: z.string().optional(),
     limit: z.number().min(1).optional(),
@@ -42,48 +38,7 @@ const schema = z.object({
         .optional()
 })
 
-const verifyAccess = async (locals: App.Locals, account: SubjectAccount) => {
-    const xy = `${locals.account?.type}:${account.type}`
-    let descendant: Account | null = null
-
-    switch (xy) {
-        case `${accountTypes.DISTRIBUTOR}:${accountTypes.DISTRIBUTOR}`:
-        case `${accountTypes.DEALER}:${accountTypes.DEALER}`:
-        case `${accountTypes.FRANCHISEE}:${accountTypes.FRANCHISEE}`:
-            return account.id === locals.account?.id
-
-        case `${accountTypes.DISTRIBUTOR}:${accountTypes.DEALER}`:
-        case `${accountTypes.DEALER}:${accountTypes.FRANCHISEE}`:
-            descendant = await Account.findOne({
-                where: account
-            })
-
-            return descendant?.associateId === locals.account?.id
-
-        case `${accountTypes.DISTRIBUTOR}:${accountTypes.FRANCHISEE}`:
-            descendant = await Account.findOne({
-                where: account,
-                include: [
-                    {
-                        model: Account,
-                        as: 'parent', // dealer
-                        include: [
-                            {
-                                model: Account,
-                                as: 'parent' // distributor
-                            }
-                        ]
-                    }
-                ]
-            })
-
-            return descendant?.parent?.parent?.id === locals.account?.id
-    }
-
-    return false
-}
-
-const fetch = async (account: SubjectAccount, options?: FetchOptions) => {
+const fetch = async (account: ScopedAccount, options?: FetchOptions) => {
     let where: Json = {}
 
     if (options?.nextCursor) {
@@ -177,7 +132,9 @@ const fetch = async (account: SubjectAccount, options?: FetchOptions) => {
             nextCursor = items.pop()?.id
         }
 
-        return { items, nextCursor }
+        const data = { items, nextCursor }
+
+        return { data }
     } catch (e: any) {
         error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
     }
@@ -191,14 +148,9 @@ export const POST = async ({ locals, request }) => {
         error(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST)
     }
 
-    const { account, query, nextCursor, limit, sort } = validation.data
-    const ok = await verifyAccess(locals, account)
+    const { query, nextCursor, limit, sort } = validation.data
 
-    if (!ok) {
-        error(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND)
-    }
-
-    const data = await fetch(account, { query, nextCursor, limit, sort })
+    const data = await fetch(locals.account!, { query, nextCursor, limit, sort })
 
     return json(data)
 }

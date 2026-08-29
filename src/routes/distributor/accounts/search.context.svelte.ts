@@ -1,15 +1,27 @@
 import type Account from '$lib/db/Account'
+import api from '$lib/api'
+import _ from 'lodash'
 
 class SearchContext {
-    accounts: Promise<Account[]> | Account[] | null = $state(null)
+    accounts: Account[] = $state([])
+
+    loading = $state(false)
 
     query = $state('')
     openSearchOptions = $state(false)
 
-    submit() {
-        this.accounts = new Promise((resolve) => {
-            setTimeout(() => resolve([]), 4000)
+    async submit() {
+        this.loading = true
+
+        const res = await api.post('accounts', {
+            json: { query: this.query }
         })
+
+        const response: Data<{ items: Account[]; nextCusror?: string }> = await res.json()
+
+        this.accounts = response.data.items
+
+        this.loading = false
     }
 
     toggleSearchOptions() {

@@ -1,10 +1,11 @@
 <script lang="ts">
+    import { getContext } from 'svelte'
     import roles from '$lib/config/user.roles'
 
-    let { account, role } = $props()
+    const auth = getContext<{ user: AuthUser; account: AuthAccount }>('auth')
 
-    let userRole = $derived.by(() => {
-        switch (role) {
+    let role = $derived.by(() => {
+        switch (auth.user.role) {
             case roles.DISTRIBUTOR_ADMIN:
                 return 'Admin Distributor'
             case roles.DISTRIBUTOR_USER:
@@ -24,8 +25,8 @@
 </script>
 
 <div class="account-name">
-    <div class="mb-1">{account}</div>
-    <div class="text-xs">{userRole}</div>
+    <div class="mb-1">{auth.account.name}</div>
+    <div class="text-xs">{role}</div>
 </div>
 
 <style lang="postcss">
