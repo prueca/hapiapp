@@ -62,12 +62,6 @@ export const handle: Handle = async ({ event, resolve }) => {
         event.locals.account = payload.account
         event.locals.isAuthenticated = isAuthenticated
 
-        console.log({
-            from: 'hooks.server.ts',
-            user: payload.user,
-            account: payload.account
-        })
-
         return resolve(event)
     } catch {
         const response =
