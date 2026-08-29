@@ -37,8 +37,7 @@ export const handle: Handle = async ({ event, resolve }) => {
         console.log({
             from: 'hooks.server.ts',
             path: event.url.pathname,
-            hasAccessToken: !!accessToken,
-            cookies: event.cookies.getAll()
+            hasAccessToken: !!accessToken
         })
 
         if (!accessToken) {
