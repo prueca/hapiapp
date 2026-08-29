@@ -13,12 +13,9 @@ type SubjectAccount = {
 }
 
 type FetchOptions = {
-    limit?: number
+    query?: string
     nextCursor?: string
-    filter?: {
-        name?: string
-        companyCode?: string
-    }
+    limit?: number
     sort?: {
         id?: 'asc' | 'desc'
         type?: 'asc' | 'desc'
@@ -32,14 +29,9 @@ const schema = z.object({
         type: z.enum([accountTypes.DISTRIBUTOR, accountTypes.DEALER, accountTypes.FRANCHISEE]),
         id: z.ulid()
     }),
-    limit: z.number().min(1).optional(),
+    query: z.string().optional(),
     nextCursor: z.string().optional(),
-    filter: z
-        .object({
-            name: z.string().optional(),
-            companyCode: z.string().optional()
-        })
-        .optional(),
+    limit: z.number().min(1).optional(),
     sort: z
         .object({
             id: z.enum(['asc', 'desc']).optional(),
@@ -92,53 +84,55 @@ const verifyAccess = async (locals: App.Locals, account: SubjectAccount) => {
 }
 
 const fetch = async (account: SubjectAccount, options?: FetchOptions) => {
-    let query: Json = {}
-    let filter: Json = {}
+    let where: Json = {}
 
     if (options?.nextCursor) {
-        query.id = {
+        where.id = {
             [Op.gt]: options.nextCursor
         }
     }
 
-    if (!_.isEmpty(options?.filter)) {
-        if (options?.filter?.name) {
-            filter.name = {
-                [Op.iLike]: `%${options.filter.name}%`
-            }
-        }
-        if (options?.filter?.companyCode) {
-            filter.name = {
-                [Op.iLike]: `%${options.filter.companyCode}%`
-            }
-        }
-
-        filter = {
-            [Op.or]: filter
+    if (options?.query) {
+        where = {
+            ...where,
+            [Op.and]: [
+                {
+                    [Op.or]: [
+                        {
+                            name: {
+                                [Op.iLike]: `%${options.query}%`
+                            }
+                        },
+                        {
+                            companyCode: {
+                                [Op.iLike]: `%${options.query}%`
+                            }
+                        }
+                    ]
+                }
+            ]
         }
     }
 
     switch (account.type) {
         case accountTypes.DISTRIBUTOR:
-            query = {
-                ...query,
+            where = {
+                ...where,
                 [Op.or]: [
                     {
                         associateId: account.id,
-                        type: accountTypes.DEALER,
-                        ...filter
+                        type: accountTypes.DEALER
                     },
                     {
                         type: accountTypes.FRANCHISEE,
-                        '$parent.associate_id$': account.id,
-                        ...filter
+                        '$parent.associate_id$': account.id
                     }
                 ]
             }
             break
         case accountTypes.DEALER:
-            query = {
-                ...query,
+            where = {
+                ...where,
                 [Op.and]: [
                     {
                         associateId: account.id,
@@ -152,7 +146,7 @@ const fetch = async (account: SubjectAccount, options?: FetchOptions) => {
     }
 
     const findOptions: Json = {
-        where: query,
+        where,
         include: [
             {
                 model: Account,
@@ -197,14 +191,14 @@ export const POST = async ({ locals, request }) => {
         error(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST)
     }
 
-    const { account, nextCursor, filter, limit, sort } = validation.data
+    const { account, query, nextCursor, limit, sort } = validation.data
     const ok = await verifyAccess(locals, account)
 
     if (!ok) {
         error(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND)
     }
 
-    const data = await fetch(account, { nextCursor, filter, limit, sort })
+    const data = await fetch(account, { query, nextCursor, limit, sort })
 
     return json(data)
 }
