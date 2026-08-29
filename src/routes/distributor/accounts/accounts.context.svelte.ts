@@ -8,6 +8,9 @@ class AccountsContext {
     list: Account[] = $state([])
     filtered: Account[] = $state([])
 
+    limit = 10
+    total = $state(0)
+
     query = $state('')
     accountType = $state('')
     sortBy = $state('id')
@@ -22,12 +25,13 @@ class AccountsContext {
         const response: Data<{ items: Account[]; nextCusror?: string }> = await res.json()
 
         this.list = response.data.items
-        this.filtered = _.take(this.list, 10)
+        this.filtered = _.take(this.list, this.limit)
         this.loading = false
+        this.total = this.list.length
     }
 
-    filter() {
-        this.filtered = _.chain(this.list)
+    filter(limit = this.limit) {
+        const matches = _.chain(this.list)
             .filter((x) => {
                 const accountName = _.toLower(x.name)
                 const companyCode = _.toLower(x.companyCode as string)
@@ -56,8 +60,14 @@ class AccountsContext {
                 return true
             })
             .orderBy([this.sortBy, this.sortOrder])
-            .take(10)
             .value()
+
+        this.filtered = _.take(matches, limit)
+        this.total = matches.length
+    }
+
+    loadMore() {
+        this.filter(this.filtered.length + this.limit)
     }
 
     toggleSearchOptions() {

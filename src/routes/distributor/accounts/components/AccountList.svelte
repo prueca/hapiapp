@@ -25,7 +25,7 @@
         </div>
     </div>
     <div class="overflow-hidden rounded-lg bg-white">
-        <!-- search -->
+        <!-- search components -->
         <Search />
         <SearchOptions />
 
@@ -33,12 +33,23 @@
             <!-- loading skeletons  -->
             <Skeleton class="h-36 w-full rounded-none" />
         {:else}
-            <!-- list -->
+            <!-- account list -->
             <div class="p-4">
                 {#each accounts.filtered as item}
                     <AccountListItem {item} />
                 {/each}
             </div>
+            {#if accounts.filtered.length < accounts.total}
+                <div class="border-t border-gray-100 p-4 text-center">
+                    <button
+                        type="button"
+                        class="btn rounded-lg btn-ghost btn-sm"
+                        onclick={() => accounts.loadMore()}
+                    >
+                        Load More
+                    </button>
+                </div>
+            {/if}
         {/if}
     </div>
 </div>
