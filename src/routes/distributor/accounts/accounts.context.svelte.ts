@@ -2,25 +2,21 @@ import type Account from '$lib/db/Account'
 import api from '$lib/api'
 import _ from 'lodash'
 
-class SearchContext {
-    accounts: Account[] = $state([])
+class AccountsContext {
+    list: Account[] = $state([])
 
     loading = $state(false)
 
     query = $state('')
     openSearchOptions = $state(false)
 
-    async submit() {
+    async load() {
         this.loading = true
 
-        const res = await api.post('accounts', {
-            json: { query: this.query }
-        })
-
+        const res = await api.post('accounts', { json: {} })
         const response: Data<{ items: Account[]; nextCusror?: string }> = await res.json()
 
-        this.accounts = response.data.items
-
+        this.list = response.data.items
         this.loading = false
     }
 
@@ -29,4 +25,4 @@ class SearchContext {
     }
 }
 
-export default new SearchContext()
+export default new AccountsContext()

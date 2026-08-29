@@ -4,9 +4,9 @@
     import Skeleton from '../../../components/Skeleton.svelte'
     import Search from './Search.svelte'
     import SearchOptions from './SearchOptions.svelte'
-    import search from '../search.context.svelte'
+    import accounts from '../accounts.context.svelte'
 
-    onMount(() => search.submit())
+    onMount(() => accounts.load())
 </script>
 
 <div class="px-4">
@@ -29,13 +29,13 @@
         <Search />
         <SearchOptions />
 
-        {#if search.loading}
+        {#if accounts.loading}
             <!-- loading skeletons  -->
             <Skeleton class="h-36 w-full rounded-none" />
         {:else}
             <!-- list -->
             <div class="p-4">
-                {#each search.accounts as item}
+                {#each accounts.list as item}
                     <AccountListItem {item} />
                 {/each}
             </div>

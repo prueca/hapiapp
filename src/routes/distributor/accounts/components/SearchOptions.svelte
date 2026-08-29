@@ -1,14 +1,16 @@
+<!-- svelte-ignore a11y_label_has_associated_control -->
+
 <script lang="ts">
-    import search from '../search.context.svelte'
+    import accounts from '../accounts.context.svelte'
 
     const submit = () => {
-        search.toggleSearchOptions()
-        search.submit()
+        accounts.toggleSearchOptions()
+        accounts.load()
     }
 </script>
 
 <div class="account-selection">
-    <div class="modal" class:modal-open={search.openSearchOptions}>
+    <div class="modal" class:modal-open={accounts.openSearchOptions}>
         <div class="modal-box">
             <div class="heading">
                 <p class="mb-4 text-lg font-bold">Search and filter accounts...</p>
@@ -55,7 +57,7 @@
                 </fieldset>
             </div>
             <div class="modal-action">
-                <button class="cancel-btn btn" onclick={() => search.toggleSearchOptions()}>
+                <button class="cancel-btn btn" onclick={() => accounts.toggleSearchOptions()}>
                     Cancel
                 </button>
                 <button class="search-btn btn" onclick={() => submit()}> Search </button>
