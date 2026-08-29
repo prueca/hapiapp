@@ -34,12 +34,6 @@ export const handle: Handle = async ({ event, resolve }) => {
     try {
         const accessToken = event.cookies.get(ACCESS_TOKEN_COOKIE)
 
-        console.log({
-            from: 'hooks.server.ts',
-            path: event.url.pathname,
-            hasAccessToken: !!accessToken
-        })
-
         if (!accessToken) {
             const response =
                 isApi && !isLoginApi
