@@ -1,7 +1,9 @@
 <script lang="ts">
+    import { goto } from '$app/navigation'
     import Icon from '@iconify/svelte'
     import OtherMenu from './OtherMenu.svelte'
 
+    let { accountType } = $props()
     let isOpen = $state(false)
 
     function toggle() {
@@ -10,7 +12,7 @@
 </script>
 
 <div class="dock">
-    <button class="dock-active">
+    <button class="dock-active" onclick={() => goto(`/${accountType}`)}>
         <Icon icon="lineicons:dashboard-square-1" width="24" />
         <span class="dock-label">Dashboard</span>
     </button>

@@ -3,6 +3,7 @@
     import TopBar from '../components/TopBar'
     import Dashboard from './components/Dashboard.svelte'
     import WelcomeBanner from './components/WelcomeBanner.svelte'
+    import accountTypes from '$lib/config/account.types'
 
     let { data } = $props()
 </script>
@@ -13,7 +14,7 @@
         <WelcomeBanner {data} />
         <Dashboard />
     </div>
-    <Dock />
+    <Dock accountType={accountTypes.DISTRIBUTOR} />
 </div>
 
 <style lang="postcss">
