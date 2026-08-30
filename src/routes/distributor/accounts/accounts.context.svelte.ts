@@ -26,8 +26,9 @@ class AccountsContext {
 
         this.list = response.data.items
         this.filtered = _.take(this.list, this.limit)
-        this.loading = false
         this.total = this.list.length
+
+        this.loading = false
     }
 
     filter(limit = this.limit) {
