@@ -3,13 +3,13 @@ import ulid from '$lib/ulid'
 import accountTypes from '$lib/config/account.types'
 import userRoles from '$lib/config/user.roles'
 
-const typeEnum = pgEnum('account_type', [
+export const typeEnum = pgEnum('type', [
     accountTypes.DISTRIBUTOR,
     accountTypes.DEALER,
     accountTypes.HAPISTORE
 ])
 
-const roleEnum = pgEnum('user_role', [
+export const roleEnum = pgEnum('role', [
     userRoles.DISTRIBUTOR_ADMIN,
     userRoles.DISTRIBUTOR_USER,
     userRoles.DEALER_ADMIN,
@@ -54,8 +54,13 @@ export const access = pgTable(
     {
         id: varchar('id', { length: 26 }).primaryKey().$defaultFn(ulid.generate),
 
-        userId: varchar('user_id', { length: 26 }).primaryKey().$defaultFn(ulid.generate),
-        accountId: varchar('account_id', { length: 26 }).primaryKey().$defaultFn(ulid.generate)
+        userId: varchar('user_id', { length: 26 })
+            .references(() => user.id)
+            .notNull(),
+
+        accountId: varchar('account_id', { length: 26 })
+            .references(() => account.id)
+            .notNull()
     },
     (t) => [unique('access_user_account_unique').on(t.userId, t.accountId)]
 )
