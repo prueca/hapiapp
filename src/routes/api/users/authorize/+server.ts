@@ -14,7 +14,7 @@ import _ from 'lodash'
 
 import db from '$lib/drizzle'
 import { eq } from 'drizzle-orm'
-import * as table from '$lib/drizzle/schema'
+import * as t from '$lib/drizzle/schema'
 
 const schema = z.object({
     companyCode: z.string().nonempty()
@@ -45,9 +45,9 @@ const verifyAuthToken = (cookies: Cookies) => {
 const verifyAccess = async (username: string, companyCode: string) => {
     const [row] = await db
         .select()
-        .from(table.access)
-        .innerJoin(table.user, eq(table.user.username, username))
-        .innerJoin(table.account, eq(table.account.companyCode, companyCode))
+        .from(t.access)
+        .innerJoin(t.user, eq(t.user.username, username))
+        .innerJoin(t.account, eq(t.account.companyCode, companyCode))
         .limit(1)
 
     if (!row || !row.user || !row.account) {
@@ -62,8 +62,8 @@ const verifyAccess = async (username: string, companyCode: string) => {
 
 const authorize = (
     cookies: Cookies,
-    user: typeof table.user.$inferSelect,
-    account: typeof table.account.$inferSelect
+    user: typeof t.user.$inferSelect,
+    account: typeof t.account.$inferSelect
 ) => {
     const jwtPayload = {
         user: _.pick(user, ['id', 'role', 'username', 'firstName', 'middleName', 'lastName']),

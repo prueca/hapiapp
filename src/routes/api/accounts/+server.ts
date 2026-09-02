@@ -4,39 +4,40 @@ import accountTypes from '$lib/config/account.types'
 import _ from 'lodash'
 
 import db from '$lib/drizzle'
-import { eq, desc } from 'drizzle-orm'
+import { eq, getTableColumns, or, and } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
-import * as table from '$lib/drizzle/schema'
+import * as t from '$lib/drizzle/schema'
 
-export const POST = async ({ locals, request }) => {
+export const POST = async ({ locals }) => {
     const account = locals.account!
-    let items: (typeof table.account.$inferSelect)[] = []
+
+    let items: (typeof t.account.$inferSelect)[] = []
 
     switch (account.type) {
         case accountTypes.DISTRIBUTOR:
-            const dealer = alias(table.account, accountTypes.DEALER)
-            const hapistore = alias(table.account, accountTypes.HAPISTORE)
+            const parent = alias(t.account, 'parent')
 
-            const rows = await db
-                .select({
-                    dealer,
-                    hapistore
-                })
-                .from(table.account)
-                .leftJoin(dealer, eq(dealer.associateId, account.id))
-                .leftJoin(hapistore, eq(hapistore.associateId, dealer.id))
-                .where(eq(table.account.id, account.id))
-
-            items = rows.flatMap(({ dealer, hapistore }) => _.compact([dealer, hapistore]))
-            items = _.uniqBy(items, 'id')
+            items = await db
+                .select({ ...getTableColumns(t.account) })
+                .from(t.account)
+                .leftJoin(parent, eq(t.account.associateId, parent.id))
+                .where(
+                    or(
+                        and(
+                            eq(t.account.type, accountTypes.DEALER),
+                            eq(t.account.associateId, account.id)
+                        ),
+                        and(
+                            eq(t.account.type, accountTypes.HAPISTORE),
+                            eq(parent.associateId, account.id)
+                        )
+                    )
+                )
 
             break
 
         case accountTypes.DEALER:
-            items = await db
-                .select()
-                .from(table.account)
-                .where(eq(table.account.associateId, account.id))
+            items = await db.select().from(t.account).where(eq(t.account.associateId, account.id))
 
             break
 
