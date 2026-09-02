@@ -12,9 +12,9 @@ import moment from 'moment'
 import z from 'zod'
 import _ from 'lodash'
 
-import User from '$lib/db/User'
-import Account from '$lib/db/Account'
-import Access from '$lib/db/Access'
+import db from '$lib/drizzle'
+import { eq } from 'drizzle-orm'
+import * as table from '$lib/drizzle/schema'
 
 const schema = z.object({
     companyCode: z.string().nonempty()
@@ -43,34 +43,28 @@ const verifyAuthToken = (cookies: Cookies) => {
 }
 
 const verifyAccess = async (username: string, companyCode: string) => {
-    const access = await Access.findOne({
-        include: [
-            {
-                model: User,
-                as: 'user',
-                required: true,
-                where: { username }
-            },
-            {
-                model: Account,
-                as: 'account',
-                required: true,
-                where: { companyCode }
-            }
-        ]
-    })
+    const [row] = await db
+        .select()
+        .from(table.access)
+        .innerJoin(table.user, eq(table.user.username, username))
+        .innerJoin(table.account, eq(table.account.companyCode, companyCode))
+        .limit(1)
 
-    if (!access || !access.user || !access.account) {
+    if (!row || !row.user || !row.account) {
         error(StatusCodes.UNAUTHORIZED, INVALID_AUTHORIZATION)
     }
 
     return {
-        user: access.user,
-        account: access.account
+        user: row.user,
+        account: row.account
     }
 }
 
-const authorize = (cookies: Cookies, user: User, account: Account) => {
+const authorize = (
+    cookies: Cookies,
+    user: typeof table.user.$inferSelect,
+    account: typeof table.account.$inferSelect
+) => {
     const jwtPayload = {
         user: _.pick(user, ['id', 'role', 'username', 'firstName', 'middleName', 'lastName']),
         account: _.pick(account, ['id', 'type', 'companyCode', 'name', 'type', 'address'])

@@ -22,7 +22,7 @@ class AccountsContext {
         this.loading = true
 
         const res = await api.post('accounts', { json: {} })
-        const response: Data<{ items: Account[]; nextCusror?: string }> = await res.json()
+        const response: Data<{ items: Account[] }> = await res.json()
 
         this.list = response.data.items
         this.filtered = _.take(this.list, this.limit)

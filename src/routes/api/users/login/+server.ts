@@ -10,9 +10,9 @@ import jwt, { type SignOptions } from 'jsonwebtoken'
 import z from 'zod'
 import _ from 'lodash'
 
-import User from '$lib/db/User'
-import Account from '$lib/db/Account'
-import Access from '$lib/db/Access'
+import db from '$lib/drizzle'
+import { eq } from 'drizzle-orm'
+import * as table from '$lib/drizzle/schema'
 
 const schema = z.object({
     username: z.string().nonempty(),
@@ -36,9 +36,11 @@ export const POST = async ({ request, cookies }) => {
          * Check username validity
          */
 
-        const user = await User.findOne({
-            where: { username }
-        })
+        const [user] = await db
+            .select()
+            .from(table.user)
+            .where(eq(table.user.username, username))
+            .limit(1)
 
         if (!user) {
             error(StatusCodes.UNAUTHORIZED, INVALID_LOGIN)
@@ -82,20 +84,13 @@ export const POST = async ({ request, cookies }) => {
          * Return all accounts accessible to the user.
          */
 
-        let accessRecords = await Access.findAll({
-            where: { userId: user.id },
-            include: [
-                {
-                    model: Account,
-                    as: 'account',
-                    required: true
-                }
-            ],
-            raw: true,
-            nest: true
-        })
+        const rows = await db
+            .select()
+            .from(table.access)
+            .innerJoin(table.account, eq(table.access.accountId, table.account.id))
+            .where(eq(table.access.userId, user.id))
 
-        const accounts = _.map(accessRecords, (x) => {
+        const accounts = _.map(rows, (x) => {
             return _.pick(x.account, ['id', 'type', 'name', 'address', 'companyCode'])
         })
 

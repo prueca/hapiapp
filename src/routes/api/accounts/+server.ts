@@ -1,156 +1,52 @@
 import { json, error } from '@sveltejs/kit'
 import { StatusCodes, ReasonPhrases } from 'http-status-codes'
-import { Op } from 'sequelize'
 import accountTypes from '$lib/config/account.types'
-import z from 'zod'
 import _ from 'lodash'
 
-import Account from '$lib/db/Account'
+import db from '$lib/drizzle'
+import { eq, desc } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
+import * as table from '$lib/drizzle/schema'
 
-type ScopedAccount = {
-    type: (typeof accountTypes)[keyof typeof accountTypes]
-    id: string
-}
-
-type FetchOptions = {
-    query?: string
-    nextCursor?: string
-    limit?: number
-    sort?: {
-        id?: 'asc' | 'desc'
-        type?: 'asc' | 'desc'
-        name?: 'asc' | 'desc'
-        companyCode?: 'asc' | 'desc'
-    }
-}
-
-const schema = z.object({
-    query: z.string().optional(),
-    nextCursor: z.string().optional(),
-    limit: z.number().min(1).optional(),
-    sort: z
-        .object({
-            id: z.enum(['asc', 'desc']).optional(),
-            type: z.enum(['asc', 'desc']).optional(),
-            name: z.enum(['asc', 'desc']).optional(),
-            companyCode: z.enum(['asc', 'desc']).optional()
-        })
-        .optional()
-})
-
-const fetch = async (account: ScopedAccount, options?: FetchOptions) => {
-    let where: Json = {}
-
-    if (options?.nextCursor) {
-        where.id = {
-            [Op.gt]: options.nextCursor
-        }
-    }
-
-    if (options?.query) {
-        where = {
-            ...where,
-            [Op.and]: [
-                {
-                    [Op.or]: [
-                        {
-                            name: {
-                                [Op.iLike]: `%${options.query}%`
-                            }
-                        },
-                        {
-                            companyCode: {
-                                [Op.iLike]: `%${options.query}%`
-                            }
-                        }
-                    ]
-                }
-            ]
-        }
-    }
+export const POST = async ({ locals, request }) => {
+    const account = locals.account!
+    let items: (typeof table.account.$inferSelect)[] = []
 
     switch (account.type) {
         case accountTypes.DISTRIBUTOR:
-            where = {
-                ...where,
-                [Op.or]: [
-                    {
-                        associateId: account.id,
-                        type: accountTypes.DEALER
-                    },
-                    {
-                        type: accountTypes.FRANCHISEE,
-                        '$parent.associate_id$': account.id
-                    }
-                ]
-            }
+            const dealer = alias(table.account, accountTypes.DEALER)
+            const franchisee = alias(table.account, accountTypes.FRANCHISEE)
+
+            const rows = await db
+                .select({
+                    dealer,
+                    franchisee
+                })
+                .from(table.account)
+                .innerJoin(dealer, eq(dealer.associateId, account.id))
+                .innerJoin(franchisee, eq(franchisee.associateId, dealer.id))
+                .where(eq(table.account.id, account.id))
+                .orderBy(desc(table.account.id))
+
+            items = rows.flatMap(({ dealer, franchisee }) => [dealer, franchisee])
+            items = _.uniqBy(items, 'id')
+
             break
+
         case accountTypes.DEALER:
-            where = {
-                ...where,
-                [Op.and]: [
-                    {
-                        associateId: account.id,
-                        type: accountTypes.FRANCHISEE
-                    }
-                ]
-            }
+            items = await db
+                .select()
+                .from(table.account)
+                .where(eq(table.account.associateId, account.id))
+                .orderBy(desc(table.account.id))
+
             break
+
         default:
             error(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST)
     }
 
-    const findOptions: Json = {
-        where,
-        include: [
-            {
-                model: Account,
-                as: 'parent',
-                attributes: [],
-                required: false
-            }
-        ],
-        order: [['id', 'ASC']]
-    }
-
-    if (options?.limit) {
-        findOptions.limit = options.limit + 1
-    }
-
-    if (options?.sort) {
-        findOptions.order = [
-            ['id', options.sort.id || 'asc'],
-            ..._.map(options.sort, (order, column) => [column, order])
-        ]
-    }
-
-    try {
-        const items = await Account.findAll(findOptions)
-        let nextCursor: string | undefined
-
-        if (options?.limit && items.length > options.limit) {
-            nextCursor = items.pop()?.id
-        }
-
-        const data = { items, nextCursor }
-
-        return { data }
-    } catch (e: any) {
-        error(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR)
-    }
-}
-
-export const POST = async ({ locals, request }) => {
-    const payload = await request.json()
-    const validation = schema.safeParse(payload)
-
-    if (!validation.success) {
-        error(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST)
-    }
-
-    const { query, nextCursor, limit, sort } = validation.data
-
-    const data = await fetch(locals.account!, { query, nextCursor, limit, sort })
-
-    return json(data)
+    return json({
+        data: { items }
+    })
 }
