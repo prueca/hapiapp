@@ -4,7 +4,7 @@
 
     ChartJS.register(ArcElement, Tooltip, Legend)
 
-    const labels = ['Distributor', 'Dealer', 'Franchisee']
+    const labels = ['Distributor', 'Dealer', 'Hapistore']
     const colors = ['#e16660', '#ff9671', '#ffc75f']
 
     const data = {

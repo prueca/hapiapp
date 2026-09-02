@@ -15,20 +15,19 @@ export const POST = async ({ locals, request }) => {
     switch (account.type) {
         case accountTypes.DISTRIBUTOR:
             const dealer = alias(table.account, accountTypes.DEALER)
-            const franchisee = alias(table.account, accountTypes.FRANCHISEE)
+            const hapistore = alias(table.account, accountTypes.HAPISTORE)
 
             const rows = await db
                 .select({
                     dealer,
-                    franchisee
+                    hapistore
                 })
                 .from(table.account)
-                .innerJoin(dealer, eq(dealer.associateId, account.id))
-                .innerJoin(franchisee, eq(franchisee.associateId, dealer.id))
+                .leftJoin(dealer, eq(dealer.associateId, account.id))
+                .leftJoin(hapistore, eq(hapistore.associateId, dealer.id))
                 .where(eq(table.account.id, account.id))
-                .orderBy(desc(table.account.id))
 
-            items = rows.flatMap(({ dealer, franchisee }) => [dealer, franchisee])
+            items = rows.flatMap(({ dealer, hapistore }) => _.compact([dealer, hapistore]))
             items = _.uniqBy(items, 'id')
 
             break
@@ -38,7 +37,6 @@ export const POST = async ({ locals, request }) => {
                 .select()
                 .from(table.account)
                 .where(eq(table.account.associateId, account.id))
-                .orderBy(desc(table.account.id))
 
             break
 

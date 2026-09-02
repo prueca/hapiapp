@@ -1,4 +1,4 @@
-import { pgTable, varchar, integer, timestamp, pgEnum, boolean } from 'drizzle-orm/pg-core'
+import { pgTable, varchar, pgEnum, boolean } from 'drizzle-orm/pg-core'
 import ulid from '$lib/ulid'
 import accountTypes from '$lib/config/account.types'
 import userRoles from '$lib/config/user.roles'
@@ -6,7 +6,7 @@ import userRoles from '$lib/config/user.roles'
 const typeEnum = pgEnum('account_type', [
     accountTypes.DISTRIBUTOR,
     accountTypes.DEALER,
-    accountTypes.FRANCHISEE
+    accountTypes.HAPISTORE
 ])
 
 const roleEnum = pgEnum('user_role', [
@@ -14,8 +14,8 @@ const roleEnum = pgEnum('user_role', [
     userRoles.DISTRIBUTOR_USER,
     userRoles.DEALER_ADMIN,
     userRoles.DEALER_USER,
-    userRoles.FRANCHISEE_ADMIN,
-    userRoles.FRANCHISEE_USER
+    userRoles.HAPISTORE_ADMIN,
+    userRoles.HAPISTORE_USER
 ])
 
 export const account = pgTable('account', {

@@ -36,7 +36,7 @@
                         <option value="" disabled={true} selected>Pick account type</option>
                         <option value="">All</option>
                         <option value={accountTypes.DEALER}>Dealer</option>
-                        <option value={accountTypes.FRANCHISEE}>Franchisse</option>
+                        <option value={accountTypes.HAPISTORE}>Hapistore</option>
                     </select>
                 </fieldset>
 
