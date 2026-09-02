@@ -53,7 +53,7 @@ export const TYPE_FILTER_OPTIONS: { value: TypeFilter; label: string }[] = [
     { value: 'all', label: 'All Types' },
     { value: accountTypes.DISTRIBUTOR, label: 'Distributor' },
     { value: accountTypes.DEALER, label: 'Dealer' },
-    { value: accountTypes.FRANCHISEE, label: 'Franchisee' }
+    { value: accountTypes.HAPISTORE, label: 'Hapistore' }
 ]
 
 export type CodeMonthFilter = 'all' | string

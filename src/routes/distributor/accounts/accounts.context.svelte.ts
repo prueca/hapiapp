@@ -1,6 +1,8 @@
-import type Account from '$lib/db/Account'
+import * as t from '$lib/drizzle/schema'
 import api from '$lib/api'
 import _ from 'lodash'
+
+type Account = typeof t.account.$inferSelect
 
 class AccountsContext {
     loading = $state(false)

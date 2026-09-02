@@ -35,11 +35,7 @@ const attributes = {
         field: 'company_code'
     },
     type: {
-        type: DataTypes.ENUM(
-            accountTypes.DISTRIBUTOR,
-            accountTypes.DEALER,
-            accountTypes.FRANCHISEE
-        ),
+        type: DataTypes.ENUM(accountTypes.DISTRIBUTOR, accountTypes.DEALER, accountTypes.HAPISTORE),
         field: 'type',
         allowNull: false
     },

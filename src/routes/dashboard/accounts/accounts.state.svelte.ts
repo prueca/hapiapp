@@ -9,11 +9,11 @@ export interface Merchant {
     isr_code: string
     sap_code: string
     company_code: string
-    account_type: 'distributor' | 'dealer' | 'franchisee'
+    account_type: 'distributor' | 'dealer' | 'hapistore'
     associate_id: string
 }
 
-export type TypeFilter = 'all' | 'distributor' | 'dealer' | 'franchisee'
+export type TypeFilter = 'all' | 'distributor' | 'dealer' | 'hapistore'
 export type SortKey = 'name' | 'account_type' | 'id'
 export type SortDir = 'asc' | 'desc'
 

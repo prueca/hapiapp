@@ -98,8 +98,8 @@ class AuthContext {
                     goto('/dealer')
                     break
 
-                case accountTypes.FRANCHISEE:
-                    goto('/franchisee')
+                case accountTypes.HAPISTORE:
+                    goto('/hapistore')
                     break
             }
         } catch (e: any) {

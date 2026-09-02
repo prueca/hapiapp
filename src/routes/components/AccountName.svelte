@@ -14,10 +14,10 @@
                 return 'Admin Dealer'
             case roles.DEALER_USER:
                 return 'Dealer'
-            case roles.FRANCHISEE_ADMIN:
-                return 'Admin Franchisee'
-            case roles.FRANCHISEE_USER:
-                return 'Franchisee'
+            case roles.HAPISTORE_ADMIN:
+                return 'Admin Hapistore'
+            case roles.HAPISTORE_USER:
+                return 'Hapistore'
             default:
                 return ''
         }

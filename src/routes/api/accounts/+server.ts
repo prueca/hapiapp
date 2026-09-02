@@ -4,7 +4,7 @@ import accountTypes from '$lib/config/account.types'
 import _ from 'lodash'
 
 import db from '$lib/drizzle'
-import { eq, getTableColumns, or, and } from 'drizzle-orm'
+import { eq, and, or, getTableColumns } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import * as t from '$lib/drizzle/schema'
 
