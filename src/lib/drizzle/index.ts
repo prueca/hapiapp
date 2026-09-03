@@ -1,12 +1,26 @@
-import 'dotenv/config'
+import { DB_URL } from '$env/static/private'
 import { Pool } from 'pg'
 import { drizzle } from 'drizzle-orm/node-postgres'
 
 const pool = new Pool({
-    connectionString: process.env.DB_URL,
+    connectionString: DB_URL,
     ssl: {
         rejectUnauthorized: false
     }
 })
 
-export default drizzle(pool)
+const db = drizzle(pool)
+
+const authenticate = async () => {
+    try {
+        await db.execute('SELECT 1')
+        console.log('Database connection established.')
+    } catch (e: any) {
+        console.log(`Error connecting to database: ${e.message}`)
+        console.log(e.stack)
+    }
+}
+
+authenticate()
+
+export default db

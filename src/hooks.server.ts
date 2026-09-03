@@ -1,4 +1,4 @@
-import '$lib/db'
+import '$lib/drizzle'
 import { ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_SECRET, IGNORE_AUTH } from '$env/static/private'
 import type { Handle } from '@sveltejs/kit'
 import { StatusCodes, ReasonPhrases } from 'http-status-codes'
