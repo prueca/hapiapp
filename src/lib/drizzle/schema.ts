@@ -3,13 +3,13 @@ import ulid from '$lib/ulid'
 import accountTypes from '$lib/config/account.types'
 import userRoles from '$lib/config/user.roles'
 
-export const typeEnum = pgEnum('type', [
+export const typeEnum = pgEnum('account_type', [
     accountTypes.DISTRIBUTOR,
     accountTypes.DEALER,
     accountTypes.HAPISTORE
 ])
 
-export const roleEnum = pgEnum('role', [
+export const roleEnum = pgEnum('user_role', [
     userRoles.DISTRIBUTOR_ADMIN,
     userRoles.DISTRIBUTOR_USER,
     userRoles.DEALER_ADMIN,
@@ -23,7 +23,7 @@ export const account = pgTable('account', {
 
     type: typeEnum('type').notNull(),
     active: boolean('active').notNull().default(true),
-    associateId: varchar('associate_id', { length: 26 }),
+    parentId: varchar('parent_id', { length: 26 }),
 
     name: varchar('name', { length: 255 }).notNull(),
     address: varchar('address', { length: 255 }),

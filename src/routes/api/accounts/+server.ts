@@ -20,16 +20,16 @@ export const POST = async ({ locals }) => {
             items = await db
                 .select({ ...getTableColumns(t.account) })
                 .from(t.account)
-                .leftJoin(parent, eq(t.account.associateId, parent.id))
+                .leftJoin(parent, eq(t.account.parentId, parent.id))
                 .where(
                     or(
                         and(
                             eq(t.account.type, accountTypes.DEALER),
-                            eq(t.account.associateId, account.id)
+                            eq(t.account.parentId, account.id)
                         ),
                         and(
                             eq(t.account.type, accountTypes.HAPISTORE),
-                            eq(parent.associateId, account.id)
+                            eq(parent.parentId, account.id)
                         )
                     )
                 )
@@ -37,7 +37,7 @@ export const POST = async ({ locals }) => {
             break
 
         case accountTypes.DEALER:
-            items = await db.select().from(t.account).where(eq(t.account.associateId, account.id))
+            items = await db.select().from(t.account).where(eq(t.account.parentId, account.id))
 
             break
 
