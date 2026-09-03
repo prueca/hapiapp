@@ -4,7 +4,6 @@
     import AccountName from '../../components/AccountName.svelte'
     import AccountList from './components/AccountList.svelte'
     import Chart from './components/Chart.svelte'
-    import accountTypes from '$lib/config/account.types'
 </script>
 
 <div class="content-wrapper">
@@ -14,7 +13,7 @@
         <Chart />
         <AccountList />
     </div>
-    <Dock accountType={accountTypes.DISTRIBUTOR} />
+    <Dock />
 </div>
 
 <style lang="postcss">

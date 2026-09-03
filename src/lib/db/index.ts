@@ -34,24 +34,24 @@ _.values(models).map((model) => {
 
     if (typeof assoc !== 'function') {
         return
-         }
+    }
 
     assoc = assoc.bind(model)
     assoc(models)
 })
 
 sequelize
-     .authenticate()
-     .then(() => {
+    .authenticate()
+    .then(() => {
         console.log('DB connection has been established successfully.')
 
-        return sequelize.sync({
+        /* return sequelize.sync({
             force: DB_FORCE === '1'
-           })
-     })
-     .catch((error: Error) => {
+        }) */
+    })
+    .catch((error: Error) => {
         console.error('Unable to connect to the database:', error)
-     })
+    })
 
 export { sequelize }
 export default models
