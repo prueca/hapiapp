@@ -4,7 +4,7 @@ import accountTypes from '$lib/config/account.types'
 import _ from 'lodash'
 
 import db from '$lib/drizzle'
-import { eq, and, or, getTableColumns } from 'drizzle-orm'
+import { eq, or, getTableColumns, asc } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import * as t from '$lib/drizzle/schema'
 
@@ -20,19 +20,9 @@ export const POST = async ({ locals }) => {
             items = await db
                 .select({ ...getTableColumns(t.account) })
                 .from(t.account)
-                .leftJoin(parent, eq(t.account.parentId, parent.id))
-                .where(
-                    or(
-                        and(
-                            eq(t.account.type, accountTypes.DEALER),
-                            eq(t.account.parentId, account.id)
-                        ),
-                        and(
-                            eq(t.account.type, accountTypes.HAPISTORE),
-                            eq(parent.parentId, account.id)
-                        )
-                    )
-                )
+                .leftJoin(parent, eq(parent.id, t.account.parentId))
+                .where(or(eq(t.account.parentId, account.id), eq(parent.parentId, account.id)))
+                .orderBy(asc(t.account.name))
 
             break
 
