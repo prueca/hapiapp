@@ -4,6 +4,7 @@
     import AccountName from '../../components/AccountName.svelte'
     import AccountList from './components/AccountList.svelte'
     import Chart from './components/Chart.svelte'
+    import CreateAccount from './components/CreateAccount.svelte'
 </script>
 
 <div class="content-wrapper">
@@ -12,6 +13,7 @@
         <AccountName />
         <Chart />
         <AccountList />
+        <CreateAccount />
     </div>
     <Dock />
 </div>
