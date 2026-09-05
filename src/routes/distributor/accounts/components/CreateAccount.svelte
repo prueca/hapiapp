@@ -1,6 +1,5 @@
 <script lang="ts">
     import _ from 'lodash'
-    import Icon from '@iconify/svelte'
     import accountTypes from '$lib/config/account.types'
 </script>
 
@@ -12,36 +11,27 @@
         <div>
             <!-- account type -->
             <div class="fieldset">
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="w/1-2 grow">
-                        <input id="dealer" class="hidden" type="radio" name="options" />
-                        <label for="dealer" class="btn btn-lg">
-                            <Icon
-                                icon="material-symbols:deployed-code-account-outline-rounded"
-                                width="24"
-                            />
-                            <div>{_.upperFirst(accountTypes.DEALER)}</div>
-                        </label>
-                    </div>
-                    <div class="w/1-2 grow">
-                        <input id="hapistore" class="hidden" type="radio" name="options" />
-                        <label for="hapistore" class="btn btn-lg">
-                            <Icon icon="ant-design:shop-outlined" width="24" />
-                            <div>{_.upperFirst(accountTypes.HAPISTORE)}</div>
-                        </label>
-                    </div>
-                </div>
+                <label class="label">Select account type</label>
+                <select class="select">
+                    <option disabled selected>Choose one</option>
+                    <option value={accountTypes.DEALER}>
+                        {_.upperFirst(accountTypes.DEALER)}
+                    </option>
+                    <option value={accountTypes.HAPISTORE}>
+                        {_.upperFirst(accountTypes.HAPISTORE)}
+                    </option>
+                </select>
             </div>
 
             <!-- name -->
             <fieldset class="fieldset">
-                <label class="label">Name</label>
+                <label class="label">Enter account name</label>
                 <input type="text" id="name" class="input w-full" placeholder="Account name" />
             </fieldset>
 
             <!-- address -->
             <fieldset class="fieldset">
-                <label class="label">Address</label>
+                <label class="label">Enter account address</label>
                 <input
                     type="text"
                     id="address"
@@ -52,19 +42,19 @@
 
             <!-- phone -->
             <fieldset class="fieldset">
-                <label class="label">Phone</label>
+                <label class="label">Enter phone number</label>
                 <input type="text" id="phone" class="input w-full" placeholder="Contact number" />
             </fieldset>
 
             <!-- isr code -->
             <fieldset class="fieldset">
-                <label class="label">ISR Code</label>
+                <label class="label">Enter ISR Code</label>
                 <input type="text" id="isr-code" class="input w-full" placeholder="ISR code" />
             </fieldset>
 
             <!-- sap code -->
             <fieldset class="fieldset">
-                <label class="label">SAP Code</label>
+                <label class="label">Enter SAP Code</label>
                 <input type="text" id="sap-code" class="input w-full" placeholder="SAP code" />
             </fieldset>
         </div>
@@ -81,12 +71,9 @@
     .fieldset {
         @apply not-last:mb-4;
 
-        label.btn {
+        select,
+        input[type='text'] {
             @apply w-full rounded-lg;
-        }
-
-        input[type='radio']:checked + .btn {
-            @apply border-none bg-(--c1) text-white;
         }
     }
 
