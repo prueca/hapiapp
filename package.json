@@ -60,8 +60,6 @@
         "lodash": "^4.18.1",
         "moment": "^2.30.1",
         "pg": "^8.23.0",
-        "pg-hstore": "^2.3.4",
-        "sequelize": "^6.37.8",
         "svelte-chartjs": "^4.0.1",
         "ulid": "^3.0.2",
         "zod": "^4.4.3"
