@@ -1,14 +1,23 @@
-import { pgTable, varchar, pgEnum, boolean, unique } from 'drizzle-orm/pg-core'
+import { pgTable, varchar, pgEnum, boolean, unique, integer, real } from 'drizzle-orm/pg-core'
+import { relations } from 'drizzle-orm'
 import ulid from '$lib/ulid'
 import accountTypes from '$lib/config/account.types'
 import userRoles from '$lib/config/user.roles'
+import freezerStatus from '$lib/config/freezer.status'
+import { timestampMixin } from './mixin'
 
+/**
+ * Enum for Account Types. Defines the specific roles permitted within the ecosystem.
+ */
 export const typeEnum = pgEnum('account_type', [
     accountTypes.DISTRIBUTOR,
     accountTypes.DEALER,
     accountTypes.HAPISTORE
 ])
 
+/**
+ * Enum for User Roles. Defines permissions levels for different user types.
+ */
 export const roleEnum = pgEnum('user_role', [
     userRoles.DISTRIBUTOR_ADMIN,
     userRoles.DISTRIBUTOR_USER,
@@ -18,6 +27,24 @@ export const roleEnum = pgEnum('user_role', [
     userRoles.HAPISTORE_USER
 ])
 
+/**
+ * Enum for Freezer Status. Tracks the lifecycle and current state of a freezer unit.
+ */
+export const freezerStatusEnum = pgEnum('freezer_status', [
+    freezerStatus.HHOUSED_AVAILABLE,
+    freezerStatus.FOR_DEPLOYMENT,
+    freezerStatus.DEPLOYED_DESIGNATED,
+    freezerStatus.FOR_PULLOUT,
+    freezerStatus.PULLOUT,
+    freezerStatus.FOR_REPLACEMENT_BROKEN_UNIT,
+    freezerStatus.FOR_REPLACEMENT_DOWNGRADE,
+    freezerStatus.FOR_REPLACEMENT_UPGRADE
+])
+
+/**
+ * Represents an organization account.
+ * Supports a recursive hierarchy (Distributor > Dealer > Franchisee).
+ */
 export const account = pgTable('account', {
     id: varchar('id', { length: 26 }).primaryKey().$defaultFn(ulid.generate),
 
@@ -33,6 +60,10 @@ export const account = pgTable('account', {
     companyCode: varchar('company_code', { length: 20 }).unique().notNull()
 })
 
+/**
+ * Represents a system user.
+ * Contains identity and authentication details.
+ */
 export const user = pgTable('user', {
     id: varchar('id', { length: 26 }).primaryKey().$defaultFn(ulid.generate),
 
@@ -49,6 +80,10 @@ export const user = pgTable('user', {
     password: varchar('password', { length: 255 }).notNull()
 })
 
+/**
+ * Association table linking users to accounts.
+ * Ensures that a user can be associated with a specific account for access control.
+ */
 export const access = pgTable(
     'access',
     {
@@ -64,3 +99,51 @@ export const access = pgTable(
     },
     (t) => [unique('access_user_account_unique').on(t.userId, t.accountId)]
 )
+
+/**
+ * Represents a physical freezer unit.
+ * Includes unique constraints on brand, capacity, and year model to enforce strict inventory rules.
+ */
+export const freezer = pgTable('freezer', {
+    id: varchar('id', { length: 26 }).primaryKey().$defaultFn(ulid.generate),
+    model: varchar('model', { length: 255 }).unique().notNull(),
+    capacity: real('capacity').unique().notNull(),
+    unit: varchar('unit', { length: 12 }).unique().notNull(),
+    brand: varchar('brand', { length: 255 }).unique().notNull(),
+    yearModel: integer('year_model').unique().notNull(),
+    barcode: varchar('barcode', { length: 255 }).unique().notNull(),
+    status: freezerStatusEnum('status').notNull(),
+    distributorId: varchar('distributor_id', { length: 26 }).notNull(),
+    designationId: varchar('designation_id', { length: 26 }).notNull(),
+    ...timestampMixin
+})
+
+export const accountRelation = relations(account, ({ one, many }) => ({
+    users: many(user),
+    freezers: many(freezer),
+
+    // The "Many" side: Downward tree lookup
+    // If this is a Distributor, 'children' returns its Dealers.
+    // If this is a Dealer, 'children' returns its Franchisees.
+    childAccounts: many(account, { relationName: 'account_heirarchy' }),
+
+    // The "One" side: Upward tree lookup
+    // If this is a Franchisee, 'parent' returns its Dealer.
+    // If this is a Dealer, 'parent' returns its Distributor.
+    parentAccount: one(account, {
+        fields: [account.parentId],
+        references: [account.id],
+        relationName: 'account_heirarchy'
+    })
+}))
+
+export const freezerRelations = relations(freezer, ({ one }) => ({
+    distributor: one(account, {
+        fields: [freezer.distributorId],
+        references: [account.id]
+    }),
+    designation: one(account, {
+        fields: [freezer.designationId],
+        references: [account.id]
+    })
+}))
