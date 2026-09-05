@@ -2,6 +2,9 @@ import { DB_URL } from '$env/static/private'
 import { Pool } from 'pg'
 import { drizzle } from 'drizzle-orm/node-postgres'
 
+import * as schema from './schema'
+import { accountRelation, freezerRelations } from './relations'
+
 const pool = new Pool({
     connectionString: DB_URL,
     ssl: {
@@ -9,7 +12,13 @@ const pool = new Pool({
     }
 })
 
-const db = drizzle(pool)
+const db = drizzle(pool, {
+    schema: {
+        ...schema,
+        accountRelation,
+        freezerRelations
+    }
+})
 
 const authenticate = async () => {
     try {
