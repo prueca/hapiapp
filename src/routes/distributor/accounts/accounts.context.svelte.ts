@@ -15,7 +15,7 @@ class AccountsContext {
 
     query = $state('')
     accountType = $state('')
-    sortBy = $state('id')
+    sortBy = $state('name')
     sortOrder = $state('asc')
 
     openSearchOptions = $state(false)
