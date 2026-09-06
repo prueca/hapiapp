@@ -11,12 +11,12 @@ class CreateContext {
     error: string | null = $state(null)
 
     data = $state({
-        type: '',
-        name: '',
-        address: '',
-        phone: '',
-        isrCode: '',
-        sapCode: ''
+        type: 'dealer',
+        name: 'wancavino',
+        address: 'montalban, rizal',
+        phone: '09168728941',
+        isrCode: null,
+        sapCode: null
     })
 
     issues = $state({
@@ -30,6 +30,7 @@ class CreateContext {
 
     reset() {
         this.error = null
+        this.loading = false
 
         _.map(_.keys(this.issues), (k) => {
             this.issues[k as keyof typeof this.issues] = null
@@ -48,7 +49,7 @@ class CreateContext {
             address: z.string().nonempty(),
             phone: z
                 .string()
-                .regex(/^09\d[9]$/)
+                .regex(/^09\d{9}$/)
                 .nonempty(),
             isrCode: z
                 .string()
@@ -126,15 +127,18 @@ class CreateContext {
     async send() {
         if (this.loading) return
 
+        this.open = false
         this.loading = true
 
         try {
-            api.post('accounts/create', { json: this.data })
+            await api.post('accounts/create', { json: this.data })
+            this.loading = false
+
+            // redirect to account view page upon success
         } catch (e: any) {
             this.error = e.message
+            this.loading = false
         }
-
-        this.loading = false
     }
 
     async submit() {

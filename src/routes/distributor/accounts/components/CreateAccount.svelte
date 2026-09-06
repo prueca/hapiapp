@@ -5,11 +5,11 @@
     import Icon from '@iconify/svelte'
 </script>
 
-<duv class="modal" class:modal-open={create.error && !create.loading}>
+<duv class="modal" class:modal-open={create.error}>
     <div class="modal-box">
         <div class="heading">
             <div class="flex items-start gap-4">
-                <Icon icon="boxicons:message-circle-exclamation" class="mb-8" width="24" />
+                <Icon icon="boxicons:message-circle-exclamation" class="-mt-0.5" width="50" />
                 <div>
                     <p class="mb-1 font-medium">An error was encountered</p>
                     <p class="text-sm">{create.error}</p>
@@ -26,7 +26,7 @@
     <div class="modal-box">
         <div class="heading">
             <div class="flex items-start gap-4">
-                <span class="loading mt-1.5 loading-xs loading-spinner"></span>
+                <span class="loading mt-1 loading-xl loading-spinner"></span>
                 <div>
                     <p class="mb-1 text-lg font-medium">Creating account...</p>
                     <div class="text-sm">You will be redirected upon success.</div>
@@ -36,7 +36,7 @@
     </div>
 </duv>
 
-<div class="modal" class:modal-open={create.open && !create.loading}>
+<div class="modal" class:modal-open={create.open}>
     <div class="modal-box">
         <div class="heading">
             <p class="mb-4 text-xl font-medium">Create an account</p>
