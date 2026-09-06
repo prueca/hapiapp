@@ -5,7 +5,7 @@
     import Icon from '@iconify/svelte'
 </script>
 
-<duv class="modal" class:modal-open={create.error}>
+<div class="modal" class:modal-open={create.error}>
     <div class="modal-box">
         <div class="heading">
             <div class="flex items-start gap-4">
@@ -20,9 +20,9 @@
             <button class="close-btn btn" onclick={() => create.reset()}> Close </button>
         </div>
     </div>
-</duv>
+</div>
 
-<duv class="modal" class:modal-open={create.loading}>
+<div class="modal" class:modal-open={create.loading}>
     <div class="modal-box">
         <div class="heading">
             <div class="flex items-start gap-4">
@@ -34,7 +34,7 @@
             </div>
         </div>
     </div>
-</duv>
+</div>
 
 <div class="modal" class:modal-open={create.open}>
     <div class="modal-box">

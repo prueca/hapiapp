@@ -14,8 +14,8 @@ const schema: ZodObject = z.object({
     name: z.string().nonempty(),
     address: z.string().nonempty(),
     phone: z.string().nonempty(),
-    isrCode: z.string().nonempty(),
-    sapCode: z.string().nonempty(),
+    isrCode: z.string().nonempty().nullable(),
+    sapCode: z.string().nonempty().nullable(),
     parentId: z.ulid(),
     active: z.boolean()
 })
