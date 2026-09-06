@@ -1,4 +1,4 @@
-import { pgTable, varchar, boolean } from 'drizzle-orm/pg-core'
+import { pgTable, varchar, boolean, timestamp } from 'drizzle-orm/pg-core'
 import { roleEnum } from './enum'
 import ulid from '$lib/ulid'
 
@@ -19,5 +19,9 @@ export const user = pgTable('user', {
     phone: varchar('phone', { length: 32 }),
 
     username: varchar('username', { length: 255 }).notNull(),
-    password: varchar('password', { length: 255 }).notNull()
+    password: varchar('password', { length: 255 }).notNull(),
+
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+    deletedAt: timestamp('deleted_at')
 })

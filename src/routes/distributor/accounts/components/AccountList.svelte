@@ -5,6 +5,7 @@
     import Search from './Search.svelte'
     import SearchOptions from './SearchOptions.svelte'
     import accounts from '../accounts.context.svelte'
+    import create from '../create.context.svelte'
 
     onMount(() => accounts.load())
 </script>
@@ -18,7 +19,11 @@
                 <span>Delete</span>
             </button>
             <div class="divider-sm divider mx-0 mt-0.5 divider-horizontal h-5"></div>
-            <button type="button" class="create-account btn btn-ghost btn-xs">
+            <button
+                type="button"
+                class="create-account btn btn-ghost btn-xs"
+                onclick={() => create.toggle()}
+            >
                 <span>&plus;</span>
                 <span>Create</span>
             </button>

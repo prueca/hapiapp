@@ -1,4 +1,4 @@
-import { pgTable, varchar, boolean } from 'drizzle-orm/pg-core'
+import { pgTable, varchar, boolean, timestamp } from 'drizzle-orm/pg-core'
 import { typeEnum } from './enum'
 import ulid from '$lib/ulid'
 
@@ -18,5 +18,9 @@ export const account = pgTable('account', {
     phone: varchar('phone', { length: 32 }),
     isrCode: varchar('isr_code', { length: 20 }),
     sapCode: varchar('sap_code', { length: 20 }),
-    companyCode: varchar('company_code', { length: 20 }).unique().notNull()
+    companyCode: varchar('company_code', { length: 20 }).unique().notNull(),
+
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+    deletedAt: timestamp('deleted_at')
 })

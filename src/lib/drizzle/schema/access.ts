@@ -1,4 +1,4 @@
-import { pgTable, varchar, unique } from 'drizzle-orm/pg-core'
+import { pgTable, varchar, unique, timestamp } from 'drizzle-orm/pg-core'
 import ulid from '$lib/ulid'
 import { user } from './user'
 import { account } from './account'
@@ -18,7 +18,11 @@ export const access = pgTable(
 
         accountId: varchar('account_id', { length: 26 })
             .references(() => account.id)
-            .notNull()
+            .notNull(),
+
+        createdAt: timestamp('created_at').defaultNow().notNull(),
+        updatedAt: timestamp('updated_at').defaultNow().notNull(),
+        deletedAt: timestamp('deleted_at')
     },
     (t) => [unique('access_user_account_unique').on(t.userId, t.accountId)]
 )
