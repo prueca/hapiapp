@@ -1,59 +1,29 @@
-import z from 'zod'
-import cabconStatuses from '$lib/config/cabcon.status'
-import accountTypes from '$lib/config/account.types'
+import { freezer } from '$lib/drizzle/schema/freezer'
+import freezerStatuses from '$lib/config/freezer.status'
 
-export const FreezerSchema = z.object({
-    id: z.string(),
-    model: z.string(),
-    capacity: z.string().nullable(),
-    barcode: z.string().nullable(),
-    brand: z.string().nullable(),
-    yearModel: z.number().nullable(),
-    cabconStatus: z.string().nullable(),
-    codeMonth: z.string().nullable(),
-    cabconCreatedAt: z.string().nullable(),
-    accountName: z.string().nullable(),
-    accountType: z.string().nullable(),
-    accountAddress: z.string().nullable()
-})
+export type Freezer = typeof freezer.$inferSelect
 
-export type Freezer = z.infer<typeof FreezerSchema>
-
-export type SortKey =
-    | 'model'
-    | 'createdAt-desc'
-    | 'yearModel-asc'
-    | 'yearModel-desc'
-    | 'cabconStatus'
-    | 'accountName'
-    | 'accountType'
+export type SortKey = 'model' | 'yearModel-asc' | 'yearModel-desc' | 'createdAt-desc'
 
 export const SORT_OPTIONS: { value: SortKey; label: string }[] = [
-    { value: 'createdAt-desc', label: 'Recently Submitted' },
+    { value: 'createdAt-desc', label: 'Recently Added' },
     { value: 'model', label: 'Model (A-Z)' },
     { value: 'yearModel-asc', label: 'Year (Old to New)' },
-    { value: 'yearModel-desc', label: 'Year (New to Old)' },
-    { value: 'cabconStatus', label: 'Status (A-Z)' },
-    { value: 'accountName', label: 'Account (A-Z)' },
-    { value: 'accountType', label: 'Type (A-Z)' }
+    { value: 'yearModel-desc', label: 'Year (New to Old)' }
 ]
 
-export type StatusFilter = 'all' | (typeof cabconStatuses)[keyof typeof cabconStatuses]
+export type StatusFilter = 'all' | (typeof freezerStatuses)[keyof typeof freezerStatuses]
+
+export const DEFAULT_STATUS_FILTER: StatusFilter = freezerStatuses.HHOUSED_AVAILABLE
 
 export const STATUS_FILTER_OPTIONS: { value: StatusFilter; label: string }[] = [
     { value: 'all', label: 'All Status' },
-    { value: cabconStatuses.MANUAL_SUBMIT, label: 'Manual Submit' },
-    { value: cabconStatuses.MATCHED, label: 'Matched' },
-    { value: cabconStatuses.MISMATCH, label: 'Mismatch' }
+    { value: freezerStatuses.HHOUSED_AVAILABLE, label: 'Housed — Available' },
+    { value: freezerStatuses.FOR_DEPLOYMENT, label: 'For Deployment' },
+    { value: freezerStatuses.DEPLOYED_DESIGNATED, label: 'Deployed — Designated' },
+    { value: freezerStatuses.FOR_PULLOUT, label: 'For Pullout' },
+    { value: freezerStatuses.PULLOUT, label: 'Pullout' },
+    { value: freezerStatuses.FOR_REPLACEMENT_BROKEN_UNIT, label: 'For Replacement — Broken Unit' },
+    { value: freezerStatuses.FOR_REPLACEMENT_DOWNGRADE, label: 'For Replacement — Downgrade' },
+    { value: freezerStatuses.FOR_REPLACEMENT_UPGRADE, label: 'For Replacement — Upgrade' }
 ]
-
-export type TypeFilter = 'all' | (typeof accountTypes)[keyof typeof accountTypes]
-
-export const TYPE_FILTER_OPTIONS: { value: TypeFilter; label: string }[] = [
-    { value: 'all', label: 'All Types' },
-    { value: accountTypes.DISTRIBUTOR, label: 'Distributor' },
-    { value: accountTypes.DEALER, label: 'Dealer' },
-    { value: accountTypes.HAPISTORE, label: 'Hapistore' }
-]
-
-export type CodeMonthFilter = 'all' | string
