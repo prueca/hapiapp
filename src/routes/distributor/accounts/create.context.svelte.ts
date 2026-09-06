@@ -1,10 +1,14 @@
 import _ from 'lodash'
 import z from 'zod'
 import accountTypes from '$lib/config/account.types'
+import api from '$lib/api'
 
 class CreateContext {
     open = $state(false)
+
     loading = $state(false)
+
+    error: string | null = $state(null)
 
     data = $state({
         type: '',
@@ -24,7 +28,16 @@ class CreateContext {
         sapCode: null
     })
 
+    reset() {
+        this.error = null
+
+        _.map(_.keys(this.issues), (k) => {
+            this.issues[k as keyof typeof this.issues] = null
+        })
+    }
+
     toggle() {
+        !this.open && this.reset()
         this.open = !this.open
     }
 
@@ -40,19 +53,19 @@ class CreateContext {
             isrCode: z
                 .string()
                 .regex(/^[A-Z0-9]{10,20}$/)
-                .nonempty(),
+                .nonempty()
+                .nullable(),
             sapCode: z
                 .string()
                 .regex(/^[A-Z0-9]{10,20}$/)
                 .nonempty()
+                .nullable()
         })
 
         const result = schema.safeParse(this.data)
 
         if (!result.success && result.error) {
-            _.map(_.keys(this.issues), (k) => {
-                this.issues[k as keyof typeof this.issues] = null
-            })
+            this.reset()
 
             _.map(result.error.issues, (x) => {
                 const [field] = x.path
@@ -108,6 +121,26 @@ class CreateContext {
         }
 
         return true
+    }
+
+    async send() {
+        if (this.loading) return
+
+        this.loading = true
+
+        try {
+            api.post('accounts/create', { json: this.data })
+        } catch (e: any) {
+            this.error = e.message
+        }
+
+        this.loading = false
+    }
+
+    async submit() {
+        if (!this.validate()) return
+
+        await this.send()
     }
 }
 

@@ -2,9 +2,41 @@
     import _ from 'lodash'
     import accountTypes from '$lib/config/account.types'
     import create from '../create.context.svelte'
+    import Icon from '@iconify/svelte'
 </script>
 
-<div class="modal" class:modal-open={create.open}>
+<duv class="modal" class:modal-open={create.error && !create.loading}>
+    <div class="modal-box">
+        <div class="heading">
+            <div class="flex items-start gap-4">
+                <Icon icon="boxicons:message-circle-exclamation" class="mb-8" width="24" />
+                <div>
+                    <p class="mb-1 font-medium">An error was encountered</p>
+                    <p class="text-sm">{create.error}</p>
+                </div>
+            </div>
+        </div>
+        <div class="modal-action">
+            <button class="close-btn btn" onclick={() => create.reset()}> Close </button>
+        </div>
+    </div>
+</duv>
+
+<duv class="modal" class:modal-open={create.loading}>
+    <div class="modal-box">
+        <div class="heading">
+            <div class="flex items-start gap-4">
+                <span class="loading mt-1.5 loading-xs loading-spinner"></span>
+                <div>
+                    <p class="mb-1 text-lg font-medium">Creating account...</p>
+                    <div class="text-sm">You will be redirected upon success.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</duv>
+
+<div class="modal" class:modal-open={create.open && !create.loading}>
     <div class="modal-box">
         <div class="heading">
             <p class="mb-4 text-xl font-medium">Create an account</p>
@@ -98,7 +130,7 @@
             </fieldset>
         </div>
         <div class="modal-action">
-            <button class="submit-btn btn" onclick={() => create.validate()}> Submit </button>
+            <button class="submit-btn btn" onclick={() => create.submit()}> Submit </button>
             <button class="close-btn btn" onclick={() => create.toggle()}> Close </button>
         </div>
     </div>
