@@ -2,12 +2,9 @@ import { json, error, isHttpError } from '@sveltejs/kit'
 import { StatusCodes, ReasonPhrases } from 'http-status-codes'
 import z, { ZodObject } from 'zod'
 import accountTypes from '$lib/config/account.types'
-import { customAlphabet } from 'nanoid'
 
 import db from '$lib/drizzle'
 import * as t from '$lib/drizzle/schema'
-
-const nanoid = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', 10)
 
 const schema: ZodObject = z.object({
     type: z.enum([accountTypes.DEALER, accountTypes.HAPISTORE]),
@@ -28,7 +25,6 @@ export const POST = async ({ locals, request }) => {
 
         let data: typeof t.account.$inferInsert = {
             ...payload,
-            companyCode: nanoid(),
             parentId: account.id,
             active: true
         }
