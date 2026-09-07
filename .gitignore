@@ -30,3 +30,4 @@ vite.config.ts.timestamp-*
 scripts
 instruction.md
 _mock
+_scratch
