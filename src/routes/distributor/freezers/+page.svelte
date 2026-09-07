@@ -5,6 +5,8 @@
     import List from './components/List.svelte'
     import Toolbar from './components/Toolbar.svelte'
     import ItemSkeleton from './components/Item.skeleton.svelte'
+    import CreateFreezer from './components/CreateFreezer.svelte'
+    import state from './freezers.context.svelte'
 
     let { data }: { data: { freezers: Promise<Freezer[]> } } = $props()
 </script>
@@ -17,7 +19,14 @@
             <div class="mb-2 flex items-center justify-between">
                 <span class="text-lg">Freezers</span>
                 <div class="flex items-center">
-                    <button type="button" class="create-freezer btn btn-ghost btn-xs">
+                    <button
+                        type="button"
+                        class="create-freezer btn btn-ghost btn-xs"
+                        onclick={() => {
+                            state.error = ''
+                            state.openCreate = true
+                           }}
+                    >
                         <span>&plus;</span>
                         <span>Create</span>
                     </button>
@@ -42,6 +51,8 @@
 
     <Dock />
 </div>
+
+<CreateFreezer />
 
 <style lang="postcss">
     @reference 'tailwindcss';
