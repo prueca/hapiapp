@@ -1,7 +1,7 @@
 import { pgEnum } from 'drizzle-orm/pg-core'
 import accountTypes from '$lib/config/account.types'
 import userRoles from '$lib/config/user.roles'
-import freezerStatus from '$lib/config/freezer.status'
+import { freezerStatus } from '$lib/config/freezer.options'
 
 /**
  * Enum for Account Types. Defines the specific roles permitted within the ecosystem.
@@ -28,7 +28,7 @@ export const roleEnum = pgEnum('user_role', [
  * Enum for Freezer Status. Tracks the lifecycle and current state of a freezer unit.
  */
 export const freezerStatusEnum = pgEnum('freezer_status', [
-    freezerStatus.HHOUSED_AVAILABLE,
+    freezerStatus.HOUSED_AVAILABLE,
     freezerStatus.FOR_DEPLOYMENT,
     freezerStatus.DEPLOYED_DESIGNATED,
     freezerStatus.FOR_PULLOUT,
