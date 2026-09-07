@@ -1,5 +1,5 @@
 import { freezer } from '$lib/drizzle/schema/freezer'
-import freezerStatuses from '$lib/config/freezer.status'
+import { freezerStatus as freezerStatuses } from '$lib/config/freezer.options'
 
 export type Freezer = typeof freezer.$inferSelect
 
@@ -14,11 +14,11 @@ export const SORT_OPTIONS: { value: SortKey; label: string }[] = [
 
 export type StatusFilter = 'all' | (typeof freezerStatuses)[keyof typeof freezerStatuses]
 
-export const DEFAULT_STATUS_FILTER: StatusFilter = freezerStatuses.HHOUSED_AVAILABLE
+export const DEFAULT_STATUS_FILTER: StatusFilter = freezerStatuses.HOUSED_AVAILABLE
 
 export const STATUS_FILTER_OPTIONS: { value: StatusFilter; label: string }[] = [
     { value: 'all', label: 'All Status' },
-    { value: freezerStatuses.HHOUSED_AVAILABLE, label: 'Housed — Available' },
+    { value: freezerStatuses.HOUSED_AVAILABLE, label: 'Housed — Available' },
     { value: freezerStatuses.FOR_DEPLOYMENT, label: 'For Deployment' },
     { value: freezerStatuses.DEPLOYED_DESIGNATED, label: 'Deployed — Designated' },
     { value: freezerStatuses.FOR_PULLOUT, label: 'For Pullout' },
