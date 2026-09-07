@@ -48,9 +48,8 @@
                         bind:value={accounts.sortBy}
                         onchange={() => accounts.filter()}
                     >
-                        <option value="id" selected>ID</option>
+                        <option value="createdAt" selected>Date Created</option>
                         <option value="name">Name</option>
-                        <option value="companyCode">Company Code</option>
                     </select>
                 </fieldset>
 

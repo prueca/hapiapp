@@ -8,16 +8,13 @@
 <div class="account-list-item">
     <div class="flex items-center justify-between">
         <div>
-            <!-- account name -->
-            <div class="mb-1 font-medium">{item.name}</div>
-
-            <div class="flex gap-2 text-xs text-gray-400">
-                <!-- account type -->
-                <div>{_.upperFirst(item.type)}</div>
-                <div>•</div>
-
-                <!-- account companyCode -->
-                <div>{item.companyCode}</div>
+            <div class="mb-1 font-medium">
+                {item.name}
+            </div>
+            <div class="mb-1 text-xs text-gray-400">
+                <span>{_.upperFirst(item.type)}</span>
+                <span class="mx-1">•</span>
+                <span>{item.address}</span>
             </div>
         </div>
         <div class="text-gray-400">
