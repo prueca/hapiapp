@@ -17,7 +17,7 @@ import { eq } from 'drizzle-orm'
 import * as t from '$lib/drizzle/schema'
 
 const schema = z.object({
-    companyCode: z.string().nonempty()
+    accountId: z.string().nonempty()
 })
 
 const INVALID_AUTHORIZATION = 'Invalid user or account'
@@ -42,12 +42,12 @@ const verifyAuthToken = (cookies: Cookies) => {
     }
 }
 
-const verifyAccess = async (username: string, companyCode: string) => {
+const verifyAccess = async (username: string, accountId: string) => {
     const [row] = await db
         .select()
         .from(t.access)
         .innerJoin(t.user, eq(t.user.username, username))
-        .innerJoin(t.account, eq(t.account.companyCode, companyCode))
+        .innerJoin(t.account, eq(t.account.id, accountId))
         .limit(1)
 
     if (!row || !row.user || !row.account) {
@@ -67,7 +67,7 @@ const authorize = (
 ) => {
     const jwtPayload = {
         user: _.pick(user, ['id', 'role', 'username', 'firstName', 'middleName', 'lastName']),
-        account: _.pick(account, ['id', 'type', 'companyCode', 'name', 'type', 'address'])
+        account: _.pick(account, ['id', 'type', 'name', 'type', 'address'])
     }
 
     const accessToken = jwt.sign(jwtPayload, ACCESS_TOKEN_SECRET as string, {
@@ -102,7 +102,7 @@ export const POST = async ({ request, cookies }) => {
             error(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST)
         }
 
-        const { companyCode } = validation.data
+        const { accountId } = validation.data
 
         /**
          * Verify authorization token.
@@ -118,7 +118,7 @@ export const POST = async ({ request, cookies }) => {
          * This returns the user and account record.
          */
 
-        const { user, account } = await verifyAccess(username, companyCode)
+        const { user, account } = await verifyAccess(username, accountId)
 
         /**
          * Generate access token.

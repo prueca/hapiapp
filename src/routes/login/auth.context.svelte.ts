@@ -76,7 +76,7 @@ class AuthContext {
         }
     }
 
-    async authorize(companyCode: string) {
+    async authorize(accountId: string) {
         try {
             if (this.status !== 1) return
 
@@ -84,7 +84,7 @@ class AuthContext {
             this.error = null
             this.toggleAccountSelection()
 
-            const json = { companyCode }
+            const json = { accountId }
             const res = await api.post('users/authorize', { json })
             const response: Data<{ user: AuthUser; account: AuthAccount }> = await res.json()
             const { account } = response.data

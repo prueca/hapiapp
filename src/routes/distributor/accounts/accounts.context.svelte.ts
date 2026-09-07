@@ -37,19 +37,16 @@ class AccountsContext {
         const matches = _.chain(this.list)
             .filter((x) => {
                 const accountName = _.toLower(x.name)
-                const companyCode = _.toLower(x.companyCode as string)
                 const query = _.toLower(this.query).trim()
 
                 if (query && this.accountType) {
-                    const matches =
-                        (_.includes(accountName, query) || _.includes(companyCode, query)) &&
-                        x.type === this.accountType
+                    const matches = _.includes(accountName, query) && x.type === this.accountType
 
                     return matches
                 }
 
                 if (query) {
-                    const matches = _.includes(accountName, query) || _.includes(companyCode, query)
+                    const matches = _.includes(accountName, query)
 
                     return matches
                 }

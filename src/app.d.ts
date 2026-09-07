@@ -27,7 +27,6 @@ declare global {
         type: (typeof accountTypes)[keyof typeof accountTypes]
         name: string
         address: string
-        companyCode: string
     }
 
     namespace App {

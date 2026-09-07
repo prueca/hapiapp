@@ -8,7 +8,6 @@
         type: string
         name: string
         address: string
-        companyCode: string
     }
 
     type Props = {
@@ -18,7 +17,7 @@
     let { account }: Props = $props()
 </script>
 
-<button class="account" type="button" onclick={() => auth.authorize(account.companyCode)}>
+<button class="account" type="button" onclick={() => auth.authorize(account.id)}>
     <div class="w-full">
         <div class="account-name">{account.name}</div>
         <div class="account-details">

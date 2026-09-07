@@ -87,7 +87,7 @@ export const POST = async ({ request, cookies }) => {
             .where(eq(t.access.userId, user.id))
 
         const accounts = _.map(rows, (x) => {
-            return _.pick(x.account, ['id', 'type', 'name', 'address', 'companyCode'])
+            return _.pick(x.account, ['id', 'type', 'name', 'address'])
         })
 
         const data = { accounts }
