@@ -2,6 +2,8 @@ import { json, error, isHttpError } from '@sveltejs/kit'
 import { StatusCodes, ReasonPhrases } from 'http-status-codes'
 import z, { ZodObject } from 'zod'
 import accountTypes from '$lib/config/account.types'
+import errorCode from '$lib/error.code'
+import _ from 'lodash'
 
 import db from '$lib/drizzle'
 import * as t from '$lib/drizzle/schema'
@@ -64,6 +66,25 @@ export const POST = async ({ locals, request }) => {
 
         return json({ data: result })
     } catch (e: any) {
+        const code = _.get(e, 'cause.code', null)
+
+        switch (code) {
+            case '23505':
+                error(StatusCodes.CONFLICT, errorCode.DATA_CONFLICT)
+
+            case '23503':
+                error(StatusCodes.UNPROCESSABLE_ENTITY, errorCode.FOREIGN_KEY_VIOLATION)
+
+            case '23502':
+                error(StatusCodes.BAD_REQUEST, errorCode.MISSING_REQUIRED_FIELD)
+
+            case '23514':
+                error(StatusCodes.UNPROCESSABLE_ENTITY, errorCode.CHECK_CONSTRAINT_VIOLATION)
+
+            case '22P02':
+                error(StatusCodes.BAD_REQUEST, errorCode.INVALID_DATA_FORMAT)
+        }
+
         if (isHttpError(e)) throw e
 
         const message = e.message ?? ReasonPhrases.INTERNAL_SERVER_ERROR

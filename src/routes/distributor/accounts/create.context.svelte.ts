@@ -8,7 +8,7 @@ class CreateContext {
 
     loading = $state(false)
 
-    error: string | null = $state(null)
+    error: App.Error | null = $state(null)
 
     data = $state({
         type: 'dealer',
@@ -131,8 +131,19 @@ class CreateContext {
         this.loading = true
 
         try {
-            await api.post('accounts/create', { json: this.data })
+            const response = await api.post('accounts/create', {
+                json: this.data,
+                throwHttpErrors: false
+            })
+
             this.loading = false
+
+            if (!response.ok) {
+                const body: Json = await response.json()
+                this.error = body as App.Error
+
+                return
+            }
 
             // redirect to account view page upon success
         } catch (e: any) {

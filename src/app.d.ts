@@ -41,6 +41,11 @@ declare global {
             account: AuthAccount | null
             isAuthenticated: boolean
         }
+
+        interface Error {
+            code: string
+            message: string
+        }
     }
 }
 
