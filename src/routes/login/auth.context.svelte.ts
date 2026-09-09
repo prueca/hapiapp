@@ -57,21 +57,28 @@ class AuthContext {
             this.status = 1
 
             const response = await api.post('users/login', { json })
-            const body: Json = await response.json()
-
-            if (!response.ok) {
-                this.status = 0
-                this.error = body.message
-
-                return
-            }
+            const body: Data<{ accounts: AuthAccount[] }> = await response.json()
 
             this.accounts = body.data.accounts
 
             this.toggleAccountSelection()
         } catch (e: any) {
             this.status = 0
-            this.error = errors.UNKNOWN_ERROR.message
+            this.error = errors.UNEXPECTED_ERROR.message
+
+            switch (e.name) {
+                case 'HTTPError':
+                    this.error = e.data.message
+                    break
+
+                case 'NetworkError':
+                    this.error = errors.NETWORK_ERROR.message
+                    break
+
+                case 'TypeError':
+                    this.error = errors.TYPE_ERROR.message
+                    break
+            }
         }
     }
 
@@ -102,19 +109,20 @@ class AuthContext {
                     break
             }
         } catch (e: any) {
-            const status = _.get(e, 'response.status', null)
+            this.error = errors.UNEXPECTED_ERROR.message
 
-            switch (status) {
-                case 400:
-                    this.error = 'Invalid login attempt.'
+            switch (e.name) {
+                case 'HTTPError':
+                    this.error = e.data.message
                     break
 
-                case 404:
-                    this.error = 'Resource not found.'
+                case 'NetworkError':
+                    this.error = errors.NETWORK_ERROR.message
                     break
 
-                default:
-                    this.error = _.get(e, 'data.message', 'Unknown error.')
+                case 'TypeError':
+                    this.error = errors.TYPE_ERROR.message
+                    break
             }
         } finally {
             this.status = 0

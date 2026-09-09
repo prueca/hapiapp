@@ -3,6 +3,8 @@ import api from '$lib/api'
 import _ from 'lodash'
 import errors from '$lib/errors'
 
+type Account = typeof t.account.$inferSelect
+
 class AccountsContext {
     loading = $state(false)
     error: string | null = $state(null)
@@ -26,13 +28,7 @@ class AccountsContext {
             this.loading = true
 
             const response = await api.post('accounts', { json: {} })
-            const body: Json = await response.json()
-
-            if (!response.ok) {
-                this.loading = false
-                this.error = body.code
-                return
-            }
+            const body: Data<{ items: Account[] }> = await response.json()
 
             this.list = body.data.items
             this.filtered = _.take(this.list, this.limit)
@@ -41,7 +37,21 @@ class AccountsContext {
             this.loading = false
         } catch (e: any) {
             this.loading = false
-            this.error = e.name ?? errors.UNKNOWN_ERROR.code
+            this.error = errors.UNEXPECTED_ERROR.message
+
+            switch (e.name) {
+                case 'HTTPError':
+                    this.error = e.data.message
+                    break
+
+                case 'NetworkError':
+                    this.error = errors.NETWORK_ERROR.message
+                    break
+
+                case 'TypeError':
+                    this.error = errors.TYPE_ERROR.message
+                    break
+            }
         }
     }
 

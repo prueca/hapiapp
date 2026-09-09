@@ -11,8 +11,8 @@
             <div class="flex items-start gap-4">
                 <Icon icon="boxicons:message-circle-exclamation" class="-mt-0.5" width="50" />
                 <div>
-                    <p class="mb-1 font-medium">An error was encountered</p>
-                    <p class="mb-1 text-sm">{create.error?.message}</p>
+                    <p class="mb-1 font-medium">Account creation failed</p>
+                    <!-- <p class="mb-1 text-sm">{create.error?.message}</p> -->
                     <p class="mb-1 text-sm">Error: {create.error?.code}</p>
                 </div>
             </div>

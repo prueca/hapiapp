@@ -132,20 +132,27 @@ class CreateContext {
         this.loading = true
 
         try {
-            const response = await api.post('accounts/create', { json: this.data })
+            await api.post('accounts/create', { json: this.data })
             this.loading = false
-
-            if (!response.ok) {
-                const body: Json = await response.json()
-                this.error = body as App.Error
-
-                return
-            }
 
             // redirect to account view page upon success
         } catch (e: any) {
-            this.error = errors.UNKNOWN_ERROR
             this.loading = false
+            this.error = errors.UNEXPECTED_ERROR
+
+            switch (e.name) {
+                case 'HTTPError':
+                    this.error = e.data
+                    break
+
+                case 'NetworkError':
+                    this.error = errors.NETWORK_ERROR
+                    break
+
+                case 'TypeError':
+                    this.error = errors.TYPE_ERROR
+                    break
+            }
         }
     }
 

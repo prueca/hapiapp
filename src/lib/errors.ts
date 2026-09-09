@@ -1,7 +1,7 @@
 export default {
-    UNKNOWN_ERROR: {
-        code: 'UNKNOWN_ERROR',
-        message: "We couldn't complete your request. Please try again later."
+    UNEXPECTED_ERROR: {
+        code: 'UNEXPECTED_ERROR',
+        message: 'An unexpected error occurred.'
     },
     INTERNAL_ERROR: {
         code: 'INTERNAL_ERROR',
@@ -35,5 +35,13 @@ export default {
     CHECK_CONSTRAINT_VIOLATION: {
         code: 'CHECK_CONSTRAINT_VIOLATION',
         message: 'The provided data does not satisfy the required constraints.'
+    },
+    NETWORK_ERROR: {
+        code: 'NETWORK_ERROR',
+        message: 'No internet connection. Please check your connection and try again.'
+    },
+    TYPE_ERROR: {
+        code: 'TYPE_ERROR',
+        message: 'Unable to connect. Please check your internet connection and try again.'
     }
 }
