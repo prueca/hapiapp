@@ -11,6 +11,7 @@ import jwt, { type SignOptions } from 'jsonwebtoken'
 import moment from 'moment'
 import z from 'zod'
 import _ from 'lodash'
+import errors from '$lib/errors'
 
 import db from '$lib/drizzle'
 import { eq } from 'drizzle-orm'
@@ -20,13 +21,11 @@ const schema = z.object({
     accountId: z.string().nonempty()
 })
 
-const INVALID_AUTHORIZATION = 'Invalid user or account'
-
 const verifyAuthToken = (cookies: Cookies) => {
     const authToken = cookies.get(AUTHORIZATION_TOKEN_COOKIE)
 
     if (!authToken) {
-        error(StatusCodes.UNAUTHORIZED, INVALID_AUTHORIZATION)
+        error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
     }
 
     try {
@@ -38,7 +37,7 @@ const verifyAuthToken = (cookies: Cookies) => {
 
         return payload
     } catch {
-        error(StatusCodes.UNAUTHORIZED, INVALID_AUTHORIZATION)
+        error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
     }
 }
 
@@ -51,7 +50,7 @@ const verifyAccess = async (username: string, accountId: string) => {
         .limit(1)
 
     if (!row || !row.user || !row.account) {
-        error(StatusCodes.UNAUTHORIZED, INVALID_AUTHORIZATION)
+        error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
     }
 
     return {
@@ -77,7 +76,7 @@ const authorize = (
     const match = (ACCESS_TOKEN_VALIDITY as string).match(/^(\d+)([A-Za-z])$/)
 
     if (!match) {
-        error(StatusCodes.INTERNAL_SERVER_ERROR, 'Invalid access token validity')
+        error(StatusCodes.INTERNAL_SERVER_ERROR, errors.INTERNAL_ERROR)
     }
 
     const [, amount, unit] = match as [string, moment.DurationInputArg1, moment.DurationInputArg2]
@@ -99,7 +98,7 @@ export const POST = async ({ request, cookies }) => {
         const validation = schema.safeParse(payload)
 
         if (!validation.success) {
-            error(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST)
+            error(StatusCodes.BAD_REQUEST, errors.INVALID_DATA_FORMAT)
         }
 
         const { accountId } = validation.data
@@ -138,8 +137,9 @@ export const POST = async ({ request, cookies }) => {
     } catch (e: any) {
         if (isHttpError(e)) throw e
 
-        const message = e.message ?? ReasonPhrases.INTERNAL_SERVER_ERROR
-
-        error(StatusCodes.INTERNAL_SERVER_ERROR, message)
+        error(StatusCodes.INTERNAL_SERVER_ERROR, {
+            ...errors.INTERNAL_ERROR,
+            message: e.message ?? errors.INTERNAL_ERROR.message
+        })
     }
 }

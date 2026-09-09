@@ -13,7 +13,7 @@
                 <div>
                     <p class="mb-1 font-medium">An error was encountered</p>
                     <p class="mb-1 text-sm">{create.error?.message}</p>
-                    <p class="text-sm text-gray-400">Error code: {create.error?.code}</p>
+                    <p class="mb-1 text-sm">Error: {create.error?.code}</p>
                 </div>
             </div>
         </div>

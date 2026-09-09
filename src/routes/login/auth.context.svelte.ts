@@ -3,6 +3,7 @@ import _ from 'lodash'
 import z from 'zod'
 import { goto } from '$app/navigation'
 import accountTypes from '$lib/config/account.types'
+import errors from '$lib/errors'
 
 class AuthContext {
     username = $state('User1234')
@@ -55,24 +56,22 @@ class AuthContext {
 
             this.status = 1
 
-            const res = await api.post('users/login', { json })
-            const response: Data<{ accounts: AuthAccount[] }> = await res.json()
-            this.accounts = response.data.accounts
+            const response = await api.post('users/login', { json })
+            const body: Json = await response.json()
+
+            if (!response.ok) {
+                this.status = 0
+                this.error = body.message
+
+                return
+            }
+
+            this.accounts = body.data.accounts
 
             this.toggleAccountSelection()
         } catch (e: any) {
             this.status = 0
-
-            const status = _.get(e, 'response.status', null)
-
-            switch (status) {
-                case 400:
-                    this.error = 'You have entered invalid credentials.'
-                    break
-
-                default:
-                    this.error = _.get(e, 'data.message', 'Unknown error.')
-            }
+            this.error = errors.UNKNOWN_ERROR.message
         }
     }
 

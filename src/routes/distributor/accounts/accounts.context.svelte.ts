@@ -1,11 +1,11 @@
 import * as t from '$lib/drizzle/schema'
 import api from '$lib/api'
 import _ from 'lodash'
-
-type Account = typeof t.account.$inferSelect
+import errors from '$lib/errors'
 
 class AccountsContext {
     loading = $state(false)
+    error: string | null = $state(null)
 
     list: Account[] = $state([])
     filtered: Account[] = $state([])
@@ -21,16 +21,28 @@ class AccountsContext {
     openSearchOptions = $state(false)
 
     async load() {
-        this.loading = true
+        try {
+            this.error = null
+            this.loading = true
 
-        const res = await api.post('accounts', { json: {} })
-        const response: Data<{ items: Account[] }> = await res.json()
+            const response = await api.post('accounts', { json: {} })
+            const body: Json = await response.json()
 
-        this.list = response.data.items
-        this.filtered = _.take(this.list, this.limit)
-        this.total = this.list.length
+            if (!response.ok) {
+                this.loading = false
+                this.error = body.code
+                return
+            }
 
-        this.loading = false
+            this.list = body.data.items
+            this.filtered = _.take(this.list, this.limit)
+            this.total = this.list.length
+
+            this.loading = false
+        } catch (e: any) {
+            this.loading = false
+            this.error = e.name ?? errors.UNKNOWN_ERROR.code
+        }
     }
 
     filter(limit = this.limit) {

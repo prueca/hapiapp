@@ -37,6 +37,8 @@
         {#if accounts.loading}
             <!-- loading skeletons  -->
             <Skeleton class="h-36 w-full rounded-none" />
+        {:else if accounts.error}
+            <p class="p-4">Error: {accounts.error}</p>
         {:else}
             <!-- account list -->
             <div class="p-4">

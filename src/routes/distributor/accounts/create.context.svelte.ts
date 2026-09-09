@@ -2,6 +2,7 @@ import _ from 'lodash'
 import z from 'zod'
 import accountTypes from '$lib/config/account.types'
 import api from '$lib/api'
+import errors from '$lib/errors'
 
 class CreateContext {
     open = $state(false)
@@ -131,11 +132,7 @@ class CreateContext {
         this.loading = true
 
         try {
-            const response = await api.post('accounts/create', {
-                json: this.data,
-                throwHttpErrors: false
-            })
-
+            const response = await api.post('accounts/create', { json: this.data })
             this.loading = false
 
             if (!response.ok) {
@@ -147,7 +144,7 @@ class CreateContext {
 
             // redirect to account view page upon success
         } catch (e: any) {
-            this.error = e.message
+            this.error = errors.UNKNOWN_ERROR
             this.loading = false
         }
     }

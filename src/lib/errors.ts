@@ -1,4 +1,8 @@
 export default {
+    UNKNOWN_ERROR: {
+        code: 'UNKNOWN_ERROR',
+        message: "We couldn't complete your request. Please try again later."
+    },
     INTERNAL_ERROR: {
         code: 'INTERNAL_ERROR',
         message: 'An unexpected error occurred. Please try again later.'
@@ -14,6 +18,14 @@ export default {
     DATA_CONFLICT: {
         code: 'DATA_CONFLICT',
         message: 'The data already exists and conflicts with an existing record.'
+    },
+    NOT_FOUND: {
+        code: 'NOT_FOUND',
+        message: 'The requested resource was not found.'
+    },
+    UNAUTHORIZED: {
+        code: 'UNAUTHORIZED',
+        message: 'You are not authorized to perform this transaction.'
     },
     FOREIGN_KEY_VIOLATION: {
         code: 'FOREIGN_KEY_VIOLATION',

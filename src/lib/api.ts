@@ -14,7 +14,8 @@ if (!_.endsWith(PUBLIC_API_URL, '/')) {
 
 const api = ky.create({
     baseUrl,
-    credentials: 'include'
+    credentials: 'include',
+    throwHttpErrors: false
 })
 
 export default api

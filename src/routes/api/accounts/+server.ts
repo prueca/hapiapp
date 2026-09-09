@@ -7,6 +7,7 @@ import db from '$lib/drizzle'
 import { eq, or, getTableColumns, desc } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import * as t from '$lib/drizzle/schema'
+import errors from '$lib/errors'
 
 export const POST = async ({ locals }) => {
     const account = locals.account!
@@ -32,7 +33,7 @@ export const POST = async ({ locals }) => {
             break
 
         default:
-            error(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST)
+            error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
     }
 
     return json({

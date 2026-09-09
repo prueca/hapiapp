@@ -9,6 +9,7 @@ import * as argon2 from 'argon2'
 import jwt, { type SignOptions } from 'jsonwebtoken'
 import z from 'zod'
 import _ from 'lodash'
+import errors from '$lib/errors'
 
 import db from '$lib/drizzle'
 import { eq } from 'drizzle-orm'
@@ -19,15 +20,13 @@ const schema = z.object({
     password: z.string().nonempty()
 })
 
-const INVALID_LOGIN = 'Invalid username or password'
-
 export const POST = async ({ request, cookies }) => {
     try {
         const payload = await request.json()
         const validation = schema.safeParse(payload)
 
         if (!validation.success) {
-            error(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST)
+            error(StatusCodes.BAD_REQUEST, errors.INVALID_DATA_FORMAT)
         }
 
         const { username, password } = validation.data
@@ -39,7 +38,10 @@ export const POST = async ({ request, cookies }) => {
         const [user] = await db.select().from(t.user).where(eq(t.user.username, username)).limit(1)
 
         if (!user) {
-            error(StatusCodes.UNAUTHORIZED, INVALID_LOGIN)
+            error(StatusCodes.UNAUTHORIZED, {
+                ...errors.NOT_FOUND,
+                message: 'Invalid username or password'
+            })
         }
 
         /**
@@ -49,7 +51,10 @@ export const POST = async ({ request, cookies }) => {
         const isValidPassword = await argon2.verify(user.password, password)
 
         if (!isValidPassword) {
-            error(StatusCodes.UNAUTHORIZED, INVALID_LOGIN)
+            error(StatusCodes.UNAUTHORIZED, {
+                ...errors.NOT_FOUND,
+                message: 'Invalid username or password'
+            })
         }
 
         /**
@@ -96,8 +101,9 @@ export const POST = async ({ request, cookies }) => {
     } catch (e: any) {
         if (isHttpError(e)) throw e
 
-        const message = e.message ?? ReasonPhrases.INTERNAL_SERVER_ERROR
-
-        error(StatusCodes.INTERNAL_SERVER_ERROR, message)
+        error(StatusCodes.INTERNAL_SERVER_ERROR, {
+            ...errors.INTERNAL_ERROR,
+            message: e.message ?? errors.INTERNAL_ERROR.message
+        })
     }
 }
