@@ -4,7 +4,7 @@ import accountTypes from '$lib/config/account.types'
 import _ from 'lodash'
 
 import db from '$lib/drizzle'
-import { eq, or, getTableColumns, desc } from 'drizzle-orm'
+import { eq, or, and, getTableColumns, desc, isNull } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import * as t from '$lib/drizzle/schema'
 import errors from '$lib/errors'
@@ -22,7 +22,12 @@ export const POST = async ({ locals }) => {
                 .select({ ...getTableColumns(t.account) })
                 .from(t.account)
                 .leftJoin(parent, eq(parent.id, t.account.parentId))
-                .where(or(eq(t.account.parentId, account.id), eq(parent.parentId, account.id)))
+                .where(
+                    and(
+                        or(eq(t.account.parentId, account.id), eq(parent.parentId, account.id)),
+                        isNull(t.account.deletedAt)
+                    )
+                )
                 .orderBy(desc(t.account.createdAt))
 
             break

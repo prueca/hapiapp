@@ -1,12 +1,13 @@
 <script lang="ts">
     import _ from 'lodash'
     import Icon from '@iconify/svelte'
+    import del from '../delete.context.svelte'
 
     let { item } = $props()
 </script>
 
 <div class="account-list-item">
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between gap-4">
         <div>
             <div class="mb-1 font-medium">
                 {item.name}
@@ -17,8 +18,14 @@
                 <span>{item.address}</span>
             </div>
         </div>
-        <div class="text-gray-400">
-            <Icon icon="basil:caret-right-solid" />
+        <div class="flex items-center gap-2 text-gray-400">
+            <!-- <Icon icon="basil:caret-right-solid" /> -->
+            <button class="btn btn-circle">
+                <Icon icon="ci:note-edit" width="24" />
+            </button>
+            <button class="btn btn-circle" onclick={() => del.confirm(item.id)}>
+                <Icon icon="mdi:delete-outline" width="24" />
+            </button>
         </div>
     </div>
 </div>

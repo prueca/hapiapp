@@ -143,6 +143,11 @@ class CreateContext {
             switch (e.name) {
                 case 'HTTPError':
                     this.error = e.data
+
+                    if (e.response.status === 404 && e.data?.code !== errors.NOT_FOUND.code) {
+                        this.error = errors.NOT_FOUND
+                    }
+
                     break
 
                 case 'NetworkError':

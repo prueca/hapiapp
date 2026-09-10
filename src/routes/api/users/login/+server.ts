@@ -4,7 +4,7 @@ import {
     AUTHORIZATION_TOKEN_VALIDITY
 } from '$env/static/private'
 import { json, error, isHttpError } from '@sveltejs/kit'
-import { StatusCodes, ReasonPhrases } from 'http-status-codes'
+import { StatusCodes } from 'http-status-codes'
 import * as argon2 from 'argon2'
 import jwt, { type SignOptions } from 'jsonwebtoken'
 import z from 'zod'
@@ -12,7 +12,7 @@ import _ from 'lodash'
 import errors from '$lib/errors'
 
 import db from '$lib/drizzle'
-import { eq } from 'drizzle-orm'
+import { eq, and, isNull } from 'drizzle-orm'
 import * as t from '$lib/drizzle/schema'
 
 const schema = z.object({
@@ -89,7 +89,8 @@ export const POST = async ({ request, cookies }) => {
             .select()
             .from(t.access)
             .innerJoin(t.account, eq(t.access.accountId, t.account.id))
-            .where(eq(t.access.userId, user.id))
+            // .where(eq(t.access.userId, user.id))
+            .where(and(eq(t.access.userId, user.id), isNull(t.account.deletedAt)))
 
         const accounts = _.map(rows, (x) => {
             return _.pick(x.account, ['id', 'type', 'name', 'address'])

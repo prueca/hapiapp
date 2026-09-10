@@ -14,11 +14,11 @@
     <div class="mb-2 flex items-center justify-between">
         <span class="text-lg">Accounts</span>
         <div class="flex items-center">
-            <button type="button" class="delete-account btn btn-ghost btn-xs">
+            <!-- <button type="button" class="delete-account btn btn-ghost btn-xs">
                 <span>&minus;</span>
                 <span>Delete</span>
             </button>
-            <div class="divider-sm divider mx-0 mt-0.5 divider-horizontal h-5"></div>
+            <div class="divider-sm divider mx-0 mt-0.5 divider-horizontal h-5"></div> -->
             <button
                 type="button"
                 class="create-account btn btn-ghost btn-xs"

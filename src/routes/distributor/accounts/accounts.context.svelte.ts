@@ -42,6 +42,11 @@ class AccountsContext {
             switch (e.name) {
                 case 'HTTPError':
                     this.error = e.data.message
+
+                    if (e.response.status === 404 && e.data?.code !== errors.NOT_FOUND.code) {
+                        this.error = errors.NOT_FOUND.message
+                    }
+
                     break
 
                 case 'NetworkError':
@@ -81,7 +86,7 @@ class AccountsContext {
 
                 return true
             })
-            .orderBy([this.sortBy, this.sortOrder])
+            .orderBy([this.sortBy], [this.sortOrder as 'asc' | 'desc'])
             .value()
 
         this.filtered = _.take(matches, limit)
@@ -94,6 +99,11 @@ class AccountsContext {
 
     toggleSearchOptions() {
         this.openSearchOptions = !this.openSearchOptions
+    }
+
+    remove(accountId: string) {
+        this.list = _.filter(this.list, (x) => x.id !== accountId)
+        this.filtered = _.filter(this.filtered, (x) => x.id !== accountId)
     }
 }
 
