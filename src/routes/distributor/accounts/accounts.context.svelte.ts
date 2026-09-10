@@ -86,7 +86,7 @@ class AccountsContext {
 
                 return true
             })
-            .orderBy([this.sortBy], [this.sortOrder as 'asc' | 'desc'])
+            .orderBy([this.sortBy, 'name'], [this.sortOrder as 'asc' | 'desc', 'asc'])
             .value()
 
         this.filtered = _.take(matches, limit)

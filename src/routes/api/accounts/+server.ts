@@ -4,7 +4,7 @@ import accountTypes from '$lib/config/account.types'
 import _ from 'lodash'
 
 import db from '$lib/drizzle'
-import { eq, or, and, getTableColumns, desc, isNull } from 'drizzle-orm'
+import { eq, or, and, getTableColumns, desc, asc, isNull } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import * as t from '$lib/drizzle/schema'
 import errors from '$lib/errors'
@@ -28,7 +28,7 @@ export const POST = async ({ locals }) => {
                         isNull(t.account.deletedAt)
                     )
                 )
-                .orderBy(desc(t.account.createdAt))
+                .orderBy(desc(t.account.createdAt), asc(t.account.name))
 
             break
 
