@@ -8,8 +8,8 @@
 <div class="modal" class:modal-open={create.error}>
     <div class="modal-box">
         <div class="heading">
-            <div class="flex items-start gap-4">
-                <Icon icon="boxicons:message-circle-exclamation" class="-mt-0.5" width="50" />
+            <div class="flex items-start gap-2">
+                <Icon icon="boxicons:message-circle-exclamation" class="-mt-0.5" width="32" />
                 <div>
                     <p class="mb-1 font-medium">Account creation failed</p>
                     <!-- <p class="mb-1 text-sm">{create.error?.message}</p> -->
@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="modal-action">
-            <button class="close-btn btn" onclick={() => create.reset()}> Close </button>
+            <button class="close-btn btn btn-sm" onclick={() => create.reset()}> Close </button>
         </div>
     </div>
 </div>
@@ -26,8 +26,8 @@
 <div class="modal" class:modal-open={create.loading}>
     <div class="modal-box">
         <div class="heading">
-            <div class="flex items-start gap-4">
-                <span class="loading mt-1 loading-xl loading-spinner"></span>
+            <div class="flex items-start gap-2">
+                <span class="loading mt-1 loading-lg loading-spinner"></span>
                 <div>
                     <p class="mb-1 text-lg font-medium">Creating account...</p>
                     <div class="text-sm">You will be redirected upon success.</div>
@@ -131,8 +131,8 @@
             </fieldset>
         </div>
         <div class="modal-action">
-            <button class="submit-btn btn" onclick={() => create.submit()}> Submit </button>
-            <button class="close-btn btn" onclick={() => create.toggle()}> Close </button>
+            <button class="submit-btn btn btn-sm" onclick={() => create.submit()}> Submit </button>
+            <button class="close-btn btn btn-sm" onclick={() => create.toggle()}> Close </button>
         </div>
     </div>
 </div>

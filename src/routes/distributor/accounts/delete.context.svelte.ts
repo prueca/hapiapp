@@ -4,15 +4,13 @@ import errors from '$lib/errors'
 import accounts from './accounts.context.svelte'
 
 class DeleteContext {
-    loading = $state(false)
-
-    error: App.Error | null = $state(null)
-
-    success = $state(false)
+    open = $state(false)
 
     target: string | null = $state(null)
 
-    open = $state(false)
+    loading = $state(false)
+    success = $state(false)
+    error: App.Error | null = $state(null)
 
     setOpen(flag: boolean) {
         if (!this.open) {
