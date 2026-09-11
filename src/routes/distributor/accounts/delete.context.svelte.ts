@@ -30,6 +30,8 @@ class DeleteContext {
     }
 
     async proceed() {
+        if (this.loading) return
+
         try {
             this.setOpen(false)
             this.loading = true
