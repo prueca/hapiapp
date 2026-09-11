@@ -1,25 +1,47 @@
 import { json, error, isHttpError } from '@sveltejs/kit'
 import { StatusCodes } from 'http-status-codes'
-import z, { ZodObject } from 'zod'
+import z from 'zod'
 import accountTypes from '$lib/config/account.types'
 import errors from '$lib/errors'
 import _ from 'lodash'
 
 import db from '$lib/drizzle'
-import { eq, and, isNull } from 'drizzle-orm'
+import { eq, or, and, isNull, getTableColumns } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
 import * as t from '$lib/drizzle/schema'
 
-const schema: ZodObject = z.object({
+const schema = z.object({
     id: z.ulid(),
     type: z.enum([accountTypes.DEALER, accountTypes.HAPISTORE]),
     name: z.string().nonempty(),
     address: z.string().nonempty(),
     phone: z.string().nonempty(),
-    isrCode: z.string().nonempty().nullable(),
-    sapCode: z.string().nonempty().nullable()
+    isrCode: z.string().nullable(),
+    sapCode: z.string().nullable()
 })
 
-export const POST = async ({ request }) => {
+const verifyAccess = async (currentAccountId: string, id: string) => {
+    const parent = alias(t.account, 'parent')
+
+    const [account] = await db
+        .select({ ...getTableColumns(t.account) })
+        .from(t.account)
+        .leftJoin(parent, eq(parent.id, t.account.parentId))
+        .where(
+            and(
+                eq(t.account.id, id),
+                isNull(t.account.deletedAt),
+                or(eq(t.account.parentId, currentAccountId), eq(parent.parentId, currentAccountId))
+            )
+        )
+        .limit(1)
+
+    if (!account) {
+        error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
+    }
+}
+
+export const POST = async ({ locals, request }) => {
     try {
         const payload = await request.json()
         const validation = schema.safeParse(payload)
@@ -29,6 +51,10 @@ export const POST = async ({ request }) => {
         }
 
         const { id } = validation.data
+        const currentAccountId = locals.account!.id
+
+        await verifyAccess(currentAccountId, id)
+
         const [account] = await db
             .update(t.account)
             .set(_.assign(_.omit(validation.data, 'id'), { updatedAt: new Date() }))

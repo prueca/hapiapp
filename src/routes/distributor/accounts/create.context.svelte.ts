@@ -54,13 +54,11 @@ class CreateContext {
                 .nonempty(),
             isrCode: z
                 .string()
-                .regex(/^[A-Z0-9]{10,20}$/)
-                .nonempty()
+                .regex(/^[a-zA-Z0-9]{0}|[a-zA-Z0-9]{10,20}$/)
                 .nullable(),
             sapCode: z
                 .string()
-                .regex(/^[A-Z0-9]{10,20}$/)
-                .nonempty()
+                .regex(/^[a-zA-Z0-9]{0}|[a-zA-Z0-9]{10,20}$/)
                 .nullable()
         })
 

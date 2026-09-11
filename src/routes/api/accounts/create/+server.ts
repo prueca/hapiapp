@@ -1,5 +1,5 @@
 import { json, error, isHttpError } from '@sveltejs/kit'
-import { StatusCodes, ReasonPhrases } from 'http-status-codes'
+import { StatusCodes } from 'http-status-codes'
 import z, { ZodObject } from 'zod'
 import accountTypes from '$lib/config/account.types'
 import errors from '$lib/errors'
@@ -13,8 +13,8 @@ const schema: ZodObject = z.object({
     name: z.string().nonempty(),
     address: z.string().nonempty(),
     phone: z.string().nonempty(),
-    isrCode: z.string().nonempty().nullable(),
-    sapCode: z.string().nonempty().nullable(),
+    isrCode: z.string().nullable(),
+    sapCode: z.string().nullable(),
     parentId: z.ulid(),
     active: z.boolean()
 })
