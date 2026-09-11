@@ -2,6 +2,7 @@
     import _ from 'lodash'
     import Icon from '@iconify/svelte'
     import del from '../delete.context.svelte'
+    import update from '../update.context.svelte'
 
     let { item } = $props()
 </script>
@@ -20,7 +21,7 @@
         </div>
         <div class="flex items-center gap-2 text-gray-400">
             <!-- <Icon icon="basil:caret-right-solid" /> -->
-            <button class="btn btn-circle">
+            <button class="btn btn-circle" onclick={() => update.select(item.id)}>
                 <Icon icon="ci:note-edit" width="24" />
             </button>
             <button class="btn btn-circle" onclick={() => del.confirm(item.id)}>

@@ -1,6 +1,7 @@
 import { json, error, isHttpError } from '@sveltejs/kit'
 import { StatusCodes } from 'http-status-codes'
 import z, { ZodObject } from 'zod'
+import accountTypes from '$lib/config/account.types'
 import errors from '$lib/errors'
 import _ from 'lodash'
 
@@ -9,7 +10,13 @@ import { eq, and, isNull } from 'drizzle-orm'
 import * as t from '$lib/drizzle/schema'
 
 const schema: ZodObject = z.object({
-    id: z.ulid()
+    id: z.ulid(),
+    type: z.enum([accountTypes.DEALER, accountTypes.HAPISTORE]),
+    name: z.string().nonempty(),
+    address: z.string().nonempty(),
+    phone: z.string().nonempty(),
+    isrCode: z.string().nonempty().nullable(),
+    sapCode: z.string().nonempty().nullable()
 })
 
 export const POST = async ({ request }) => {
@@ -24,9 +31,7 @@ export const POST = async ({ request }) => {
         const { id } = validation.data
         const [account] = await db
             .update(t.account)
-            .set({
-                deletedAt: new Date()
-            })
+            .set(_.assign(_.omit(validation.data, 'id'), { updatedAt: new Date() }))
             .where(and(eq(t.account.id, id as string), isNull(t.account.deletedAt)))
             .returning()
 

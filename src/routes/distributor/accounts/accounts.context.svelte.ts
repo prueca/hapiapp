@@ -105,6 +105,11 @@ class AccountsContext {
         this.list = _.filter(this.list, (x) => x.id !== accountId)
         this.filtered = _.filter(this.filtered, (x) => x.id !== accountId)
     }
+
+    update(account: Account) {
+        this.list = _.map(this.list, (x) => (x.id === account.id ? account : x))
+        this.filtered = _.map(this.filtered, (x) => (x.id === account.id ? account : x))
+    }
 }
 
 export default new AccountsContext()
