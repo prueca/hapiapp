@@ -14,8 +14,8 @@ export const account = pgTable('account', {
     parentId: varchar('parent_id', { length: 26 }),
 
     name: varchar('name', { length: 255 }).notNull().unique(),
-    address: varchar('address', { length: 255 }),
-    phone: varchar('phone', { length: 32 }),
+    address: varchar('address', { length: 255 }).notNull(),
+    phone: varchar('phone', { length: 32 }).notNull(),
     isrCode: varchar('isr_code', { length: 20 }),
     sapCode: varchar('sap_code', { length: 20 }),
 
