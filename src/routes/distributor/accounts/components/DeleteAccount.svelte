@@ -67,8 +67,23 @@
             <div class="flex items-start gap-2">
                 <Icon icon="boxicons:message-circle-question-mark" class="-mt-0.5" width="32" />
                 <div>
-                    <p class="mb-1 font-medium">Are you sure want to delete this account?</p>
-                    <p class="font-normal">{account?.name}</p>
+                    <p class="mb-4 font-medium">Are you sure want to delete this account?</p>
+                    <div class="flex flex-col gap-2">
+                        <!-- <span class="mb-1 font-semibold">{_.upperFirst(account?.name)}</span> from
+                        <span>{account?.address}</span> -->
+                        <div>
+                            <div class="text-xs text-gray-400">Name</div>
+                            <div class="font-medium">{account?.name}</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-gray-400">Type</div>
+                            <div class="font-medium">{_.upperFirst(account?.type)}</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-gray-400">Address</div>
+                            <div class="font-medium">{account?.address}</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
