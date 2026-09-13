@@ -9,7 +9,7 @@ import db from '$lib/drizzle'
 import * as t from '$lib/drizzle/schema'
 
 const schema: ZodObject = z.object({
-    type: z.enum([accountTypes.DEALER, accountTypes.HAPISTORE]),
+    type: z.enum([accountTypes.DEALER, accountTypes.HAPISTORE, accountTypes.DIRECT_STORE]),
     name: z.string().nonempty(),
     address: z.string().nonempty(),
     phone: z.string().nonempty(),
