@@ -45,7 +45,7 @@
         <div>
             <!-- account type -->
             <div class="fieldset" class:error={create.issues.type !== null}>
-                <label class="label">Select account type</label>
+                <label class="label" for="">Select account type</label>
                 <select class="select" bind:value={create.data.type}>
                     <option disabled selected value="">Choose one</option>
                     <option value={accountTypes.DEALER}>
@@ -65,7 +65,7 @@
 
             <!-- name -->
             <fieldset class="fieldset" class:error={create.issues.name !== null}>
-                <label class="label">Enter account name</label>
+                <label class="label" for="">Enter account name</label>
                 <input
                     type="text"
                     class="input w-full"
@@ -79,7 +79,7 @@
 
             <!-- address -->
             <fieldset class="fieldset" class:error={create.issues.address !== null}>
-                <label class="label">Enter account address</label>
+                <label class="label" for="">Enter account address</label>
                 <input
                     type="text"
                     class="input w-full"
@@ -93,7 +93,7 @@
 
             <!-- phone -->
             <fieldset class="fieldset" class:error={create.issues.phone !== null}>
-                <label class="label">Enter phone number</label>
+                <label class="label" for="">Enter phone number</label>
                 <input
                     type="text"
                     class="input w-full"
@@ -107,7 +107,7 @@
 
             <!-- isr code -->
             <fieldset class="fieldset" class:error={create.issues.isrCode !== null}>
-                <label class="label">Enter ISR Code</label>
+                <label class="label" for="">Enter ISR Code</label>
                 <input
                     type="text"
                     class="input w-full"
@@ -121,7 +121,7 @@
 
             <!-- sap code -->
             <fieldset class="fieldset" class:error={create.issues.sapCode !== null}>
-                <label class="label">Enter SAP Code</label>
+                <label class="label" for="">Enter SAP Code</label>
                 <input
                     type="text"
                     class="input w-full"
