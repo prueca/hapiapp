@@ -10,11 +10,15 @@ const accountTypes = {
     DIRECT_STORE
 } as const
 
-export const displayText = {
+const displayText = {
     [DISTRIBUTOR]: 'Distributor',
     [DEALER]: 'Dealer',
     [HAPISTORE]: 'Hapistore',
     [DIRECT_STORE]: 'Direct Store'
+}
+
+export const getDisplayText = (type: string) => {
+    return displayText[type as keyof typeof displayText]
 }
 
 export default accountTypes

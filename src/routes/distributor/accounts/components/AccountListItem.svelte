@@ -3,6 +3,7 @@
     import Icon from '@iconify/svelte'
     import del from '../delete.context.svelte'
     import update from '../update.context.svelte'
+    import { getDisplayText } from '$lib/config/account.types'
 
     let { item } = $props()
 </script>
@@ -35,7 +36,7 @@
         </div>
     </div>
     <div class="mb-1 text-xs text-gray-400">
-        <span>{_.upperFirst(item.type)}</span>
+        <span>{getDisplayText(item.type)}</span>
         <span class="mx-1">•</span>
         <span>{item.address}</span>
     </div>

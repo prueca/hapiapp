@@ -18,7 +18,7 @@ const userRoles = {
     DIRECT_STORE_USER
 } as const
 
-export const displayText = {
+const displayText = {
     [DISTRIBUTOR_ADMIN]: 'Admin Distributor',
     [DISTRIBUTOR_USER]: 'Distributor',
     [DEALER_ADMIN]: 'Admin Dealer',
@@ -27,6 +27,10 @@ export const displayText = {
     [HAPISTORE_USER]: 'Hapistore User',
     [DIRECT_STORE_ADMIN]: 'Direct Store Admin',
     [DIRECT_STORE_USER]: 'Direct Store User'
+}
+
+export const getDisplayText = (role: string) => {
+    return displayText[role as keyof typeof displayText]
 }
 
 export default userRoles

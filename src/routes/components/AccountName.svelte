@@ -1,10 +1,10 @@
 <script lang="ts">
     import { getContext } from 'svelte'
-    import { displayText } from '$lib/config/user.roles'
+    import { getDisplayText } from '$lib/config/user.roles'
 
     const auth = getContext<{ user: AuthUser; account: AuthAccount }>('auth')
 
-    let role = $derived.by(() => displayText[auth.user.role])
+    let role = $derived.by(() => getDisplayText(auth.user.role))
 </script>
 
 <div class="account-name">
