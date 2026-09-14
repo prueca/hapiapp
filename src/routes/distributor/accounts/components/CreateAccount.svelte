@@ -1,6 +1,6 @@
 <script lang="ts">
     import _ from 'lodash'
-    import accountTypes, { formatted } from '$lib/config/account.types'
+    import accountTypes, { displayText } from '$lib/config/account.types'
     import create from '../create.context.svelte'
     import Icon from '@iconify/svelte'
 </script>
@@ -49,13 +49,13 @@
                 <select class="select" bind:value={create.data.type}>
                     <option disabled selected value="">Choose one</option>
                     <option value={accountTypes.DEALER}>
-                        {formatted.DEALER}
+                        {displayText[accountTypes.DEALER]}
                     </option>
                     <option value={accountTypes.HAPISTORE}>
-                        {formatted.HAPISTORE}
+                        {displayText[accountTypes.HAPISTORE]}
                     </option>
                     <option value={accountTypes.DIRECT_STORE}>
-                        {formatted.DIRECT_STORE}
+                        {displayText[accountTypes.DIRECT_STORE]}
                     </option>
                 </select>
                 <div class="help-text">

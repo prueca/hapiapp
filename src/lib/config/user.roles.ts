@@ -18,15 +18,15 @@ const userRoles = {
     DIRECT_STORE_USER
 } as const
 
-export const formatted = {
-    DISTRIBUTOR_ADMIN: 'Admin Distributor',
-    DISTRIBUTOR_USER: 'Distributor',
-    DEALER_ADMIN: 'Admin Dealer',
-    DEALER_USER: 'Dealer',
-    HAPISTORE_ADMIN: 'Hapistore Admin',
-    HAPISTORE_USER: 'Hapistore User',
-    DIRECT_STORE_ADMIN: 'Direct Store Admin',
-    DIRECT_STORE_USER: 'Direct Store User'
+export const displayText = {
+    [DISTRIBUTOR_ADMIN]: 'Admin Distributor',
+    [DISTRIBUTOR_USER]: 'Distributor',
+    [DEALER_ADMIN]: 'Admin Dealer',
+    [DEALER_USER]: 'Dealer',
+    [HAPISTORE_ADMIN]: 'Hapistore Admin',
+    [HAPISTORE_USER]: 'Hapistore User',
+    [DIRECT_STORE_ADMIN]: 'Direct Store Admin',
+    [DIRECT_STORE_USER]: 'Direct Store User'
 }
 
 export default userRoles

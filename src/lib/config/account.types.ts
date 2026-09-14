@@ -10,11 +10,11 @@ const accountTypes = {
     DIRECT_STORE
 } as const
 
-export const formatted = {
-    DISTRIBUTOR: 'Distributor',
-    DEALER: 'Dealer',
-    HAPISTORE: 'Hapistore',
-    DIRECT_STORE: 'Direct Store'
+export const displayText = {
+    [DISTRIBUTOR]: 'Distributor',
+    [DEALER]: 'Dealer',
+    [HAPISTORE]: 'Hapistore',
+    [DIRECT_STORE]: 'Direct Store'
 }
 
 export default accountTypes

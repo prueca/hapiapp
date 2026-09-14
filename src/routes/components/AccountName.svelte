@@ -1,27 +1,10 @@
 <script lang="ts">
     import { getContext } from 'svelte'
-    import roles from '$lib/config/user.roles'
+    import { displayText } from '$lib/config/user.roles'
 
     const auth = getContext<{ user: AuthUser; account: AuthAccount }>('auth')
 
-    let role = $derived.by(() => {
-        switch (auth.user.role) {
-            case roles.DISTRIBUTOR_ADMIN:
-                return 'Admin Distributor'
-            case roles.DISTRIBUTOR_USER:
-                return 'Distributor'
-            case roles.DEALER_ADMIN:
-                return 'Admin Dealer'
-            case roles.DEALER_USER:
-                return 'Dealer'
-            case roles.HAPISTORE_ADMIN:
-                return 'Admin Hapistore'
-            case roles.HAPISTORE_USER:
-                return 'Hapistore'
-            default:
-                return ''
-        }
-    })
+    let role = $derived.by(() => displayText[auth.user.role])
 </script>
 
 <div class="account-name">
