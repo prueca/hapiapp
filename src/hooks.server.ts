@@ -1,5 +1,5 @@
 import '$lib/drizzle'
-import { ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_SECRET, IGNORE_AUTH } from '$env/static/private'
+import { ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_SECRET } from '$env/static/private'
 import type { Handle } from '@sveltejs/kit'
 import { StatusCodes, ReasonPhrases } from 'http-status-codes'
 import jwt, { type JwtPayload } from 'jsonwebtoken'
@@ -23,10 +23,6 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.user = null
     event.locals.account = null
     event.locals.isAuthenticated = false
-
-    if (IGNORE_AUTH === '1') {
-        return resolve(event)
-    }
 
     const isApi = event.url.pathname.startsWith('/api')
     const isLoginApi = LOGIN_ROUTES.includes(event.url.pathname)
