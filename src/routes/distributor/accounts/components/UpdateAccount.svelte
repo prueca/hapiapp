@@ -13,7 +13,7 @@
         <div>
             <!-- account type -->
             <div class="fieldset" class:error={update.issues.type !== null}>
-                <label class="label">Select account type</label>
+                <label for="" class="label">Select account type</label>
                 <select class="select" bind:value={update.data.type}>
                     <option disabled selected value="">Choose one</option>
                     <option value={accountTypes.DEALER}>
@@ -30,7 +30,7 @@
 
             <!-- name -->
             <fieldset class="fieldset" class:error={update.issues.name !== null}>
-                <label class="label">Enter account name</label>
+                <label for="" class="label">Enter account name</label>
                 <input
                     type="text"
                     class="input w-full"
@@ -44,7 +44,7 @@
 
             <!-- address -->
             <fieldset class="fieldset" class:error={update.issues.address !== null}>
-                <label class="label">Enter account address</label>
+                <label for="" class="label">Enter account address</label>
                 <input
                     type="text"
                     class="input w-full"
@@ -58,7 +58,7 @@
 
             <!-- phone -->
             <fieldset class="fieldset" class:error={update.issues.phone !== null}>
-                <label class="label">Enter phone number</label>
+                <label for="" class="label">Enter phone number</label>
                 <input
                     type="text"
                     class="input w-full"
@@ -72,7 +72,7 @@
 
             <!-- isr code -->
             <fieldset class="fieldset" class:error={update.issues.isrCode !== null}>
-                <label class="label">Enter ISR Code</label>
+                <label for="" class="label">Enter ISR Code</label>
                 <input
                     type="text"
                     class="input w-full"
@@ -86,7 +86,7 @@
 
             <!-- sap code -->
             <fieldset class="fieldset" class:error={update.issues.sapCode !== null}>
-                <label class="label">Enter SAP Code</label>
+                <label for="" class="label">Enter SAP Code</label>
                 <input
                     type="text"
                     class="input w-full"
@@ -99,10 +99,8 @@
             </fieldset>
         </div>
         <div class="modal-action">
-            <button class="submit-btn btn btn-sm" onclick={() => update.submit()}> Update </button>
-            <button class="close-btn btn btn-sm" onclick={() => update.setOpen(false)}>
-                Close
-            </button>
+            <button class="submit-btn btn" onclick={() => update.submit()}> Update </button>
+            <button class="close-btn btn" onclick={() => update.setOpen(false)}> Close </button>
         </div>
     </div>
 </div>
@@ -134,9 +132,7 @@
             </div>
         </div>
         <div class="modal-action">
-            <button class="close-btn btn btn-sm" onclick={() => update.setOpen(false)}>
-                Close
-            </button>
+            <button class="close-btn btn" onclick={() => update.setOpen(false)}> Close </button>
         </div>
     </div>
 </div>
@@ -153,9 +149,7 @@
             </div>
         </div>
         <div class="modal-action">
-            <button class="close-btn btn rounded-lg btn-sm" onclick={() => update.setOpen(false)}>
-                Close
-            </button>
+            <button class="close-btn btn" onclick={() => update.setOpen(false)}> Close </button>
         </div>
     </div>
 </div>

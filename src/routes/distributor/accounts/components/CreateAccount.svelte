@@ -134,8 +134,8 @@
             </fieldset>
         </div>
         <div class="modal-action">
-            <button class="submit-btn btn btn-sm" onclick={() => create.submit()}> Create </button>
-            <button class="close-btn btn btn-sm" onclick={() => create.toggle()}> Close </button>
+            <button class="submit-btn btn" onclick={() => create.submit()}> Create </button>
+            <button class="close-btn btn" onclick={() => create.toggle()}> Close </button>
         </div>
     </div>
 </div>
