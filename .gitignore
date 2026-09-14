@@ -7,6 +7,7 @@ node_modules
 .wrangler
 /.svelte-kit
 /build
+/drizzle
 
 # OS
 .DS_Store
@@ -27,3 +28,6 @@ vite.config.ts.timestamp-*
 
 # ---
 scripts
+instruction.md
+_mock
+_scratch

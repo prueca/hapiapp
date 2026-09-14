@@ -11,22 +11,21 @@ import jwt, { type SignOptions } from 'jsonwebtoken'
 import moment from 'moment'
 import z from 'zod'
 import _ from 'lodash'
+import errors from '$lib/errors'
 
-import User from '$lib/db/User'
-import Account from '$lib/db/Account'
-import Access from '$lib/db/Access'
+import db from '$lib/drizzle'
+import { eq } from 'drizzle-orm'
+import * as t from '$lib/drizzle/schema'
 
 const schema = z.object({
-    companyCode: z.string().nonempty()
+    accountId: z.string().nonempty()
 })
-
-const INVALID_AUTHORIZATION = 'Invalid user or account'
 
 const verifyAuthToken = (cookies: Cookies) => {
     const authToken = cookies.get(AUTHORIZATION_TOKEN_COOKIE)
 
     if (!authToken) {
-        error(StatusCodes.UNAUTHORIZED, INVALID_AUTHORIZATION)
+        error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
     }
 
     try {
@@ -38,42 +37,36 @@ const verifyAuthToken = (cookies: Cookies) => {
 
         return payload
     } catch {
-        error(StatusCodes.UNAUTHORIZED, INVALID_AUTHORIZATION)
+        error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
     }
 }
 
-const verifyAccess = async (username: string, companyCode: string) => {
-    const access = await Access.findOne({
-        include: [
-            {
-                model: User,
-                as: 'user',
-                required: true,
-                where: { username }
-            },
-            {
-                model: Account,
-                as: 'account',
-                required: true,
-                where: { companyCode }
-            }
-        ]
-    })
+const verifyAccess = async (username: string, accountId: string) => {
+    const [row] = await db
+        .select()
+        .from(t.access)
+        .innerJoin(t.user, eq(t.user.username, username))
+        .innerJoin(t.account, eq(t.account.id, accountId))
+        .limit(1)
 
-    if (!access || !access.user || !access.account) {
-        error(StatusCodes.UNAUTHORIZED, INVALID_AUTHORIZATION)
+    if (!row || !row.user || !row.account) {
+        error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
     }
 
     return {
-        user: access.user,
-        account: access.account
+        user: row.user,
+        account: row.account
     }
 }
 
-const authorize = (cookies: Cookies, user: User, account: Account) => {
+const authorize = (
+    cookies: Cookies,
+    user: typeof t.user.$inferSelect,
+    account: typeof t.account.$inferSelect
+) => {
     const jwtPayload = {
         user: _.pick(user, ['id', 'role', 'username', 'firstName', 'middleName', 'lastName']),
-        account: _.pick(account, ['id', 'type', 'companyCode', 'name', 'type', 'address'])
+        account: _.pick(account, ['id', 'type', 'name', 'type', 'address'])
     }
 
     const accessToken = jwt.sign(jwtPayload, ACCESS_TOKEN_SECRET as string, {
@@ -83,7 +76,7 @@ const authorize = (cookies: Cookies, user: User, account: Account) => {
     const match = (ACCESS_TOKEN_VALIDITY as string).match(/^(\d+)([A-Za-z])$/)
 
     if (!match) {
-        error(StatusCodes.INTERNAL_SERVER_ERROR, 'Invalid access token validity')
+        error(StatusCodes.INTERNAL_SERVER_ERROR, errors.INTERNAL_ERROR)
     }
 
     const [, amount, unit] = match as [string, moment.DurationInputArg1, moment.DurationInputArg2]
@@ -105,10 +98,10 @@ export const POST = async ({ request, cookies }) => {
         const validation = schema.safeParse(payload)
 
         if (!validation.success) {
-            error(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST)
+            error(StatusCodes.BAD_REQUEST, errors.INVALID_DATA_FORMAT)
         }
 
-        const { companyCode } = validation.data
+        const { accountId } = validation.data
 
         /**
          * Verify authorization token.
@@ -124,7 +117,7 @@ export const POST = async ({ request, cookies }) => {
          * This returns the user and account record.
          */
 
-        const { user, account } = await verifyAccess(username, companyCode)
+        const { user, account } = await verifyAccess(username, accountId)
 
         /**
          * Generate access token.
@@ -144,8 +137,9 @@ export const POST = async ({ request, cookies }) => {
     } catch (e: any) {
         if (isHttpError(e)) throw e
 
-        const message = e.message ?? ReasonPhrases.INTERNAL_SERVER_ERROR
-
-        error(StatusCodes.INTERNAL_SERVER_ERROR, message)
+        error(StatusCodes.INTERNAL_SERVER_ERROR, {
+            ...errors.INTERNAL_ERROR,
+            message: e.message ?? errors.INTERNAL_ERROR.message
+        })
     }
 }

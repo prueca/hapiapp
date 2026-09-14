@@ -104,7 +104,7 @@
                 <select class="input" bind:value={form.account_type}>
                     <option value="distributor">Distributor</option>
                     <option value="dealer">Dealer</option>
-                    <option value="franchisee">Franchisee</option>
+                    <option value="hapistore">Hapistore</option>
                 </select>
             </div>
         </div>

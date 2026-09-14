@@ -1,91 +1,53 @@
-/**
- * Freezers list UI context (singleton).
- *
- * The default-exported `Freezers` instance is the single source of truth every
- * component in this route binds to (Toolbar, Filters, List, Item).
- *
- * Mutable fields ($state):
- *   items, codeMonths, query, sort, statusFilter, typeFilter, codeMonthFilter,
- *   visibleCount, openFilters. `pageSize = 12` is a fixed const.
- *
- * Derivations ($derived):
- *   - codeMonthFilterOptions: `['all', ...codeMonths]` for the filter dropdown.
- *   - filtered: status / type / codeMonth matches plus a free-text search across
- *     10 fields (model, brand, barcode, capacity, yearModel, cabconStatus,
- *     codeMonth, accountName, accountType, accountAddress).
- *   - sorted: applies `sortItems` to `filtered`.
- *   - hasFilters: any filter/sort/search deviating from defaults (drives the
- *     "Clear filters" affordance).
- *   - visible / canLoadMore: windowing slice of `sorted` for "Load more".
- *
- * `sortItems`: `createdAt-desc` orders by `cabconCreatedAt` desc with `codeMonth`
- * desc as tiebreak; other keys sort by yearModel / cabconStatus / accountName /
- * accountType.
- *
- * Methods: `load`, `loadMore`, `resetFilters`, `resetVisibleCount`,
- * `closeFilters`.
- */
 import {
     SORT_OPTIONS,
     STATUS_FILTER_OPTIONS,
-    TYPE_FILTER_OPTIONS,
+    DEFAULT_STATUS_FILTER,
     type Freezer as FreezerType,
     type SortKey,
-    type StatusFilter,
-    type TypeFilter,
-    type CodeMonthFilter
+    type StatusFilter
 } from '$lib/types/freezer'
+import { invalidateAll } from '$app/navigation'
+import api from '$lib/api'
+import { modelOptions, capacityOptions, yearModelOptions, brandOptions } from '$lib/config/freezer.options'
 import _ from 'lodash'
 
 class Freezers {
     items: FreezerType[] = $state([])
-    codeMonths: string[] = $state([])
 
     query = $state('')
     sort: SortKey = $state('createdAt-desc')
-    statusFilter: StatusFilter = $state('all')
-    typeFilter: TypeFilter = $state('all')
-    codeMonthFilter: CodeMonthFilter = $state('all')
+    statusFilter: StatusFilter = $state(DEFAULT_STATUS_FILTER)
 
     pageSize = 12
     visibleCount = $state(12)
 
     openFilters = $state(false)
 
+    openCreate = $state(false)
+    submitting = $state(false)
+    error = $state('')
+
+    newModel = $state('')
+    newCapacity = $state('')
+    newBrand = $state('')
+    newYearModel = $state('')
+    newBarcode = $state('')
+
     sortOptions = SORT_OPTIONS
     statusFilterOptions = STATUS_FILTER_OPTIONS
-    typeFilterOptions = TYPE_FILTER_OPTIONS
-
-    codeMonthFilterOptions: CodeMonthFilter[] = $derived([
-          'all',
-          ...this.codeMonths
-     ])
+     modelOptions = modelOptions as unknown as string[]
+     capacityOptions = capacityOptions as unknown as number[]
+     yearModelOptions = yearModelOptions as unknown as number[]
+     brandOptions = brandOptions as unknown as string[]
 
     filtered = $derived(
         _.chain(this.items)
-            .filter((f) =>
-                this.statusFilter === 'all' ? true : f.cabconStatus === this.statusFilter
-            )
-            .filter((f) => (this.typeFilter === 'all' ? true : f.accountType === this.typeFilter))
-            .filter((f) =>
-                this.codeMonthFilter === 'all' ? true : f.codeMonth === this.codeMonthFilter
-            )
+            .filter((f) => (this.statusFilter === 'all' ? true : f.status === this.statusFilter))
             .filter((f) => {
                 const q = _.toLower(_.trim(this.query))
                 if (!q) return true
                 return _.some(
-                    [
-                        f.model,
-                        f.brand,
-                        f.barcode,
-                        f.capacity,
-                        f.yearModel,
-                        f.cabconStatus,
-                        f.codeMonth,
-                         f.accountName,
-                         f.accountType,
-                         f.accountAddress
-                    ],
+                    [f.model, f.brand, f.barcode, f.capacity, f.yearModel],
                     (field) =>
                         field !== null &&
                         field !== undefined &&
@@ -100,9 +62,7 @@ class Freezers {
     hasFilters = $derived(
         this.query !== '' ||
             this.sort !== 'createdAt-desc' ||
-            this.statusFilter !== 'all' ||
-            this.typeFilter !== 'all' ||
-            this.codeMonthFilter !== 'all'
+            this.statusFilter !== DEFAULT_STATUS_FILTER
     )
 
     visible = $derived(this.sorted.slice(0, this.visibleCount))
@@ -115,9 +75,7 @@ class Freezers {
     resetFilters() {
         this.query = ''
         this.sort = 'createdAt-desc'
-        this.statusFilter = 'all'
-        this.typeFilter = 'all'
-        this.codeMonthFilter = 'all'
+        this.statusFilter = DEFAULT_STATUS_FILTER
     }
 
     resetVisibleCount() {
@@ -128,36 +86,74 @@ class Freezers {
         this.visibleCount += this.pageSize
     }
 
-    load(items: FreezerType[], codeMonths: string[] = []) {
+    load(items: FreezerType[]) {
         this.items = items
-        this.codeMonths = codeMonths
         this.resetVisibleCount()
-     }
+    }
+
+    closeCreate() {
+        this.openCreate = false
+    }
+
+    resetCreateForm() {
+        this.newModel = ''
+        this.newCapacity = ''
+        this.newBrand = ''
+        this.newYearModel = ''
+        this.newBarcode = ''
+    }
+
+    async submitCreate() {
+        this.submitting = true
+        this.error = ''
+
+        try {
+            const res = await api.post('freezers', {
+                json: {
+                    model: this.newModel,
+                    capacity: Number(this.newCapacity),
+                    brand: this.newBrand,
+                    yearModel: Number(this.newYearModel),
+                    barcode: this.newBarcode
+                }
+            })
+
+            await res.json()
+
+            this.closeCreate()
+            this.resetCreateForm()
+
+            await invalidateAll()
+        } catch (e: any) {
+            const data = e?.data
+
+            const message: string | null =
+                typeof data === 'object' && data !== null && typeof data.message === 'string'
+                    ? data.message
+                    : typeof data === 'string'
+                      ? data
+                      : e?.response?.statusText || e?.message || null
+
+            this.error = message || 'Something went wrong while creating the freezer.'
+        } finally {
+            this.submitting = false
+        }
+    }
 }
 
 const sortItems = (items: FreezerType[], sort: SortKey) => {
     switch (sort) {
         case 'createdAt-desc':
-            return _.orderBy(
-                items,
-                [(f) => f.cabconCreatedAt ?? '', (f) => f.codeMonth ?? ''],
-                ['desc', 'desc']
-            )
+            return _.orderBy(items, [(f) => (f.createdAt ? f.createdAt.getTime() : 0)], ['desc'])
+
+        case 'model':
+            return _.orderBy(items, (f) => _.toLower(f.model), 'asc')
 
         case 'yearModel-asc':
-            return _.orderBy(items, (f) => f.yearModel ?? -Infinity, 'asc')
+            return _.orderBy(items, (f) => f.yearModel, 'asc')
 
         case 'yearModel-desc':
-            return _.orderBy(items, (f) => f.yearModel ?? -Infinity, 'desc')
-
-        case 'cabconStatus':
-            return _.orderBy(items, (f) => f.cabconStatus ?? '', 'asc')
-
-        case 'accountName':
-            return _.orderBy(items, (f) => f.accountName ?? '', 'asc')
-
-        case 'accountType':
-            return _.orderBy(items, (f) => f.accountType ?? '', 'asc')
+            return _.orderBy(items, (f) => f.yearModel, 'desc')
 
         default:
             return items

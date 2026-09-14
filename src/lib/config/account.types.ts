@@ -1,9 +1,24 @@
 const DISTRIBUTOR = 'distributor'
 const DEALER = 'dealer'
-const FRANCHISEE = 'franchisee'
+const HAPISTORE = 'hapistore'
+const DIRECT_STORE = 'direct_store'
 
-export default {
+const accountTypes = {
     DISTRIBUTOR,
     DEALER,
-    FRANCHISEE
+    HAPISTORE,
+    DIRECT_STORE
 } as const
+
+const displayText = {
+    [DISTRIBUTOR]: 'Distributor',
+    [DEALER]: 'Dealer',
+    [HAPISTORE]: 'Hapistore',
+    [DIRECT_STORE]: 'Direct Store'
+}
+
+export const getDisplayText = (type: string) => {
+    return displayText[type as keyof typeof displayText]
+}
+
+export default accountTypes

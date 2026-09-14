@@ -5,6 +5,7 @@
     import Search from './Search.svelte'
     import SearchOptions from './SearchOptions.svelte'
     import accounts from '../accounts.context.svelte'
+    import create from '../create.context.svelte'
 
     onMount(() => accounts.load())
 </script>
@@ -13,12 +14,16 @@
     <div class="mb-2 flex items-center justify-between">
         <span class="text-lg">Accounts</span>
         <div class="flex items-center">
-            <button type="button" class="delete-account btn btn-ghost btn-xs">
+            <!-- <button type="button" class="delete-account btn btn-ghost btn-xs">
                 <span>&minus;</span>
                 <span>Delete</span>
             </button>
-            <div class="divider-sm divider mx-0 mt-0.5 divider-horizontal h-5"></div>
-            <button type="button" class="create-account btn btn-ghost btn-xs">
+            <div class="divider-sm divider mx-0 mt-0.5 divider-horizontal h-5"></div> -->
+            <button
+                type="button"
+                class="create-account btn btn-ghost btn-xs"
+                onclick={() => create.toggle()}
+            >
                 <span>&plus;</span>
                 <span>Create</span>
             </button>
@@ -32,6 +37,8 @@
         {#if accounts.loading}
             <!-- loading skeletons  -->
             <Skeleton class="h-36 w-full rounded-none" />
+        {:else if accounts.error}
+            <p class="p-4">Error: {accounts.error}</p>
         {:else}
             <!-- account list -->
             <div class="p-4">

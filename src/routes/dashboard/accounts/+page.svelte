@@ -60,7 +60,7 @@
                     <option value="all">All Types</option>
                     <option value="distributor">Distributor</option>
                     <option value="dealer">Dealer</option>
-                    <option value="franchisee">Franchisee</option>
+                    <option value="hapistore">Hapistore</option>
                 </select>
 
                 <select class="input max-w-32" bind:value={accounts.sortBy}>

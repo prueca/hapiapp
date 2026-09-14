@@ -27,7 +27,6 @@ declare global {
         type: (typeof accountTypes)[keyof typeof accountTypes]
         name: string
         address: string
-        companyCode: string
     }
 
     namespace App {
@@ -41,6 +40,11 @@ declare global {
             user: AuthUser | null
             account: AuthAccount | null
             isAuthenticated: boolean
+        }
+
+        interface Error {
+            code: string
+            message: string
         }
     }
 }

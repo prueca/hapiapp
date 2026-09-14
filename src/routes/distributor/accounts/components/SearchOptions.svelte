@@ -36,7 +36,7 @@
                         <option value="" disabled={true} selected>Pick account type</option>
                         <option value="">All</option>
                         <option value={accountTypes.DEALER}>Dealer</option>
-                        <option value={accountTypes.FRANCHISEE}>Franchisse</option>
+                        <option value={accountTypes.HAPISTORE}>Hapistore</option>
                     </select>
                 </fieldset>
 
@@ -48,9 +48,8 @@
                         bind:value={accounts.sortBy}
                         onchange={() => accounts.filter()}
                     >
-                        <option value="id" selected>ID</option>
+                        <option value="createdAt" selected>Date Created</option>
                         <option value="name">Name</option>
-                        <option value="companyCode">Company Code</option>
                     </select>
                 </fieldset>
 
