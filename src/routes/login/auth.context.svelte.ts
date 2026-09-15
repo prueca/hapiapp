@@ -56,7 +56,7 @@ class AuthContext {
 
             this.status = 1
 
-            const response = await api.post('users/login', { json })
+            const response = await api.post('login', { json })
             const body: Data<{ accounts: AuthAccount[] }> = await response.json()
 
             this.accounts = body.data.accounts
