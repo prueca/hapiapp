@@ -6,7 +6,7 @@ import {
     ACCESS_TOKEN_VALIDITY
 } from '$env/static/private'
 import { json, error, isHttpError, type Cookies } from '@sveltejs/kit'
-import { StatusCodes, ReasonPhrases } from 'http-status-codes'
+import { StatusCodes } from 'http-status-codes'
 import jwt, { type SignOptions } from 'jsonwebtoken'
 import moment from 'moment'
 import z from 'zod'

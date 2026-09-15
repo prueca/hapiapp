@@ -1,7 +1,8 @@
 import { error } from '@sveltejs/kit'
 import { redirect } from '@sveltejs/kit'
 import accountTypes from '$lib/config/account.types'
-import { ReasonPhrases, StatusCodes } from 'http-status-codes'
+import { StatusCodes } from 'http-status-codes'
+import errors from '$lib/errors'
 import _ from 'lodash'
 
 export const load = async ({ locals }) => {
@@ -10,7 +11,7 @@ export const load = async ({ locals }) => {
     }
 
     if (locals.account?.type !== accountTypes.DISTRIBUTOR) {
-        throw error(StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED)
+        throw error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
     }
 
     return locals
