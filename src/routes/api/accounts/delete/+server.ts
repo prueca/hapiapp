@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes'
 import z from 'zod'
 import errors from '$lib/errors'
 import _ from 'lodash'
+import userRoles from '$lib/config/user.roles'
 
 import db from '$lib/drizzle'
 import { eq, or, and, isNull } from 'drizzle-orm'
@@ -36,6 +37,21 @@ const verifyAccess = async (currentAccountId: string, id: string) => {
 
 export const POST = async ({ locals, request }) => {
     try {
+        const authAccount = locals.account!
+        const authUser = locals.user!
+
+        switch (authUser.role) {
+            case userRoles.DISTRIBUTOR_ADMIN:
+            case userRoles.DEALER_ADMIN:
+                // We do not fail the process at this point as
+                // these roles are allowed to delete account.
+                break
+            default:
+                // Any other roles are not allowed to perform
+                // the operation.
+                error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
+        }
+
         const payload = await request.json()
         const validation = schema.safeParse(payload)
 
@@ -44,9 +60,8 @@ export const POST = async ({ locals, request }) => {
         }
 
         const { id } = validation.data
-        const currentAccountId = locals.account!.id
 
-        await verifyAccess(currentAccountId, id)
+        await verifyAccess(authAccount.id, id)
 
         const [account] = await db
             .update(t.account)

@@ -2,6 +2,7 @@ import { json, error, isHttpError } from '@sveltejs/kit'
 import { StatusCodes } from 'http-status-codes'
 import z from 'zod'
 import accountTypes from '$lib/config/account.types'
+import userRoles from '$lib/config/user.roles'
 import errors from '$lib/errors'
 import _ from 'lodash'
 
@@ -20,7 +21,7 @@ const schema = z.object({
     sapCode: z.string().nullable()
 })
 
-const verifyAccess = async (currentAccountId: string, id: string) => {
+const verifyAccess = async (authAccountId: string, id: string) => {
     const parent = alias(t.account, 'parent')
 
     const [account] = await db
@@ -31,7 +32,7 @@ const verifyAccess = async (currentAccountId: string, id: string) => {
             and(
                 eq(t.account.id, id),
                 isNull(t.account.deletedAt),
-                or(eq(t.account.parentId, currentAccountId), eq(parent.parentId, currentAccountId))
+                or(eq(t.account.parentId, authAccountId), eq(parent.parentId, authAccountId))
             )
         )
         .limit(1)
@@ -43,6 +44,21 @@ const verifyAccess = async (currentAccountId: string, id: string) => {
 
 export const POST = async ({ locals, request }) => {
     try {
+        const authAccount = locals.account!
+        const authUser = locals.user!
+
+        switch (authUser.role) {
+            case userRoles.DISTRIBUTOR_ADMIN:
+            case userRoles.DEALER_ADMIN:
+                // We do not fail the process at this point as
+                // these roles are allowed to update account.
+                break
+            default:
+                // Any other roles are not allowed to perform
+                // the operation.
+                error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
+        }
+
         const payload = await request.json()
         const validation = schema.safeParse(payload)
 
@@ -51,9 +67,8 @@ export const POST = async ({ locals, request }) => {
         }
 
         const { id } = validation.data
-        const currentAccountId = locals.account!.id
 
-        await verifyAccess(currentAccountId, id)
+        await verifyAccess(authAccount.id, id)
 
         const [account] = await db
             .update(t.account)

@@ -1,6 +1,7 @@
 import { json, error } from '@sveltejs/kit'
 import { StatusCodes } from 'http-status-codes'
 import accountTypes from '$lib/config/account.types'
+import userRoles from '$lib/config/user.roles'
 import _ from 'lodash'
 
 import db from '$lib/drizzle'
@@ -11,11 +12,12 @@ import errors from '$lib/errors'
 
 export const POST = async ({ locals }) => {
     const account = locals.account!
+    const user = locals.user!
 
     let items: (typeof t.account.$inferSelect)[] = []
 
-    switch (account.type) {
-        case accountTypes.DISTRIBUTOR:
+    switch (`${account.type}:${user.role}`) {
+        case `${accountTypes.DISTRIBUTOR}:${userRoles.DISTRIBUTOR_ADMIN}`:
             const parent = alias(t.account, 'parent')
 
             items = await db
@@ -32,7 +34,7 @@ export const POST = async ({ locals }) => {
 
             break
 
-        case accountTypes.DEALER:
+        case `${accountTypes.DEALER}:${userRoles.DEALER_ADMIN}`:
             items = await db.select().from(t.account).where(eq(t.account.parentId, account.id))
 
             break

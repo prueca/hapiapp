@@ -2,6 +2,7 @@ import { json, error, isHttpError } from '@sveltejs/kit'
 import { StatusCodes } from 'http-status-codes'
 import z, { ZodObject } from 'zod'
 import accountTypes from '$lib/config/account.types'
+import userRoles from '$lib/config/user.roles'
 import errors from '$lib/errors'
 import _ from 'lodash'
 
@@ -23,6 +24,19 @@ export const POST = async ({ locals, request }) => {
     try {
         const account = locals.account!
         const user = locals.user!
+
+        switch (user.role) {
+            case userRoles.DISTRIBUTOR_ADMIN:
+            case userRoles.DEALER_ADMIN:
+                // We do not fail the process at this point as
+                // these roles are allowed to create account.
+                break
+            default:
+                // Any other roles are not allowed to perform
+                // the operation.
+                error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
+        }
+
         const payload = await request.json()
 
         let data: typeof t.account.$inferInsert = {
@@ -38,7 +52,11 @@ export const POST = async ({ locals, request }) => {
         }
 
         const scope: Json = {
-            [accountTypes.DISTRIBUTOR]: [accountTypes.DEALER, accountTypes.HAPISTORE],
+            [accountTypes.DISTRIBUTOR]: [
+                accountTypes.DEALER,
+                accountTypes.HAPISTORE,
+                accountTypes.DIRECT_STORE
+            ],
             [accountTypes.DEALER]: [accountTypes.HAPISTORE]
         }
 
