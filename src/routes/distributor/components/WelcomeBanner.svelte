@@ -1,28 +1,11 @@
 <script lang="ts">
     import { getContext } from 'svelte'
+    import { getDisplayText } from '$lib/config/user.roles'
     import Icon from '@iconify/svelte'
-    import roles from '$lib/config/user.roles'
 
     const { user, account } = getContext<{ user: AuthUser; account: AuthAccount }>('auth')
 
-    let loggedInAs = $derived.by(() => {
-        switch (user.role) {
-            case roles.DISTRIBUTOR_ADMIN:
-                return 'Admin Distributor'
-            case roles.DISTRIBUTOR_USER:
-                return 'Distributor'
-            case roles.DEALER_ADMIN:
-                return 'Admin Dealer'
-            case roles.DEALER_USER:
-                return 'Dealer'
-            case roles.HAPISTORE_ADMIN:
-                return 'Admin Hapistore'
-            case roles.HAPISTORE_USER:
-                return 'Hapistore'
-            default:
-                return ''
-        }
-    })
+    let loggedInAs = $derived.by(() => getDisplayText(user.role))
 </script>
 
 <div class="welcome-banner">

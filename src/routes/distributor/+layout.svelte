@@ -1,8 +1,14 @@
 <!-- svelte-ignore state_referenced_locally -->
 <script lang="ts">
-    import { setContext } from 'svelte'
+    import { setContext, type Snippet } from 'svelte'
 
-    let { data, children } = $props()
+    let {
+        data,
+        children
+    }: {
+        data: App.Locals
+        children: Snippet
+    } = $props()
 
     setContext('auth', {
         user: data.user,
