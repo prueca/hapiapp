@@ -89,7 +89,6 @@ export const POST = async ({ request, cookies }) => {
             .select()
             .from(t.access)
             .innerJoin(t.account, eq(t.access.accountId, t.account.id))
-            // .where(eq(t.access.userId, user.id))
             .where(and(eq(t.access.userId, user.id), isNull(t.account.deletedAt)))
 
         const accounts = _.map(rows, (x) => {
