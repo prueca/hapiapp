@@ -42,7 +42,6 @@ export const POST = async ({ locals, request }) => {
 
         switch (authUser.role) {
             case userRoles.DISTRIBUTOR_ADMIN:
-            case userRoles.DEALER_ADMIN:
                 // We do not fail the process at this point as
                 // these roles are allowed to delete account.
                 break

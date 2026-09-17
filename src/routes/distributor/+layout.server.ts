@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit'
 import { redirect } from '@sveltejs/kit'
-import accountTypes from '$lib/config/account.types'
+import userRoles from '$lib/config/user.roles'
 import { StatusCodes } from 'http-status-codes'
 import errors from '$lib/errors'
 import _ from 'lodash'
@@ -10,9 +10,13 @@ export const load = async ({ locals }) => {
         return redirect(StatusCodes.SEE_OTHER, '/login')
     }
 
-    if (locals.account?.type !== accountTypes.DISTRIBUTOR) {
-        error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
-    }
+    const authUser = locals.user!
 
-    return locals
+    switch (authUser.role) {
+        case userRoles.DISTRIBUTOR_ADMIN:
+        case userRoles.DISTRIBUTOR_USER:
+            return locals
+        default:
+            error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
+    }
 }

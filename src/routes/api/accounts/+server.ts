@@ -11,13 +11,25 @@ import * as t from '$lib/drizzle/schema'
 import errors from '$lib/errors'
 
 export const POST = async ({ locals }) => {
-    const account = locals.account!
-    const user = locals.user!
+    const authUser = locals.user!
+    const authAccount = locals.account!
+
+    switch (authUser.role) {
+        case userRoles.DISTRIBUTOR_ADMIN:
+        case userRoles.DISTRIBUTOR_USER:
+            // We do not fail the process at this point as
+            // these roles are allowed to view accounts.
+            break
+        default:
+            // Any other roles are not allowed to perform
+            // the operation.
+            error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
+    }
 
     let items: (typeof t.account.$inferSelect)[] = []
 
-    switch (`${account.type}:${user.role}`) {
-        case `${accountTypes.DISTRIBUTOR}:${userRoles.DISTRIBUTOR_ADMIN}`:
+    switch (authAccount.type) {
+        case accountTypes.DISTRIBUTOR:
             const parent = alias(t.account, 'parent')
 
             items = await db
@@ -26,7 +38,10 @@ export const POST = async ({ locals }) => {
                 .leftJoin(parent, eq(parent.id, t.account.parentId))
                 .where(
                     and(
-                        or(eq(t.account.parentId, account.id), eq(parent.parentId, account.id)),
+                        or(
+                            eq(t.account.parentId, authAccount.id),
+                            eq(parent.parentId, authAccount.id)
+                        ),
                         isNull(t.account.deletedAt)
                     )
                 )
@@ -34,8 +49,8 @@ export const POST = async ({ locals }) => {
 
             break
 
-        case `${accountTypes.DEALER}:${userRoles.DEALER_ADMIN}`:
-            items = await db.select().from(t.account).where(eq(t.account.parentId, account.id))
+        case accountTypes.DEALER:
+            items = await db.select().from(t.account).where(eq(t.account.parentId, authAccount.id))
 
             break
 
