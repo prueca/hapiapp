@@ -96,7 +96,7 @@ class AuthContext {
             this.toggleAccountSelection()
 
             const json = { accountId }
-            const res = await api.post('users/authorize', { json })
+            const res = await api.post('authorize', { json })
             const body: Data<{ user: AuthUser; account: AuthAccount }> = await res.json()
             const { user } = body.data
 

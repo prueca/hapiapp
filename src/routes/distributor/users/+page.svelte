@@ -2,11 +2,9 @@
     import Dock from '../../components/Dock.svelte'
     import TopBar from '../../components/TopBar'
     import AccountName from '../../components/AccountName.svelte'
-    import AccountList from './components/AccountList.svelte'
     import Chart from '../../components/Chart.svelte'
-    import CreateAccount from './components/CreateAccount.svelte'
-    import DeleteAccount from './components/DeleteAccount.svelte'
-    import UpdateAccount from './components/UpdateAccount.svelte'
+    import UserList from './components/UserList.svelte'
+    import CreateUser from './components/CreateUser.svelte'
 </script>
 
 <div class="content-wrapper">
@@ -14,10 +12,8 @@
         <TopBar />
         <AccountName />
         <Chart />
-        <AccountList />
-        <CreateAccount />
-        <DeleteAccount />
-        <UpdateAccount />
+        <UserList />
+        <CreateUser />
     </div>
     <Dock />
 </div>
