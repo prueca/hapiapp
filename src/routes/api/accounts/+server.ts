@@ -65,7 +65,7 @@ export const POST = async ({ request, locals }) => {
 
             return json({
                 data: {
-                    items: query ? await queryBuilder.limit(SEARCH_LIMIT) : queryBuilder
+                    items: query ? await queryBuilder.limit(SEARCH_LIMIT) : await queryBuilder
                 }
             })
         }
@@ -79,7 +79,7 @@ export const POST = async ({ request, locals }) => {
 
             return json({
                 data: {
-                    items: query ? await queryBuilder.limit(SEARCH_LIMIT) : queryBuilder
+                    items: query ? await queryBuilder.limit(SEARCH_LIMIT) : await queryBuilder
                 }
             })
         }
