@@ -5,11 +5,10 @@ import z from 'zod'
 import db from '$lib/drizzle'
 import * as t from '$lib/drizzle/schema'
 import {
-     freezerStatus,
-     modelOptions,
-     capacityOptions,
-     yearModelOptions,
-     brandOptions
+   modelOptions,
+   capacityOptions,
+   yearModelOptions,
+   brandOptions
 } from '$lib/config/freezer.options'
 
 const schema = z.object({
@@ -111,9 +110,7 @@ export const POST = async ({ request, locals }) => {
                 brand,
                 yearModel,
                 barcode,
-                status: freezerStatus.HOUSED_AVAILABLE,
-                distributorId: account.id,
-                designationId: account.id
+                distributorId: account.id
             })
             .returning()
 
