@@ -16,7 +16,7 @@ class UsersContext {
     total = $state(0)
 
     query = $state('')
-    accountType = $state('')
+    userRole = $state('')
     sortBy = $state('createdAt')
     sortOrder = $state('desc')
 
@@ -70,8 +70,20 @@ class UsersContext {
                 const fullName = `${firstName} ${middleName} ${lastName}`
                 const query = _.toLower(this.query).trim()
 
+                if (query && this.userRole) {
+                    const matches = _.includes(fullName, query) && x.role === this.userRole
+
+                    return matches
+                }
+
                 if (query) {
                     const matches = _.includes(fullName, query)
+
+                    return matches
+                }
+
+                if (this.userRole) {
+                    const matches = x.role === this.userRole
 
                     return matches
                 }

@@ -5,6 +5,7 @@
     import UserListItem from './UserListItem.svelte'
     import create from '../create.context.svelte'
     import Search from './Search.svelte'
+    import SearchOptions from './SearchOptions.svelte'
 
     onMount(() => users.load())
 </script>
@@ -26,7 +27,7 @@
     <div class="overflow-hidden rounded-lg bg-white">
         <!-- search components -->
         <Search />
-        <!-- <SearchOptions /> -->
+        <SearchOptions />
 
         {#if users.loading}
             <Skeleton class="h-36 w-full rounded-none" />
