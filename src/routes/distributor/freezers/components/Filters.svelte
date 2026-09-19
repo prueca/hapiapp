@@ -20,15 +20,6 @@
             </div>
             <div>
                 <fieldset class="fieldset">
-                    <label class="label">Status</label>
-                    <select class="select w-full" bind:value={state.statusFilter}>
-                        {#each state.statusFilterOptions as opt}
-                            <option value={opt.value}>{opt.label}</option>
-                        {/each}
-                    </select>
-                </fieldset>
-
-                <fieldset class="fieldset">
                     <label class="label">Sort</label>
                     <select class="select w-full" bind:value={state.sort}>
                         {#each state.sortOptions as opt}
