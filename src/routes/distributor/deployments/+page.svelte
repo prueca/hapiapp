@@ -55,10 +55,11 @@
                             {/await}
                         </div>
                     {/if}
-                </div>
+                  </div>
 
-                <label
-                    id="tab-available"
+                  <!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
+                  <label
+                     id="tab-available"
                     class="tab flex-1"
                     role="tab"
                     aria-selected={state.activeTab === 'available'}
