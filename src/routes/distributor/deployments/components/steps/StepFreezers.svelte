@@ -89,8 +89,8 @@
                 </div>
             {/if}
         </div>
-    {:else if state.searchedFound === false && !!state.searchQuery.trim()}
-        <p class="hint">No freezer found for barcode “{_.trim(state.searchQuery)}”.</p>
+      {:else if state.searchTried && state.searchedFound === false && !!state.searchQuery.trim()}
+          <p class="hint">No freezer found for barcode “{_.trim(state.searchQuery)}”.</p>
     {/if}
 </fieldset>
 
