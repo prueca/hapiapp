@@ -59,6 +59,49 @@ class UsersContext {
             }
         }
     }
+
+    filter(limit = this.limit) {
+        const matches = _.chain(this.list)
+            .filter((x) => {
+                const firstName = _.toLower(x.firstName)
+                const middleName = (x.middleName && _.toLower(x.middleName)) || ''
+                const lastName = _.toLower(x.lastName)
+
+                const fullName = `${firstName} ${middleName} ${lastName}`
+                const query = _.toLower(this.query).trim()
+
+                if (query) {
+                    const matches = _.includes(fullName, query)
+
+                    return matches
+                }
+
+                return true
+            })
+            .orderBy([this.sortBy, 'name'], [this.sortOrder as 'asc' | 'desc', 'asc'])
+            .value()
+
+        this.filtered = _.take(matches, limit)
+        this.total = matches.length
+    }
+
+    showMore() {
+        this.filter(this.filtered.length + this.limit)
+    }
+
+    toggleSearchOptions(flag: boolean) {
+        this.openSearchOptions = flag
+    }
+
+    remove(userId: string) {
+        this.list = _.filter(this.list, (x) => x.id !== userId)
+        this.filtered = _.filter(this.filtered, (x) => x.id !== userId)
+    }
+
+    update(user: User) {
+        this.list = _.map(this.list, (x) => (x.id === user.id ? user : x))
+        this.filtered = _.map(this.filtered, (x) => (x.id === user.id ? user : x))
+    }
 }
 
 export default new UsersContext()

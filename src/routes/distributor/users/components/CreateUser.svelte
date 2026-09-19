@@ -33,7 +33,7 @@
 
     const showMoreAccounts = () => {
         accountSearchInput.focus()
-        accounts.more()
+        accounts.showMore()
     }
 </script>
 

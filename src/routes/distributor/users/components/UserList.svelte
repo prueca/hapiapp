@@ -4,6 +4,7 @@
     import Skeleton from '../../../components/Skeleton.svelte'
     import UserListItem from './UserListItem.svelte'
     import create from '../create.context.svelte'
+    import Search from './Search.svelte'
 
     onMount(() => users.load())
 </script>
@@ -24,7 +25,7 @@
     </div>
     <div class="overflow-hidden rounded-lg bg-white">
         <!-- search components -->
-        <!-- <Search /> -->
+        <Search />
         <!-- <SearchOptions /> -->
 
         {#if users.loading}
@@ -37,6 +38,17 @@
                     <UserListItem {item} />
                 {/each}
             </p>
+            {#if users.filtered.length < users.total}
+                <div class="border-t border-gray-100 p-4 text-center">
+                    <button
+                        type="button"
+                        class="btn rounded-lg btn-ghost btn-sm"
+                        onclick={() => users.showMore()}
+                    >
+                        Show More
+                    </button>
+                </div>
+            {/if}
         {/if}
     </div>
 </div>

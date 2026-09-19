@@ -78,7 +78,7 @@ class AccountsContext {
         this.total = matches.length
     }
 
-    more() {
+    showMore() {
         this.filter(this.filtered.length + this.limit)
     }
 }
