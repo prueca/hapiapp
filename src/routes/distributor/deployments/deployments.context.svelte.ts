@@ -93,7 +93,6 @@ class Deployments {
 
     submitting = $state(false)
     submitError = $state('')
-    submitSuccess = $state('')
 
      deployStep = $state<1 | 2 | 3>(1)
      stepLabels = ['Freezers', 'Account', 'Date']
@@ -330,7 +329,6 @@ class Deployments {
         this.accounted = false
         this.designatedAccount = null
         this.deploymentDate = today()
-        this.submitSuccess = ''
         this.submitError = ''
         this.deployStep = 1
     }
@@ -373,10 +371,9 @@ class Deployments {
 
         this.submitting = true
         this.submitError = ''
-        this.submitSuccess = ''
 
         try {
-            const res = await api.post('deployments/batch', {
+            await api.post('deployments/batch', {
                 json: {
                     freezerIds: this.selectedFreezerIds,
                     designationId: this.designatedAccount.id,
@@ -384,9 +381,7 @@ class Deployments {
                 }
             })
 
-            const body: Data<{ count: number; deployments: unknown[] }> = await res.json()
-
-            this.submitSuccess = `Deployed ${body.data.count} freezer${body.data.count === 1 ? '' : 's'} to ${this.designatedAccount.name}.`
+            await invalidateAll()
             this.resetBatch()
         } catch (e: any) {
             const data = e?.data
