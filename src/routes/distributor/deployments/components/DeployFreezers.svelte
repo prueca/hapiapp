@@ -6,11 +6,7 @@
 </script>
 
 <div class="deploy-freezers">
-     {#if state.submitSuccess}
-         <p class="success">{state.submitSuccess}</p>
-     {/if}
-
-     {#if state.submitError}
+      {#if state.submitError}
          <p class="error">{state.submitError}</p>
      {/if}
 
@@ -115,10 +111,6 @@
 
        .actions {
            @apply mt-4 flex justify-between;
-       }
-
-       .success {
-           @apply mb-3 rounded-lg bg-green-50 p-2 text-sm text-green-700;
        }
 
        .error {
