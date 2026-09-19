@@ -19,7 +19,7 @@
                 class="create-user btn btn-ghost btn-xs"
                 onclick={() => create.toggle(true)}
             >
-                <span>&plus;</span>
+                <span class="-mt-0.5">&plus;</span>
                 <span>Create</span>
             </button>
         </div>
@@ -35,8 +35,8 @@
             <p class="p-4">Error: {users.error}</p>
         {:else}
             <p class="p-4">
-                {#each users.filtered as item}
-                    <UserListItem {item} />
+                {#each users.filtered as item, idx}
+                    <UserListItem {item} isLast={idx === users.filtered.length - 1} />
                 {/each}
             </p>
             {#if users.filtered.length < users.total}
