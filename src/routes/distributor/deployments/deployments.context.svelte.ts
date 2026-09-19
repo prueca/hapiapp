@@ -20,6 +20,13 @@ const isDeployedDate = (d: unknown): d is Date =>
 
 const toDateKey = (d: Date) => d.toISOString().slice(0, 10)
 
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
+const formatDate = (d: Date) =>
+      `${MONTHS[d.getMonth()]}-${String(d.getDate()).padStart(2, '0')}-${d.getFullYear()}, ${WEEKDAYS[d.getDay()]}`
+
 const startOfDayMs = (d: Date) => Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())
 
 const startOfTodayMs = () => {
@@ -394,7 +401,11 @@ class Deployments {
 
       isOverdue(group: DeploymentGroup) {
           return isOverdue(group)
-       }
+        }
+
+      formatDate(d: Date) {
+          return formatDate(d)
+        }
 
       daysOverdue(group: DeploymentGroup) {
           return daysOverdue(group)
