@@ -12,7 +12,7 @@
      let designation = $derived(group.designation)
      let date = $derived(
           group.deploymentDate && !Number.isNaN(group.deploymentDate.getTime())
-               ? group.deploymentDate.toLocaleDateString()
+               ? deployments.formatDate(group.deploymentDate)
                : '—')
 
      let overdue = $derived(deployments.isOverdue(group))
