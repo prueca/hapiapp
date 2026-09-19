@@ -3,7 +3,7 @@
     import Icon from '@iconify/svelte'
     import { getDisplayText } from '$lib/config/user.roles'
 
-    let { item } = $props()
+    let { item, isLast = false } = $props()
     let fullName = $derived.by(() => {
         return item.middleName
             ? `${item.firstName} ${item.middleName} ${item.lastName}`
@@ -16,7 +16,7 @@
         <div class="mb-2 font-medium">
             {fullName}
         </div>
-        <div class="dropdown dropdown-end">
+        <div class="dropdown dropdown-end" class:dropdown-top={isLast}>
             <button class="btn -mt-1 p-0 btn-link btn-sm" tabindex="0">
                 <span class="text-gray-500">
                     <Icon icon="octicon:ellipsis-16" width="20" />
@@ -52,6 +52,10 @@
 
     .dropdown-content {
         @apply z-1 w-52 rounded-lg p-2 shadow-sm;
+    }
+
+    .dropdown-content[popover] {
+        position-try: flip-block;
     }
 
     .menu li > button:active {

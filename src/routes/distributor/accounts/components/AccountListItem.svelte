@@ -5,7 +5,7 @@
     import update from '../update.context.svelte'
     import { getDisplayText } from '$lib/config/account.types'
 
-    let { item } = $props()
+    let { item, isLast = false } = $props()
 </script>
 
 <div class="account-list-item">
@@ -13,7 +13,7 @@
         <div class="mb-2 font-medium">
             {item.name}
         </div>
-        <div class="dropdown dropdown-end">
+        <div class="dropdown dropdown-end" class:dropdown-top={isLast}>
             <button class="btn -mt-1 p-0 btn-link btn-sm" tabindex="0">
                 <span class="text-gray-500">
                     <Icon icon="octicon:ellipsis-16" width="20" />
