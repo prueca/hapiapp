@@ -14,13 +14,24 @@
 
     let accountSearchInput: HTMLInputElement
 
-    const selectAccount = (accountId: string, accountName: string) => {
+    $effect(() => {
+        if (create.data.accountId) {
+            const account = _.find(accounts.filtered, { id: create.data.accountId })
+
+            if (account) {
+                accountSearchInput.value = account.name
+            }
+        } else {
+            accountSearchInput.value = ''
+        }
+    })
+
+    const selectAccount = (accountId: string) => {
         accountSearchInput.blur()
-        accountSearchInput.value = accountName
         create.selectAccount(accountId)
     }
 
-    const loadMoreAccounts = () => {
+    const showMoreAccounts = () => {
         accountSearchInput.focus()
         accounts.more()
     }
@@ -52,19 +63,16 @@
                             <Skeleton class="h-36 w-full rounded-lg" />
                         {:else}
                             {#each accounts.filtered as item}
-                                <AccountOption
-                                    {item}
-                                    onclick={() => selectAccount(item.id, item.name)}
-                                />
+                                <AccountOption {item} onclick={() => selectAccount(item.id)} />
                             {/each}
                             {#if accounts.filtered.length < accounts.total}
                                 <div class="border-t border-gray-100 pt-2 text-center">
                                     <button
                                         type="button"
                                         class="btn rounded-lg btn-ghost btn-sm"
-                                        onclick={() => loadMoreAccounts()}
+                                        onclick={() => showMoreAccounts()}
                                     >
-                                        Load More
+                                        Show More
                                     </button>
                                 </div>
                             {/if}

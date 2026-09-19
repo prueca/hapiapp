@@ -14,7 +14,7 @@
         <div class="flex items-center">
             <button
                 type="button"
-                class="create-account btn btn-ghost btn-xs"
+                class="create-user btn btn-ghost btn-xs"
                 onclick={() => create.toggle(true)}
             >
                 <span>&plus;</span>
@@ -43,4 +43,8 @@
 
 <style lang="postcss">
     @reference 'tailwindcss';
+
+    .create-user {
+        @apply flex items-center gap-2 rounded-md text-sm;
+    }
 </style>
