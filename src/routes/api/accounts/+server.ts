@@ -1,6 +1,5 @@
 import { json, error } from '@sveltejs/kit'
 import { StatusCodes } from 'http-status-codes'
-import z from 'zod'
 import accountTypes from '$lib/config/account.types'
 import userRoles from '$lib/config/user.roles'
 import _ from 'lodash'
@@ -11,30 +10,13 @@ import { alias } from 'drizzle-orm/pg-core'
 import * as t from '$lib/drizzle/schema'
 import errors from '$lib/errors'
 
-const schema = z.object({
-    query: z.string().optional()
-})
-
 const SEARCH_LIMIT = 50
 
 export const POST = async ({ request, locals }) => {
-    const authUser = locals.user!
     const authAccount = locals.account!
 
-    switch (authUser.role) {
-        case userRoles.DISTRIBUTOR_ADMIN:
-        case userRoles.DISTRIBUTOR_USER:
-            // We do not fail the process at this point as
-            // these roles are allowed to view accounts.
-            break
-        default:
-            // Any other roles are not allowed to perform
-            // the operation.
-            error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
-    }
-
-    const raw = (await request.json().catch(() => ({}))) as z.infer<typeof schema>
-    const query = _.trim(raw.query ?? '')
+    const body = await request.json()
+    const query = _.trim(String(body.query) ?? '')
 
     const search = (column: any) => {
         if (!query) return undefined
