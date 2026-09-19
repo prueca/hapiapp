@@ -22,9 +22,9 @@
                          {state.updateError}
                     </p>
               {:else}
-                   <fieldset class="fieldset">
-                        <label class="label">Deployment date</label>
-                        <input
+                     <fieldset class="fieldset">
+                         <legend class="label">Deployment date</legend>
+                         <input
                           type="date"
                           class="input w-full"
                           bind:value={state.editDate}
