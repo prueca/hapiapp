@@ -262,7 +262,6 @@
     .fieldset {
         @apply not-last:mb-4;
 
-        select,
         input[type='text'] {
             @apply w-full rounded-lg;
         }
@@ -272,7 +271,6 @@
         }
 
         &.error {
-            select,
             input[type='text'] {
                 @apply border-(--c1);
             }
