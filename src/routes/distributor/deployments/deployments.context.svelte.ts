@@ -78,6 +78,7 @@ class Deployments {
     searchedEligible = $state(false)
     searchedLastStatus = $state<string | null>(null)
     searchedFound = $state(false)
+    searchTried = $state(false)
 
     selectedFreezerIds = $state<string[]>([])
     selectedFreezers: Freezer[] = $state([])
@@ -279,8 +280,9 @@ class Deployments {
             this.searchedEligible = false
             this.searchedLastStatus = null
             return
-        }
+         }
 
+        this.searchTried = true
         this.searching = true
         this.searchedFreezer = null
         this.searchedFound = false
@@ -314,7 +316,8 @@ class Deployments {
         this.searchedFound = false
         this.searchedEligible = false
         this.searchedLastStatus = null
-    }
+        this.searchTried = false
+      }
 
     resetBatch() {
         this.selectedFreezerIds = []
@@ -323,6 +326,7 @@ class Deployments {
         this.searchedFound = false
         this.searchedEligible = false
         this.searchedLastStatus = null
+        this.searchTried = false
         this.searchQuery = ''
         this.accountQuery = ''
         this.accountResults = []
