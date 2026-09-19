@@ -8,7 +8,7 @@
 </script>
 
 <div class="content-wrapper">
-    <div class="mb-21">
+    <div class="pb-21">
         <TopBar />
         <AccountName />
         <Chart />
