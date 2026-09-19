@@ -1,7 +1,6 @@
 import { json, error } from '@sveltejs/kit'
 import { StatusCodes } from 'http-status-codes'
 import accountTypes from '$lib/config/account.types'
-import userRoles from '$lib/config/user.roles'
 import _ from 'lodash'
 
 import db from '$lib/drizzle'
