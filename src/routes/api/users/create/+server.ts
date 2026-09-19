@@ -122,7 +122,12 @@ export const POST = async ({ locals, request }) => {
             return newUser
         })
 
-        return json(_.pick(newUser, ['username', 'password']))
+        return json({
+            data: {
+                username: newUser.username,
+                password: DEFAULT_PASSWORD
+            }
+        })
     } catch (e: any) {
         if (isHttpError(e)) throw e
 

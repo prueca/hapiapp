@@ -184,6 +184,20 @@
     </div>
 </div>
 
+<div class="modal" class:modal-open={create.loading}>
+    <div class="modal-box">
+        <div class="heading">
+            <div class="flex items-start gap-2">
+                <span class="loading mt-1 loading-lg loading-spinner"></span>
+                <div>
+                    <p class="mb-1 text-lg font-medium">Creating user...</p>
+                    <div class="text-sm">Please wait while the user is being created.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal" class:modal-open={create.success}>
     <div class="modal-box">
         <div class="heading">
@@ -199,11 +213,11 @@
                     <div class="flex flex-col gap-4">
                         <div>
                             <div class="mb-1 text-xs text-gray-400">Username</div>
-                            <div class="text-sm font-medium">Lorem ipsum</div>
+                            <div class="text-sm font-medium">{create.newUser?.username}</div>
                         </div>
                         <div>
                             <div class="mb-1 text-xs text-gray-400">Password</div>
-                            <div class="text-sm font-medium">hapi123</div>
+                            <div class="text-sm font-medium">{create.newUser?.password}</div>
                         </div>
                     </div>
                 </div>
