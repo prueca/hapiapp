@@ -2,8 +2,10 @@
     import _ from 'lodash'
     import Icon from '@iconify/svelte'
     import { getDisplayText } from '$lib/config/user.roles'
+    import update from '../update.context.svelte'
 
     let { item, isLast = false } = $props()
+
     let fullName = $derived.by(() => {
         return item.middleName
             ? `${item.firstName} ${item.middleName} ${item.lastName}`
@@ -24,7 +26,7 @@
             </button>
             <ul class="dropdown-content menu bg-base-100">
                 <li>
-                    <button onclick={() => null}>
+                    <button onclick={() => update.select(item.id)}>
                         <Icon icon="ci:note-edit" width="18" />
                         <span class="ml-1">Update</span>
                     </button>

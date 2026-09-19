@@ -5,6 +5,7 @@
     import Chart from '../../components/Chart.svelte'
     import UserList from './components/UserList.svelte'
     import CreateUser from './components/CreateUser.svelte'
+    import UpdateUser from './components/UpdateUser.svelte'
 </script>
 
 <div class="content-wrapper">
@@ -14,6 +15,7 @@
         <Chart />
         <UserList />
         <CreateUser />
+        <UpdateUser />
     </div>
     <Dock />
 </div>
