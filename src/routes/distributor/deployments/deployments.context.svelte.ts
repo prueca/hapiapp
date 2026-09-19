@@ -1,8 +1,8 @@
 import {
-     SORT_OPTIONS,
-     type DeploymentGroup,
-     type SortKey,
-     type GroupedFreezer
+    SORT_OPTIONS,
+    type DeploymentGroup,
+    type SortKey,
+    type GroupedFreezer
 } from '$lib/types/deployment'
 import type { Freezer } from '$lib/types/freezer'
 import type * as t from '$lib/drizzle/schema'
@@ -15,8 +15,7 @@ type Account = typeof t.account.$inferSelect
 
 const today = () => new Date().toISOString().slice(0, 10)
 
-const isDeployedDate = (d: unknown): d is Date =>
-     d instanceof Date && !Number.isNaN(d.getTime())
+const isDeployedDate = (d: unknown): d is Date => d instanceof Date && !Number.isNaN(d.getTime())
 
 const toDateKey = (d: Date) => d.toISOString().slice(0, 10)
 
@@ -25,45 +24,97 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 const formatDate = (d: Date) =>
-      `${MONTHS[d.getMonth()]}-${String(d.getDate()).padStart(2, '0')}-${d.getFullYear()}, ${WEEKDAYS[d.getDay()]}`
+    `${MONTHS[d.getMonth()]}-${String(d.getDate()).padStart(2, '0')}-${d.getFullYear()}, ${WEEKDAYS[d.getDay()]}`
 
 const startOfDayMs = (d: Date) => Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())
 
 const startOfTodayMs = () => {
-     const now = new Date()
-     return Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
+    const now = new Date()
+    return Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
 }
 
 const isOverdue = (group: DeploymentGroup) =>
-     isDeployedDate(group.deploymentDate) && toDateKey(group.deploymentDate) < today()
+    isDeployedDate(group.deploymentDate) && toDateKey(group.deploymentDate) < today()
 
 const daysOverdue = (group: DeploymentGroup) => {
-     if (!isOverdue(group)) return 0
-     return Math.round((startOfTodayMs() - startOfDayMs(group.deploymentDate!)) / 86_400_000)
+    if (!isOverdue(group)) return 0
+    return Math.round((startOfTodayMs() - startOfDayMs(group.deploymentDate!)) / 86_400_000)
 }
 
 const toDateInput = (d: unknown) => (isDeployedDate(d) ? toDateKey(d) : today())
 
-const normalizeDate = (d: unknown): Date | null => {
-     if (d == null) return null
+const errorText = (e: any, fallback: string) =>
+    e?.data?.message ?? e?.data?.code ?? e?.message ?? fallback
 
-     const parsed = d instanceof Date ? d : new Date(String(d))
-     return Number.isNaN(parsed.getTime()) ? null : parsed
+const groupMatchesQuery = (group: DeploymentGroup, q: string) => {
+    const fields = [
+        group.designation?.name,
+        group.designation?.address,
+        ...group.freezers.flatMap((f) => [
+            f.brand,
+            f.model,
+            f.barcode,
+            String(f.capacity),
+            String(f.yearModel)
+        ])
+    ]
+
+    const haystack = fields
+        .filter((field): field is string => field != null)
+        .map((field) => _.toLower(field))
+
+    return haystack.some((field) => field.includes(q))
+}
+
+const filterGroups = (groups: DeploymentGroup[], status: string, query: string) => {
+    let source = groups
+
+    if (status === 'overdue') {
+        source = source.filter(isOverdue)
+    } else if (status === 'not-overdue') {
+        source = source.filter((group) => !isOverdue(group))
+    }
+
+    const q = _.toLower(_.trim(query))
+    if (!q) return source
+
+    return source.filter((group) => groupMatchesQuery(group, q))
+}
+
+const sortGroups = (groups: DeploymentGroup[], sort: SortKey) => {
+    switch (sort) {
+        case 'deploymentDate-desc':
+            return _.orderBy(
+                groups,
+                [(g) => (isDeployedDate(g.deploymentDate) ? g.deploymentDate.getTime() : 0)],
+                ['desc']
+            )
+
+        default:
+            return groups
+    }
+}
+
+const normalizeDate = (d: unknown): Date | null => {
+    if (d == null) return null
+
+    const parsed = d instanceof Date ? d : new Date(String(d))
+    return Number.isNaN(parsed.getTime()) ? null : parsed
 }
 
 const normalizeGroups = (groups: DeploymentGroup[]): DeploymentGroup[] =>
-     groups.map((group) => ({
-          ...group,
-          deploymentDate: normalizeDate(group.deploymentDate)
-     }))
+    groups.map((group) => ({
+        ...group,
+        deploymentDate: normalizeDate(group.deploymentDate)
+    }))
 
 class Deployments {
     groups: DeploymentGroup[] = $state([])
 
-     query = $state('')
-     sort: SortKey = $state('deploymentDate-desc')
-     filterStatus = $state<'all' | 'overdue' | 'not-overdue'>('all')
-     activeTab = $state<'for-deployment' | 'available'>('for-deployment')
+    query = $state('')
+    sort: SortKey = $state('deploymentDate-desc')
+    filterStatus = $state<'all' | 'overdue' | 'not-overdue'>('all')
+    activeTab = $state<'for-deployment' | 'available'>('for-deployment')
 
     pageSize = 12
     visibleCount = $state(12)
@@ -87,7 +138,6 @@ class Deployments {
     accountSearching = $state(false)
     accountResults: Account[] = $state([])
     accountError = $state('')
-    accounted = $state(false)
     designatedAccount: Account | null = $state(null)
 
     deploymentDate = $state(today())
@@ -95,105 +145,68 @@ class Deployments {
     submitting = $state(false)
     submitError = $state('')
 
-     deployStep = $state<1 | 2 | 3>(1)
-     stepLabels = ['Freezers', 'Account', 'Date']
+    deployStep = $state<1 | 2 | 3>(1)
+    stepLabels = ['Freezers', 'Account', 'Date']
 
-      removing = $state<Set<string>>(new Set())
+    removing = $state<Set<string>>(new Set())
 
-      editingGroup: DeploymentGroup | null = $state(null)
-      editDate = $state(today())
-      updating = $state<Set<string>>(new Set())
-      updateError = $state('')
+    editingGroup: DeploymentGroup | null = $state(null)
+    editDate = $state(today())
+    updating = $state<Set<string>>(new Set())
+    updateError = $state('')
 
-      isUpdating(key: string) {
-          return this.updating.has(key)
-       }
-
-      isRemoving(id: string) {
-         return this.removing.has(id)
-     }
-
-     async removeFreezer(freezer: GroupedFreezer) {
-         const id = freezer.deploymentId
-
-      if (this.removing.has(id)) return
-
-      this.removing = new Set(this.removing).add(id)
-
-       try {
-           await api.post('deployments/status', {
-               json: { deploymentId: id, status: freezerStatus.HOUSED_AVAILABLE }
-            })
-
-          this.groups = this.groups
-               .map((group) => {
-                  const freezers = group.freezers.filter((f) => f.deploymentId !== id)
-
-                  return { ...group, freezers, quantity: freezers.length }
-               })
-               .filter((group) => group.freezers.length > 0)
-
-          await invalidateAll()
-        } catch (e: any) {
-          const message = (e?.data?.message ?? e?.message ?? '') as string
-
-          if (message) {
-              this.submitError = message
-            }
-        } finally {
-          const next = new Set(this.removing)
-          next.delete(id)
-          this.removing = next
-        }
-     }
-
-    filtered = $derived(
-         (() => {
-             let source = this.groups
-
-             const status = this.filterStatus
-             if (status === 'overdue') {
-                 source = source.filter(isOverdue)
-            } else if (status === 'not-overdue') {
-                 source = source.filter((group) => !isOverdue(group))
-            }
-
-             const q = _.toLower(_.trim(this.query))
-
-             if (!q) return source
-
-             return source.filter((group) => {
-                 const designation = group.designation
-
-                 const fields = [
-                     designation?.name,
-                     designation?.address,
-                      ...group.freezers.flatMap((f) => [
-                         f.brand,
-                         f.model,
-                         f.barcode,
-                         String(f.capacity),
-                         String(f.yearModel)
-                      ])
-                  ]
-
-                 const haystack = fields
-                      .filter((field): field is string => field != null)
-                      .map((field) => _.toLower(field))
-
-                 return haystack.some((field) => field.includes(q))
-              })
-             })()
-      )
+    filtered = $derived(filterGroups(this.groups, this.filterStatus, this.query))
 
     sorted = $derived(sortGroups(this.filtered, this.sort))
 
     hasFilters = $derived(
-         this.query !== '' || this.sort !== 'deploymentDate-desc' || this.filterStatus !== 'all'
-     )
+        this.query !== '' || this.sort !== 'deploymentDate-desc' || this.filterStatus !== 'all'
+    )
 
     visible = $derived(this.sorted.slice(0, this.visibleCount))
     canLoadMore = $derived(this.visibleCount < this.sorted.length)
+
+    isUpdating(key: string) {
+        return this.updating.has(key)
+    }
+
+    isRemoving(id: string) {
+        return this.removing.has(id)
+    }
+
+    async removeFreezer(freezer: GroupedFreezer) {
+        const id = freezer.deploymentId
+
+        if (this.removing.has(id)) return
+
+        this.removing = new Set(this.removing).add(id)
+
+        try {
+            await api.post('deployments/status', {
+                json: { deploymentId: id, status: freezerStatus.HOUSED_AVAILABLE }
+            })
+
+            this.groups = this.groups
+                .map((group) => {
+                    const freezers = group.freezers.filter((f) => f.deploymentId !== id)
+
+                    return { ...group, freezers, quantity: freezers.length }
+                })
+                .filter((group) => group.freezers.length > 0)
+
+            await invalidateAll()
+        } catch (e: any) {
+            const message = errorText(e, '')
+
+            if (message) {
+                this.submitError = message
+            }
+        } finally {
+            const next = new Set(this.removing)
+            next.delete(id)
+            this.removing = next
+        }
+    }
 
     closeFilters() {
         this.openFilters = false
@@ -203,7 +216,7 @@ class Deployments {
         this.query = ''
         this.sort = 'deploymentDate-desc'
         this.filterStatus = 'all'
-     }
+    }
 
     resetVisibleCount() {
         this.visibleCount = this.pageSize
@@ -216,7 +229,7 @@ class Deployments {
     load(groups: DeploymentGroup[]) {
         this.groups = normalizeGroups(groups)
         this.resetVisibleCount()
-       }
+    }
 
     isSelected(freezerId: string) {
         return this.selectedFreezerIds.includes(freezerId)
@@ -239,15 +252,15 @@ class Deployments {
     async searchAccounts() {
         const q = _.trim(this.accountQuery)
 
-        this.accounted = true
         this.accountError = ''
         this.accountResults = []
-        this.accountSearching = !q
 
         if (!q) {
             this.accountSearching = false
             return
         }
+
+        this.accountSearching = true
 
         try {
             const res = await api.post('accounts', { json: { query: q } })
@@ -255,7 +268,7 @@ class Deployments {
 
             this.accountResults = body.data.items
         } catch (e: any) {
-            this.accountError = e?.data?.message || 'Unable to search accounts.'
+            this.accountError = errorText(e, 'Unable to search accounts.')
         } finally {
             this.accountSearching = false
         }
@@ -275,12 +288,9 @@ class Deployments {
         const barcode = _.trim(this.searchQuery)
 
         if (!barcode) {
-            this.searchedFreezer = null
-            this.searchedFound = false
-            this.searchedEligible = false
-            this.searchedLastStatus = null
+            this.clearSearchedFreezer()
             return
-         }
+        }
 
         this.searchTried = true
         this.searching = true
@@ -317,20 +327,14 @@ class Deployments {
         this.searchedEligible = false
         this.searchedLastStatus = null
         this.searchTried = false
-      }
+    }
 
     resetBatch() {
         this.selectedFreezerIds = []
         this.selectedFreezers = []
-        this.searchedFreezer = null
-        this.searchedFound = false
-        this.searchedEligible = false
-        this.searchedLastStatus = null
-        this.searchTried = false
-        this.searchQuery = ''
+        this.clearSearchedFreezer()
         this.accountQuery = ''
         this.accountResults = []
-        this.accounted = false
         this.designatedAccount = null
         this.deploymentDate = today()
         this.submitError = ''
@@ -339,15 +343,14 @@ class Deployments {
 
     canReachStep(step: number) {
         if (step <= this.deployStep) return true
-        if (step === 1) return true
         if (this.selectedFreezerIds.length === 0) return false
         if (step === 3 && !this.designatedAccount) return false
         return true
     }
 
     goToStep(step: number) {
-        if ((step === 1 || step === 2 || step === 3) && this.canReachStep(step)) {
-            this.deployStep = step
+        if (step >= 1 && step <= 3 && this.canReachStep(step)) {
+            this.deployStep = step as 1 | 2 | 3
             this.submitError = ''
         }
     }
@@ -388,83 +391,64 @@ class Deployments {
             await invalidateAll()
             this.resetBatch()
         } catch (e: any) {
-            const data = e?.data
-            this.submitError =
-                (data && (data.message ?? data.code)) ||
-                e?.message ||
-                'Something went wrong while deploying freezers.'
-      } finally {
+            this.submitError = errorText(e, 'Something went wrong while deploying freezers.')
+        } finally {
             this.submitting = false
-          }
-      }
-
-      isOverdue(group: DeploymentGroup) {
-          return isOverdue(group)
         }
+    }
 
-      formatDate(d: Date) {
-          return formatDate(d)
+    isOverdue(group: DeploymentGroup) {
+        return isOverdue(group)
+    }
+
+    formatDate(d: Date) {
+        return formatDate(d)
+    }
+
+    daysOverdue(group: DeploymentGroup) {
+        return daysOverdue(group)
+    }
+
+    openEditDate(group: DeploymentGroup) {
+        this.editingGroup = group
+        this.editDate = toDateInput(group.deploymentDate)
+        this.updateError = ''
+    }
+
+    closeEditDate() {
+        this.editingGroup = null
+        this.updateError = ''
+    }
+
+    async submitEditDate() {
+        const group = this.editingGroup
+        if (!group || this.isUpdating(group.key)) return
+
+        this.updateError = ''
+
+        const next = new Set(this.updating)
+        next.add(group.key)
+        this.updating = next
+
+        try {
+            await api.post('deployments/date', {
+                json: {
+                    deploymentIds: group.freezers.map((f) => f.deploymentId),
+                    deploymentDate: this.editDate
+                }
+            })
+
+            await invalidateAll()
+            this.editingGroup = null
+        } catch (e: any) {
+            this.updateError = errorText(e, 'Something went wrong while updating the date.')
+        } finally {
+            const updated = new Set(this.updating)
+            updated.delete(group.key)
+            this.updating = updated
         }
-
-      daysOverdue(group: DeploymentGroup) {
-          return daysOverdue(group)
-       }
-
-      openEditDate(group: DeploymentGroup) {
-          this.editingGroup = group
-          this.editDate = toDateInput(group.deploymentDate)
-          this.updateError = ''
-       }
-
-      closeEditDate() {
-          this.editingGroup = null
-          this.updateError = ''
-       }
-
-      async submitEditDate() {
-          const group = this.editingGroup
-          if (!group || this.isUpdating(group.key)) return
-
-          this.updateError = ''
-
-          const next = new Set(this.updating)
-          next.add(group.key)
-          this.updating = next
-
-          try {
-              await api.post('deployments/date', {
-                  json: {
-                       deploymentIds: group.freezers.map((f) => f.deploymentId),
-                       deploymentDate: this.editDate
-                  }
-              })
-
-              await invalidateAll()
-              this.editingGroup = null
-          } catch (e: any) {
-              this.updateError =
-                   e?.data?.message ?? e?.message ?? 'Something went wrong while updating the date.'
-          } finally {
-              const updated = new Set(this.updating)
-              updated.delete(group.key)
-              this.updating = updated
-          }
-      }
- }
-
-const sortGroups = (groups: DeploymentGroup[], sort: SortKey) => {
-     switch (sort) {
-         case 'deploymentDate-desc':
-             return _.orderBy(
-                 groups,
-                 [(g) => (isDeployedDate(g.deploymentDate) ? g.deploymentDate.getTime() : 0)],
-                 ['desc']
-              )
-
-         default:
-             return groups
-       }
- }
+    }
+}
 
 const instance = new Deployments()
 
