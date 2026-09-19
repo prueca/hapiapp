@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm'
-import { account, user, freezer } from './schema'
+import { account, user, freezer, deployment } from './schema'
 
 export const accountRelation = relations(account, ({ one, many }) => ({
     users: many(user),
@@ -20,13 +20,25 @@ export const accountRelation = relations(account, ({ one, many }) => ({
     })
 }))
 
-export const freezerRelations = relations(freezer, ({ one }) => ({
+export const freezerRelations = relations(freezer, ({ one, many }) => ({
     distributor: one(account, {
         fields: [freezer.distributorId],
         references: [account.id]
-    }),
-    designation: one(account, {
-        fields: [freezer.designationId],
+      }),
+    deployments: many(deployment)
+}))
+
+export const deploymentRelations = relations(deployment, ({ one }) => ({
+    origin: one(account, {
+        fields: [deployment.originId],
         references: [account.id]
-    })
+      }),
+    designation: one(account, {
+        fields: [deployment.designationId],
+        references: [account.id]
+      }),
+    freezer: one(freezer, {
+        fields: [deployment.freezerId],
+        references: [freezer.id]
+      })
 }))
