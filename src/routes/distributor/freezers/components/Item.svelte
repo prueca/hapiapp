@@ -10,16 +10,10 @@
             .map(String)
     )
 
-    let statusLabel = $derived(freezer.status ? _.startCase(freezer.status) : '—')
-
     let model = $derived(`${_.startCase(freezer.brand)} - ${_.startCase(freezer.model)}`)
 </script>
 
 <div class="freezer-item">
-    <div class="top-row">
-        <span class="badge">{statusLabel}</span>
-    </div>
-
     <div class="barcode">{freezer.barcode}</div>
 
     <div class="model">{model}</div>
@@ -34,14 +28,6 @@
 
     .freezer-item {
         @apply not-last:mb-4 not-last:border-b not-last:border-b-gray-100 not-last:pb-4;
-    }
-
-    .top-row {
-        @apply flex justify-end;
-    }
-
-    .badge {
-        @apply inline-block rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600;
     }
 
     .barcode {
