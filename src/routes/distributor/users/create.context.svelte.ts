@@ -2,7 +2,7 @@ import _ from 'lodash'
 import * as t from '$lib/drizzle/schema'
 
 class CreateContext {
-    open = $state(true)
+    open = $state(false)
 
     loading = $state(false)
 

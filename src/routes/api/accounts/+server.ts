@@ -48,41 +48,41 @@ export const POST = async ({ request, locals }) => {
             const where = search(t.account.name)
 
             const queryBuilder = db
-                 .select({ ...getTableColumns(t.account) })
-                 .from(t.account)
-                 .leftJoin(parent, eq(parent.id, t.account.parentId))
-                 .where(
-                      and(
-                           or(
-                                eq(t.account.parentId, authAccount.id),
-                                eq(parent.parentId, authAccount.id)
-                          ),
-                          isNull(t.account.deletedAt),
-                          where
+                .select({ ...getTableColumns(t.account) })
+                .from(t.account)
+                .leftJoin(parent, eq(parent.id, t.account.parentId))
+                .where(
+                    and(
+                        or(
+                            eq(t.account.parentId, authAccount.id),
+                            eq(parent.parentId, authAccount.id)
+                        ),
+                        isNull(t.account.deletedAt),
+                        where
                     )
                 )
-                 .orderBy(desc(t.account.createdAt), asc(t.account.name))
+                .orderBy(desc(t.account.createdAt), asc(t.account.name))
 
             return json({
-                 data: {
-                      items: query ? await queryBuilder.limit(SEARCH_LIMIT) : queryBuilder
-                   }
-             })
-         }
+                data: {
+                    items: query ? await queryBuilder.limit(SEARCH_LIMIT) : queryBuilder
+                }
+            })
+        }
 
         case accountTypes.DEALER: {
             const where = search(t.account.name)
             const queryBuilder = db
-                 .select()
-                 .from(t.account)
-                 .where(and(eq(t.account.parentId, authAccount.id), where))
+                .select()
+                .from(t.account)
+                .where(and(eq(t.account.parentId, authAccount.id), where))
 
             return json({
-                 data: {
-                      items: query ? await queryBuilder.limit(SEARCH_LIMIT) : queryBuilder
-                   }
-             })
-         }
+                data: {
+                    items: query ? await queryBuilder.limit(SEARCH_LIMIT) : queryBuilder
+                }
+            })
+        }
 
         default:
             error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)

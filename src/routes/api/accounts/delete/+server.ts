@@ -14,7 +14,7 @@ const schema = z.object({
     id: z.ulid()
 })
 
-const verifyAccess = async (currentAccountId: string, id: string) => {
+const verifyAccess = async (authAccountId: string, id: string) => {
     const parent = alias(t.account, 'parent')
 
     const [account] = await db
@@ -25,7 +25,7 @@ const verifyAccess = async (currentAccountId: string, id: string) => {
             and(
                 eq(t.account.id, id),
                 isNull(t.account.deletedAt),
-                or(eq(t.account.parentId, currentAccountId), eq(parent.parentId, currentAccountId))
+                or(eq(t.account.parentId, authAccountId), eq(parent.parentId, authAccountId))
             )
         )
         .limit(1)

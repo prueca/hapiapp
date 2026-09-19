@@ -22,10 +22,10 @@ const schema: ZodObject = z.object({
 
 export const POST = async ({ locals, request }) => {
     try {
-        const account = locals.account!
-        const user = locals.user!
+        const authAccount = locals.account!
+        const authUser = locals.user!
 
-        switch (user.role) {
+        switch (authUser.role) {
             case userRoles.DISTRIBUTOR_ADMIN:
                 // We do not fail the process at this point as
                 // these roles are allowed to create account.
@@ -40,7 +40,7 @@ export const POST = async ({ locals, request }) => {
 
         let data: typeof t.account.$inferInsert = {
             ...payload,
-            parentId: account.id,
+            parentId: authAccount.id,
             active: true
         }
 
@@ -59,7 +59,7 @@ export const POST = async ({ locals, request }) => {
             [accountTypes.DEALER]: [accountTypes.HAPISTORE]
         }
 
-        const allowedTypes: string[] | undefined = scope[account.type]
+        const allowedTypes: string[] | undefined = scope[authAccount.type]
 
         if (!allowedTypes || !allowedTypes.includes(data.type)) {
             // Distributor > Dealer > Hapistore
@@ -74,7 +74,7 @@ export const POST = async ({ locals, request }) => {
             // Allow current user to access the newly created account
             // by creating access record.
             await txn.insert(t.access).values({
-                userId: user.id,
+                userId: authUser.id,
                 accountId: newAccount.id
             })
 

@@ -24,7 +24,7 @@ class AccountsContext {
             this.error = null
             this.loading = true
 
-            const response = await api.post('accounts', { json: {} })
+            const response = await api.post('accounts/tree', { json: {} })
             const body: Data<{ items: Account[] }> = await response.json()
 
             this.list = body.data.items
