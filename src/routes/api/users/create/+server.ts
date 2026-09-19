@@ -108,7 +108,7 @@ export const POST = async ({ locals, request }) => {
             password: await argon2.hash(DEFAULT_PASSWORD)
         })
 
-        await db.transaction(async (txn) => {
+        const newUser = await db.transaction(async (txn) => {
             const [newUser] = await txn
                 .insert(t.user)
                 .values(userData as User)
@@ -119,12 +119,10 @@ export const POST = async ({ locals, request }) => {
                 accountId: data.accountId
             })
 
-            _.assign(userData, newUser, {
-                password: DEFAULT_PASSWORD
-            })
+            return newUser
         })
 
-        return json(userData)
+        return json(_.pick(newUser, ['username', 'password']))
     } catch (e: any) {
         if (isHttpError(e)) throw e
 

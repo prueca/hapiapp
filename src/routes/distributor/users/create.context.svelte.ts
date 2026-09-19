@@ -6,6 +6,8 @@ class CreateContext {
 
     loading = $state(false)
 
+    success = $state(false)
+
     error: App.Error | null = $state(null)
 
     data = $state<{
@@ -26,6 +28,11 @@ class CreateContext {
         phone: null
     })
 
+    newUser = $state<{
+        username: string
+        password: string
+    } | null>(null)
+
     issues = $state({
         accountId: null,
         firstName: null,
@@ -38,6 +45,12 @@ class CreateContext {
 
     toggle(flag: boolean) {
         this.open = flag
+
+        if (!flag) {
+            this.loading = false
+            this.success = false
+            this.error = null
+        }
     }
 
     selectAccount(accountId: string) {

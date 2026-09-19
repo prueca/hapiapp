@@ -8,6 +8,7 @@
     import create from '../create.context.svelte'
     import AccountOption from './AccountOption.svelte'
     import Skeleton from '../../../components/Skeleton.svelte'
+    import Icon from '@iconify/svelte'
 
     onMount(() => accounts.load())
 
@@ -179,6 +180,37 @@
         <div class="modal-action">
             <button class="submit-btn btn" onclick={() => create.submit()}> Create </button>
             <button class="close-btn btn" onclick={() => create.toggle(false)}> Close </button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" class:modal-open={create.success}>
+    <div class="modal-box">
+        <div class="heading">
+            <div class="flex items-start gap-2">
+                <Icon icon="boxicons:message-circle-check" class="-mt-0.5" width="32" />
+                <div>
+                    <div class="mb-4">
+                        <p class="mb-1 font-medium">User created successfully</p>
+                        <p class="mb-2 text-sm text-gray-400">
+                            You may now login and update details
+                        </p>
+                    </div>
+                    <div class="flex flex-col gap-4">
+                        <div>
+                            <div class="mb-1 text-xs text-gray-400">Username</div>
+                            <div class="text-sm font-medium">Lorem ipsum</div>
+                        </div>
+                        <div>
+                            <div class="mb-1 text-xs text-gray-400">Password</div>
+                            <div class="text-sm font-medium">hapi123</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-action">
+            <button class="btn rounded-lg" onclick={() => create.toggle(false)}> Close </button>
         </div>
     </div>
 </div>
