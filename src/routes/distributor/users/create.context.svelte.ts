@@ -27,7 +27,7 @@ class CreateContext {
         lastName: null,
         address: null,
         phone: null,
-        isAdmin: true
+        isAdmin: false
     })
 
     newUser = $state<{
@@ -60,6 +60,10 @@ class CreateContext {
         this.data.accountId = accountId
     }
 
+    setRole(flag: boolean) {
+        this.data.isAdmin = flag
+    }
+
     validate() {
         const schema = z.object({
             accountId: z.ulid(),
@@ -67,7 +71,7 @@ class CreateContext {
 
             firstName: z.string().nonempty(),
             middleName: z.string().nullable(),
-            lastName: z.string().nullable(),
+            lastName: z.string().nonempty(),
 
             address: z.string().nonempty(),
             phone: z.string().nonempty()
@@ -161,7 +165,7 @@ class CreateContext {
 
         _.map(_.keys(this.data), (k: keyof typeof this.data) => {
             if (k === 'isAdmin') {
-                this.data[k] = true
+                this.data[k] = false
             } else {
                 this.data[k] = null
             }
@@ -169,9 +173,7 @@ class CreateContext {
     }
 
     async submit() {
-        if (!this.validate()) return
-
-        await this.send()
+        this.validate() && (await this.send())
     }
 }
 

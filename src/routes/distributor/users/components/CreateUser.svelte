@@ -79,39 +79,44 @@
                         {/if}
                     </ul>
                 </div>
+                <div class="help-text">
+                    {create.issues.accountId}
+                </div>
             </div>
 
             <!-- user role -->
             <fieldset class="fieldset" class:error={create.issues.isAdmin !== null}>
                 <legend class="label">Set User Role</legend>
-                <div class="mb-2 flex items-start gap-4 rounded-lg border border-gray-300 p-4">
-                    <input
-                        id="admin"
-                        type="radio"
-                        name="role"
-                        class="radio"
-                        defaultChecked
-                        bind:group={create.data.isAdmin}
-                        value={true}
-                    />
-                    <label for="admin" class="-mt-0.5">
-                        <div class="text-[16px] font-medium">Admin User</div>
-                        <div class="text-sm text-gray-400">Can view, update and delete records</div>
-                    </label>
-                </div>
                 <div class="flex items-start gap-4 rounded-lg border border-gray-300 p-4">
                     <input
                         id="normal"
                         type="radio"
                         name="role"
                         class="radio"
-                        bind:group={create.data.isAdmin}
-                        value={false}
+                        checked={create.data.isAdmin === false}
+                        onchange={() => create.setRole(false)}
                     />
                     <label for="normal" class="-mt-0.5">
                         <div class="text-[16px] font-medium">Normal User</div>
                         <div class="text-sm text-gray-400">Can only view records</div>
                     </label>
+                </div>
+                <div class="mb-2 flex items-start gap-4 rounded-lg border border-gray-300 p-4">
+                    <input
+                        id="admin"
+                        type="radio"
+                        name="role"
+                        class="radio"
+                        checked={create.data.isAdmin === true}
+                        onchange={() => create.setRole(true)}
+                    />
+                    <label for="admin" class="-mt-0.5">
+                        <div class="text-[16px] font-medium">Admin User</div>
+                        <div class="text-sm text-gray-400">Can view, update and delete records</div>
+                    </label>
+                </div>
+                <div class="help-text">
+                    {create.issues.isAdmin}
                 </div>
             </fieldset>
 
