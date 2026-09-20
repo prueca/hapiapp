@@ -57,14 +57,33 @@ class UpdateContext {
         }
     }
 
+    select(id: string) {
+        const user = _.find(users.list, (x) => x.id === id)!
+
+        this.data = _.pick(user, [
+            'firstName',
+            'middleName',
+            'lastName',
+            'address',
+            'phone'
+        ]) as typeof this.data
+
+        _.assign(this.data, {
+            id: user.id,
+            isAdmin: _.endsWith(user.role, '-admin')
+        })
+
+        this.toggle(true)
+    }
+
     validate() {
         const schema = z.object({
-            accountId: z.ulid(),
+            id: z.ulid(),
             isAdmin: z.boolean(),
 
             firstName: z.string().nonempty(),
             middleName: z.string().nullable(),
-            lastName: z.string().nullable(),
+            lastName: z.string().nonempty(),
 
             address: z.string().nonempty(),
             phone: z.string().nonempty()
@@ -83,6 +102,10 @@ class UpdateContext {
                 let [message] = x.message.split(':')
 
                 switch (`${field as string}:${x.code}`) {
+                    case 'isAdmin:invald_value':
+                        message = 'Please select a role'
+                        break
+
                     case 'firstName:invalid_value':
                     case 'firstName:too_small':
                         message = 'Please enter your first name'
@@ -118,23 +141,50 @@ class UpdateContext {
         return true
     }
 
-    select(id: string) {
-        const user = _.find(users.list, (x) => x.id === id)!
+    async send() {
+        if (this.loading) return
 
-        this.data = _.pick(user, [
-            'firstName',
-            'middlename',
-            'lastName',
-            'address',
-            'phone'
-        ]) as typeof this.data
+        try {
+            this.open = false
+            this.loading = true
 
-        _.assign(this.data, {
-            id: user.id,
-            isAdmin: _.endsWith(user.role, '-admin')
-        })
+            const response = await api.post('users/update', { json: this.data })
+            const body = (await response.json()) as Json
+            const user = body.data
 
-        this.toggle(true)
+            this.loading = false
+            this.success = true
+
+            users.update(user)
+        } catch (e: any) {
+            this.loading = false
+            this.error = errors.UNEXPECTED_ERROR
+
+            switch (e.name) {
+                case 'HTTPError':
+                    this.error = e.data
+
+                    if (e.response.status === 404 && e.data?.code !== errors.NOT_FOUND.code) {
+                        this.error = errors.NOT_FOUND
+                    }
+
+                    break
+
+                case 'NetworkError':
+                    this.error = errors.NETWORK_ERROR
+                    break
+
+                case 'TypeError':
+                    this.error = errors.TYPE_ERROR
+                    break
+            }
+        }
+    }
+
+    async submit() {
+        if (!this.validate()) return
+
+        await this.send()
     }
 }
 

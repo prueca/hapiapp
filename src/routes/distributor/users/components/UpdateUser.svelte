@@ -44,6 +44,9 @@
                         <div class="text-sm text-gray-400">Can view, update and delete records</div>
                     </label>
                 </div>
+                <div class="help-text">
+                    {update.issues.isAdmin}
+                </div>
             </fieldset>
 
             <!-- first name -->
@@ -117,7 +120,7 @@
             </fieldset>
         </div>
         <div class="modal-action">
-            <button class="submit-btn btn" onclick={() => null}> Update </button>
+            <button class="submit-btn btn" onclick={() => update.submit()}> Update </button>
             <button class="close-btn btn" onclick={() => update.toggle(false)}> Close </button>
         </div>
     </div>

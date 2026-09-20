@@ -10,7 +10,8 @@ import { deploymentStatus as deploymentStatusValues } from '$lib/config/deployme
 export const typeEnum = pgEnum('account_type', [
     accountTypes.DISTRIBUTOR,
     accountTypes.DEALER,
-    accountTypes.HAPISTORE
+    accountTypes.HAPISTORE,
+    accountTypes.DIRECT_STORE
 ])
 
 /**
@@ -22,7 +23,9 @@ export const roleEnum = pgEnum('user_role', [
     userRoles.DEALER_ADMIN,
     userRoles.DEALER_USER,
     userRoles.HAPISTORE_ADMIN,
-    userRoles.HAPISTORE_USER
+    userRoles.HAPISTORE_USER,
+    userRoles.DIRECT_STORE_ADMIN,
+    userRoles.DIRECT_STORE_USER
 ])
 
 /**
