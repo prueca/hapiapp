@@ -5,9 +5,10 @@ import z from 'zod'
 import db from '$lib/drizzle'
 import * as t from '$lib/drizzle/schema'
 import { freezerStatus } from '$lib/config/freezer.options'
+import { deploymentStatus } from '$lib/config/deployment.status'
 import errors from '$lib/errors'
 import _ from 'lodash'
-import { eq, and, desc } from 'drizzle-orm'
+import { eq, and, desc, isNull } from 'drizzle-orm'
 
 const schema = z.object({
     freezerIds: z.array(z.string().nonempty()).nonempty(),
@@ -31,70 +32,107 @@ export const POST = async ({ request, locals }) => {
         }
 
         const { freezerIds, designationId, deploymentDate } = validation.data
-        const status = freezerStatus.FOR_DEPLOYMENT
 
-        const [designation] = await db
-             .select()
-             .from(t.account)
-             .where(
-                  and(
-                    eq(t.account.id, designationId),
-                   eq(t.account.parentId, account.id)
-             )
-         )
-             .limit(1)
+        const root = await db.query.account.findFirst({
+            where: eq(t.account.id, account.id),
+            columns: { id: true },
+            with: {
+                childAccounts: {
+                    columns: { id: true },
+                    with: {
+                        childAccounts: {
+                            columns: { id: true }
+                        }
+                    }
+                }
+            }
+        })
 
-        if (!designation) {
+        const descendantIds = new Set(
+            (root?.childAccounts ?? []).flatMap((child) => [
+                child.id,
+                ...(child.childAccounts ?? []).map((grand) => grand.id)
+            ])
+        )
+
+        if (!descendantIds.has(designationId)) {
             error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
         }
 
         const result = await db.transaction(async (txn) => {
-            const inserted: (typeof t.deployment.$inferSelect)[] = []
+            const [parent] = await txn
+                .insert(t.deployment)
+                .values({
+                    originId: account.id,
+                    designationId,
+                    status: deploymentStatus.PROCESSING,
+                    deploymentDate
+                })
+                .returning()
+
+            if (!parent) {
+                error(StatusCodes.INTERNAL_SERVER_ERROR, errors.INTERNAL_ERROR)
+            }
+
+            const items: (typeof t.deploymentItem.$inferSelect)[] = []
 
             for (const freezerId of _.uniq(freezerIds)) {
                 const [freezer] = await txn
-                     .select()
-                     .from(t.freezer)
-                     .where(
-                          and(
-                        eq(t.freezer.id, freezerId),
-                        eq(t.freezer.distributorId, account.id)
+                    .select()
+                    .from(t.freezer)
+                    .where(
+                        and(
+                            eq(t.freezer.id, freezerId),
+                            eq(t.freezer.distributorId, account.id),
+                            isNull(t.freezer.deletedAt)
+                        )
                     )
-              )
-                     .limit(1)
+                    .limit(1)
 
                 if (!freezer) continue
 
-                const [lastDeployment] = await txn
+                const [lastItem] = await txn
                     .select()
-                    .from(t.deployment)
-                    .where(eq(t.deployment.freezerId, freezer.id))
-                    .orderBy(desc(t.deployment.createdAt))
+                    .from(t.deploymentItem)
+                    .where(
+                        and(
+                            eq(t.deploymentItem.freezerId, freezer.id),
+                            isNull(t.deploymentItem.deletedAt)
+                        )
+                    )
+                    .orderBy(desc(t.deploymentItem.createdAt))
                     .limit(1)
 
-                const lastStatus = lastDeployment?.status ?? null
-                const eligible = lastStatus === null || AVAILABLE_STATUSES.has(lastStatus)
+                const eligible =
+                    lastItem === undefined ||
+                    (AVAILABLE_STATUSES.has(lastItem.status) &&
+                        lastItem.designationId === account.id)
 
                 if (!eligible) continue
 
-                const [row] = await txn
-                    .insert(t.deployment)
+                const [item] = await txn
+                    .insert(t.deploymentItem)
                     .values({
-                        originId: account.id,
+                        deploymentId: parent.id,
                         designationId,
                         freezerId: freezer.id,
-                        status,
-                        deploymentDate
+                        status: freezerStatus.FOR_DEPLOYMENT
                     })
                     .returning()
 
-                inserted.push(row)
+                items.push(item)
             }
 
-            return inserted
+            return { parent, items }
         })
 
-        return json({ data: { deployments: result, count: result.length } })
+        return json({
+            data: {
+                deployment: result.parent,
+                items: result.items,
+                count: result.items.length
+            }
+        })
     } catch (e: any) {
         if (isHttpError(e)) throw e
 
