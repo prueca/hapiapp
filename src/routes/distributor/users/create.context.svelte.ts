@@ -148,6 +148,8 @@ class CreateContext {
                     this.error = e.data
 
                     if (e.response.status === 404 && e.data?.code !== errors.NOT_FOUND.code) {
+                        // Receiving a 404 status without error code means
+                        // the url does not exists. This equates to NOT_FOUND error.
                         this.error = errors.NOT_FOUND
                     }
 

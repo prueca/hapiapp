@@ -1,63 +1,36 @@
 import { json, error, isHttpError } from '@sveltejs/kit'
 import { StatusCodes } from 'http-status-codes'
 import z from 'zod'
-import accountTypes from '$lib/config/account.types'
-import userRoles from '$lib/config/user.roles'
 import errors from '$lib/errors'
 import _ from 'lodash'
+import userRoles from '$lib/config/user.roles'
 
 import db from '$lib/drizzle'
-import { eq, and, isNull } from 'drizzle-orm'
+import { eq, or, and, isNull } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
 import * as t from '$lib/drizzle/schema'
 
 const schema = z.object({
-    id: z.ulid(),
-    isAdmin: z.boolean(),
-
-    firstName: z.string().nonempty(),
-    middleName: z.string().nullable(),
-    lastName: z.string().nonempty(),
-
-    address: z.string().nonempty(),
-    phone: z.string().nonempty()
+    id: z.ulid()
 })
 
 const verifyAccess = async (authAccountId: string, userId: string) => {
-    const [access] = await db
+    const [user] = await db
         .select()
-        .from(t.access)
+        .from(t.user)
+        .innerJoin(t.access, eq(t.access.userId, t.user.id))
         .where(
             and(
                 eq(t.access.accountId, authAccountId),
-                eq(t.access.userId, userId),
-                isNull(t.access.deletedAt)
+                isNull(t.access.deletedAt),
+                isNull(t.user.deletedAt),
+                eq(t.user.id, userId)
             )
         )
         .limit(1)
 
-    if (!access) {
+    if (!user) {
         error(StatusCodes.NOT_FOUND, errors.NOT_FOUND)
-    }
-
-    return true
-}
-
-const getUserRole = (accountType: string, isAdmin: boolean) => {
-    switch (accountType) {
-        case accountTypes.DISTRIBUTOR:
-            return isAdmin ? userRoles.DISTRIBUTOR_ADMIN : userRoles.DISTRIBUTOR_USER
-
-        case accountTypes.DEALER:
-            return isAdmin ? userRoles.DEALER_ADMIN : userRoles.DEALER_USER
-
-        case accountTypes.HAPISTORE:
-            return isAdmin ? userRoles.HAPISTORE_ADMIN : userRoles.HAPISTORE_USER
-
-        case accountTypes.DIRECT_STORE:
-            return isAdmin ? userRoles.DIRECT_STORE_ADMIN : userRoles.DIRECT_STORE_USER
-
-        default:
-            error(StatusCodes.BAD_REQUEST, errors.INVALID_DATA_FORMAT)
     }
 }
 
@@ -68,8 +41,8 @@ export const POST = async ({ locals, request }) => {
 
         switch (authUser.role) {
             case userRoles.DISTRIBUTOR_ADMIN:
-                // Users with roles from these cases are allowed
-                // to update a user
+                // Users with these roles are allowed
+                // to proceed with the operation
                 break
             default:
                 // Any other roles are not allowed to perform
@@ -84,27 +57,23 @@ export const POST = async ({ locals, request }) => {
             error(StatusCodes.BAD_REQUEST, errors.INVALID_DATA_FORMAT)
         }
 
-        const { id: userId, isAdmin, ...rest } = validation.data
+        const { id } = validation.data
 
-        await verifyAccess(authAccount.id, userId)
+        await verifyAccess(authAccount.id, id)
 
-        const values = {
-            ...rest,
-            role: getUserRole(authAccount.type, isAdmin),
-            updatedAt: new Date()
-        }
-
-        const [updatedUser] = await db
+        const [deletedUser] = await db
             .update(t.user)
-            .set(values)
-            .where(eq(t.user.id, userId))
+            .set({
+                deletedAt: new Date()
+            })
+            .where(and(eq(t.user.id, id), isNull(t.user.deletedAt)))
             .returning()
 
-        if (!updatedUser) {
+        if (!deletedUser) {
             error(StatusCodes.NOT_FOUND, errors.NOT_FOUND)
         }
 
-        return json({ data: updatedUser })
+        return json({ data: deletedUser })
     } catch (e: any) {
         if (isHttpError(e)) throw e
 

@@ -6,6 +6,7 @@
     import UserList from './components/UserList.svelte'
     import CreateUser from './components/CreateUser.svelte'
     import UpdateUser from './components/UpdateUser.svelte'
+    import DeleteUser from './components/DeleteUser.svelte'
 </script>
 
 <div class="content-wrapper">
@@ -16,6 +17,7 @@
         <UserList />
         <CreateUser />
         <UpdateUser />
+        <DeleteUser />
     </div>
     <Dock />
 </div>

@@ -3,6 +3,7 @@
     import Icon from '@iconify/svelte'
     import { getDisplayText } from '$lib/config/user.roles'
     import update from '../update.context.svelte'
+    import del from '../delete.context.svelte'
 
     let { item, isLast = false } = $props()
 
@@ -32,7 +33,7 @@
                     </button>
                 </li>
                 <li>
-                    <button onclick={() => null}>
+                    <button onclick={() => del.confirm(item.id)}>
                         <Icon icon="mdi:delete-outline" width="18" />
                         <span class="ml-1">Delete</span>
                     </button>
