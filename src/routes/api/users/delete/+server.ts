@@ -56,21 +56,32 @@ export const POST = async ({ locals, request }) => {
             error(StatusCodes.BAD_REQUEST, errors.INVALID_DATA_FORMAT)
         }
 
-        const { id } = validation.data
+        const { id: userId } = validation.data
 
-        await verifyAccess(authAccount.id, id)
+        await verifyAccess(authAccount.id, userId)
 
-        const [deletedUser] = await db
-            .update(t.user)
-            .set({
-                deletedAt: new Date()
-            })
-            .where(and(eq(t.user.id, id), isNull(t.user.deletedAt)))
-            .returning()
+        const deletedUser = await db.transaction(async (txn) => {
+            const [user] = await db
+                .update(t.user)
+                .set({
+                    deletedAt: new Date()
+                })
+                .where(and(eq(t.user.id, userId), isNull(t.user.deletedAt)))
+                .returning()
 
-        if (!deletedUser) {
-            error(StatusCodes.NOT_FOUND, errors.NOT_FOUND)
-        }
+            await db
+                .update(t.access)
+                .set({
+                    deletedAt: new Date()
+                })
+                .where(and(eq(t.access.userId, userId), isNull(t.access.deletedAt)))
+
+            if (!user) {
+                error(StatusCodes.NOT_FOUND, errors.NOT_FOUND)
+            }
+
+            return user
+        })
 
         return json({ data: deletedUser })
     } catch (e: any) {
