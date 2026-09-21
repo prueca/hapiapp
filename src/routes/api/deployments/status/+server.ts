@@ -4,14 +4,12 @@ import z from 'zod'
 
 import db from '$lib/drizzle'
 import * as t from '$lib/drizzle/schema'
-import { freezerStatus } from '$lib/config/freezer.options'
+import { deploymentStatus } from '$lib/config/deployment.status'
 import errors from '$lib/errors'
 import _ from 'lodash'
 import { eq, and } from 'drizzle-orm'
 
-type FreezerStatus = (typeof freezerStatus)[keyof typeof freezerStatus]
-
-const STATUS_VALUES = new Set<string>(Object.values(freezerStatus))
+const STATUS_VALUES = new Set<string>(Object.values(deploymentStatus))
 
 const schema = z.object({
     deploymentId: z.string().nonempty(),
@@ -51,14 +49,13 @@ export const POST = async ({ request, locals }) => {
         }
 
         const [updated] = await db
-             .update(t.deployment)
-             .set({
-                  status: status as FreezerStatus,
-                  designationId: account.id,
-                  updatedAt: new Date()
-             })
-             .where(eq(t.deployment.id, deploymentId))
-             .returning()
+            .update(t.deployment)
+            .set({
+                status: status as (typeof t.deployment.$inferSelect)['status'],
+                updatedAt: new Date()
+            })
+            .where(eq(t.deployment.id, deploymentId))
+            .returning()
 
         if (!updated) {
             error(StatusCodes.NOT_FOUND, errors.NOT_FOUND)
