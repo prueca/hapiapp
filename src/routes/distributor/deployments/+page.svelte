@@ -1,15 +1,14 @@
 <script lang="ts">
     import Dock from '../../components/Dock.svelte'
     import TopBar from '../../components/TopBar'
-    import type { DeploymentGroup } from '$lib/types/deployment'
+    import type { DeploymentRow } from '$lib/types/deployment'
      import List from './components/List.svelte'
      import Toolbar from './components/Toolbar.svelte'
      import EditDate from './components/EditDate.svelte'
-    import ItemSkeleton from './components/Item.skeleton.svelte'
     import DeployFreezers from './components/DeployFreezers.svelte'
     import state from './deployments.context.svelte'
 
-    let { data }: { data: { groups: Promise<DeploymentGroup[]> } } = $props()
+    let { data }: { data: { data: DeploymentRow[] } } = $props()
 </script>
 
 <div class="content-wrapper">
@@ -40,19 +39,11 @@
                 >
                        {#if state.activeTab === 'for-deployment'}
                           <div class="overflow-hidden rounded-lg bg-white">
-                              <Toolbar />
+                            <Toolbar />
 
-                              <EditDate />
+                                <EditDate />
 
-                            {#await data.groups}
-                                <div class="p-4">
-                                    {#each Array(6) as _}
-                                        <ItemSkeleton />
-                                    {/each}
-                                </div>
-                            {:then groups}
-                                <List {groups} />
-                            {/await}
+                                <List rows={data.data} />
                         </div>
                     {/if}
                   </div>
