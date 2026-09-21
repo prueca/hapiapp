@@ -6,8 +6,7 @@ import _ from 'lodash'
 import userRoles from '$lib/config/user.roles'
 
 import db from '$lib/drizzle'
-import { eq, or, and, isNull } from 'drizzle-orm'
-import { alias } from 'drizzle-orm/pg-core'
+import { eq, and, isNull } from 'drizzle-orm'
 import * as t from '$lib/drizzle/schema'
 
 const schema = z.object({
