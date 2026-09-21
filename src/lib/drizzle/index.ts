@@ -3,7 +3,7 @@ import { Pool } from 'pg'
 import { drizzle } from 'drizzle-orm/node-postgres'
 
 import * as schema from './schema'
-import { accountRelation, freezerRelations, deploymentRelations } from './relations'
+import { accountRelation, freezerRelations, deploymentRelations, deploymentItemRelations } from './relations'
 
 const pool = new Pool({
     connectionString: DB_URL,
@@ -13,12 +13,13 @@ const pool = new Pool({
 })
 
 const db = drizzle(pool, {
-    schema: {
-        ...schema,
-        accountRelation,
-        freezerRelations,
-        deploymentRelations
-    }
+     schema: {
+          ...schema,
+         accountRelation,
+         freezerRelations,
+         deploymentRelations,
+         deploymentItemRelations
+      }
 })
 
 const authenticate = async () => {
