@@ -2,6 +2,7 @@ import { pgEnum } from 'drizzle-orm/pg-core'
 import accountTypes from '$lib/config/account.types'
 import userRoles from '$lib/config/user.roles'
 import { freezerStatus } from '$lib/config/freezer.options'
+import { deploymentStatus as deploymentStatusValues } from '$lib/config/deployment.status'
 
 /**
  * Enum for Account Types. Defines the specific roles permitted within the ecosystem.
@@ -28,12 +29,23 @@ export const roleEnum = pgEnum('user_role', [
  * Enum for Freezer Status. Tracks the lifecycle and current state of a freezer unit.
  */
 export const freezerStatusEnum = pgEnum('freezer_status', [
-    freezerStatus.HOUSED_AVAILABLE,
-    freezerStatus.FOR_DEPLOYMENT,
-    freezerStatus.DEPLOYED_DESIGNATED,
-    freezerStatus.FOR_PULLOUT,
-    freezerStatus.PULLOUT,
-    freezerStatus.FOR_REPLACEMENT_BROKEN_UNIT,
-    freezerStatus.FOR_REPLACEMENT_DOWNGRADE,
-    freezerStatus.FOR_REPLACEMENT_UPGRADE
+     freezerStatus.HOUSED_AVAILABLE,
+     freezerStatus.FOR_DEPLOYMENT,
+     freezerStatus.DEPLOYED_DESIGNATED,
+     freezerStatus.FOR_PULLOUT,
+     freezerStatus.PULLOUT,
+     freezerStatus.FOR_REPLACEMENT_BROKEN_UNIT,
+     freezerStatus.FOR_REPLACEMENT_DOWNGRADE,
+     freezerStatus.FOR_REPLACEMENT_UPGRADE
+])
+
+/**
+  * Enum for Deployment Status. Tracks the logistics state of a deployment record.
+  */
+export const deploymentStatus = pgEnum('deployment_status', [
+     deploymentStatusValues.IN_TRANSIT,
+     deploymentStatusValues.DELIVERED,
+     deploymentStatusValues.CANCELLED,
+     deploymentStatusValues.PROCESSING,
+     deploymentStatusValues.PENDING
 ])
