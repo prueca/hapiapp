@@ -1,58 +1,76 @@
 <!-- svelte-ignore a11y_label_has_associated_control -->
 
 <script lang="ts">
-    import state from '../deployments.context.svelte'
+     import state from '../deployments.context.svelte'
 </script>
 
 {#if state.openFilters}
-      <div
-           class="modal-open modal"
-           role="dialog"
-           aria-modal="true"
-           aria-label="Filters"
-           tabindex={-1}
-           onkeydown={(e) => e.key === 'Escape' && state.closeFilters()}
-           onclick={(e) => e.target === e.currentTarget && state.closeFilters()}
-      >
-           <div class="modal-box">
-                <div class="heading">
-                     <p class="mb-4 text-lg font-bold">Sort and Filter Deployments...</p>
-                </div>
-                  <div>
-                       <fieldset class="fieldset">
-                            <label class="label">Sort</label>
-                            <select class="select w-full" bind:value={state.sort}>
-                                 {#each state.sortOptions as opt}
-                                      <option value={opt.value}>{opt.label}</option>
-                                  {/each}
-                            </select>
-                       </fieldset>
+     <div
+          class="modal-open modal"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Filters"
+          tabindex={-1}
+          onkeydown={(e) => e.key === 'Escape' && state.closeFilters()}
+          onclick={(e) => e.target === e.currentTarget && state.closeFilters()}
+     >
+          <div class="modal-box">
+               <div class="heading">
+                    <p class="mb-4 text-lg font-bold">Sort and Filter Deployments...</p>
+               </div>
+                 <div>
+                      <fieldset class="fieldset">
+                           <label class="label">Sort</label>
+                           <select
+                                 class="select w-full"
+                                 value={state.sort}
+                                 oninput={(e) =>
+                                        state.setSort(
+                                             (e.currentTarget as HTMLSelectElement).value as
+                                                    typeof state.sort
+                                        )
+                                 }
+                           >
+                                {#each state.sortOptions as opt}
+                                     <option value={opt.value}>{opt.label}</option>
+                                 {/each}
+                              </select>
+                      </fieldset>
 
-                       <fieldset class="fieldset">
-                            <label class="label">Status</label>
-                            <select class="select w-full" bind:value={state.filterStatus}>
-                                 <option value="all">All</option>
-                                 <option value="overdue">Overdue</option>
-                                 <option value="not-overdue">Not overdue</option>
-                            </select>
-                       </fieldset>
-                  </div>
-                <div class="modal-action">
-                     <button class="close-btn btn" onclick={() => state.resetFilters()}>Clear</button>
-                     <button class="btn" onclick={() => state.closeFilters()}>Done</button>
-                </div>
-           </div>
-      </div>
+                      <fieldset class="fieldset">
+                           <label class="label">Status</label>
+                           <select
+                                 class="select w-full"
+                                 value={state.filterStatus}
+                                 oninput={(e) =>
+                                        state.setStatusFilter(
+                                             (e.currentTarget as HTMLSelectElement).value as
+                                                    typeof state.filterStatus
+                                        )
+                                 }
+                           >
+                                {#each state.statusOptions as opt}
+                                     <option value={opt.value}>{opt.label}</option>
+                                 {/each}
+                              </select>
+                      </fieldset>
+                 </div>
+              <div class="modal-action">
+                   <button class="close-btn btn" onclick={() => state.resetFilters()}>Clear</button>
+                   <button class="btn" onclick={() => state.closeFilters()}>Done</button>
+              </div>
+          </div>
+     </div>
 {/if}
 
 <style lang="postcss">
-     @reference 'tailwindcss';
+      @reference 'tailwindcss';
 
-     .fieldset {
+      .fieldset {
            @apply not-last:mb-4;
-      }
+       }
 
-      .close-btn {
+       .close-btn {
            @apply cursor-pointer rounded-lg border-none;
-      }
+       }
 </style>
