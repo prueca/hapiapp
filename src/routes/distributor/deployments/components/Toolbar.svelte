@@ -1,7 +1,7 @@
 <script lang="ts">
-    import Icon from '@iconify/svelte'
-    import state from '../deployments.context.svelte'
-    import Filters from './Filters.svelte'
+     import Icon from '@iconify/svelte'
+     import state from '../deployments.context.svelte'
+     import Filters from './Filters.svelte'
 </script>
 
 <div class="border-b border-b-gray-100 p-4">
@@ -13,7 +13,8 @@
                           type="search"
                           class="grow"
                           placeholder="Search deployments..."
-                          bind:value={state.query}
+                          bind:value={state.queryInput}
+                          oninput={() => state.onSearchInput()}
                      />
                 </label>
            </div>
@@ -27,5 +28,5 @@
 <Filters />
 
 <style lang="postcss">
-     @reference 'tailwindcss';
+      @reference 'tailwindcss';
 </style>
