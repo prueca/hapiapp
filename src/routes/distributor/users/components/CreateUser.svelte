@@ -89,28 +89,28 @@
                 <legend class="label">Set User Role</legend>
                 <div class="flex items-start gap-4 rounded-lg border border-gray-300 p-4">
                     <input
-                        id="normal"
+                        id="create-role-normal"
                         type="radio"
                         name="role"
                         class="radio"
                         checked={create.data.isAdmin === false}
                         onchange={() => create.setRole(false)}
                     />
-                    <label for="normal" class="-mt-0.5">
+                    <label for="create-role-normal" class="-mt-0.5">
                         <div class="text-[16px] font-medium">Normal User</div>
                         <div class="text-sm text-gray-400">Can only view records</div>
                     </label>
                 </div>
                 <div class="mb-2 flex items-start gap-4 rounded-lg border border-gray-300 p-4">
                     <input
-                        id="admin"
+                        id="create-role-admin"
                         type="radio"
                         name="role"
                         class="radio"
                         checked={create.data.isAdmin === true}
                         onchange={() => create.setRole(true)}
                     />
-                    <label for="admin" class="-mt-0.5">
+                    <label for="create-role-admin" class="-mt-0.5">
                         <div class="text-[16px] font-medium">Admin User</div>
                         <div class="text-sm text-gray-400">Can view, update and delete records</div>
                     </label>

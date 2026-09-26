@@ -18,28 +18,28 @@
                 <legend class="label">Set User Role</legend>
                 <div class="flex items-start gap-4 rounded-lg border border-gray-300 p-4">
                     <input
-                        id="normal"
+                        id="update-role-normal"
                         type="radio"
                         name="role"
                         class="radio"
-                        bind:group={update.data.isAdmin}
-                        value={false}
+                        checked={update.data.isAdmin === false}
+                        onchange={() => update.setRole(false)}
                     />
-                    <label for="normal" class="-mt-0.5">
+                    <label for="update-role-normal" class="-mt-0.5">
                         <div class="text-[16px] font-medium">Normal User</div>
                         <div class="text-sm text-gray-400">Can only view records</div>
                     </label>
                 </div>
                 <div class="mb-2 flex items-start gap-4 rounded-lg border border-gray-300 p-4">
                     <input
-                        id="admin"
+                        id="update-role-admin"
                         type="radio"
                         name="role"
                         class="radio"
-                        bind:group={update.data.isAdmin}
-                        value={true}
+                        checked={update.data.isAdmin === true}
+                        onchange={() => update.setRole(true)}
                     />
-                    <label for="admin" class="-mt-0.5">
+                    <label for="update-role-admin" class="-mt-0.5">
                         <div class="text-[16px] font-medium">Admin User</div>
                         <div class="text-sm text-gray-400">Can view, update and delete records</div>
                     </label>

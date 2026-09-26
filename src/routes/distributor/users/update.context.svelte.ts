@@ -141,6 +141,10 @@ class UpdateContext {
         return true
     }
 
+    setRole(flag: boolean) {
+        this.data.isAdmin = flag
+    }
+
     async send() {
         if (this.loading) return
 
