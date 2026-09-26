@@ -50,22 +50,45 @@
                     </button>
                 {/if}
             </div>
-            {#if overdue}
-                <span class="overdue-badge">Overdue · {days} {days === 1 ? 'day' : 'days'}</span>
-            {/if}
-            <button
-                type="button"
-                class="qty"
-                aria-label={expanded
-                    ? 'Hide freezers in this deployment'
-                    : 'View freezers in this deployment'}
-                aria-expanded={expanded}
-                onclick={() => (expanded = !expanded)}
-            >
+              {#if overdue}
+                  <span class="overdue-badge">Overdue · {days} {days === 1 ? 'day' : 'days'}</span>
+                {/if}
+              <div class="row-actions">
+                  <button
+                     type="button"
+                     class="action"
+                     aria-label="Edit deployment items"
+                     onclick={() => deployments.openEdit(deployment)}
+                  >
+                     <Icon icon="bi:pencil" width="14" />
+                  </button>
+                  <button
+                     type="button"
+                     class="action action-danger"
+                     aria-label="Delete deployment"
+                     disabled={deployments.isDeleting(deployment.id)}
+                     onclick={() => deployments.requestDelete(deployment)}
+                  >
+                      {#if deployments.isDeleting(deployment.id)}
+                          <span class="loading loading-sm loading-spinner"></span>
+                      {:else}
+                          <Icon icon="bi:trash" width="14" />
+                      {/if}
+                  </button>
+              </div>
+              <button
+                 type="button"
+                 class="qty"
+                 aria-label={expanded
+                      ? 'Hide freezers in this deployment'
+                      : 'View freezers in this deployment'}
+                 aria-expanded={expanded}
+                 onclick={() => (expanded = !expanded)}
+              >
                   <Icon icon="bi:boxes" width="16" />
                   <span>{quantity}</span>
-                <Icon icon={expanded ? 'bi:chevron-up' : 'bi:chevron-down'} width="14" />
-            </button>
+                  <Icon icon={expanded ? 'bi:chevron-up' : 'bi:chevron-down'} width="14" />
+              </button>
         </div>
     </div>
 
@@ -115,9 +138,21 @@
         @apply flex items-center justify-end gap-1.5;
     }
 
-    .edit {
-        @apply inline-flex cursor-pointer items-center justify-center rounded p-0.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600;
-    }
+     .edit {
+          @apply inline-flex cursor-pointer items-center justify-center rounded p-0.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600;
+      }
+
+      .row-actions {
+          @apply flex items-center gap-1;
+      }
+
+      .action {
+          @apply inline-flex cursor-pointer items-center justify-center rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 disabled:cursor-not-allowed disabled:opacity-60;
+      }
+
+      .action-danger {
+          @apply hover:bg-red-50 hover:text-red-500;
+      }
 
     .overdue-badge {
         @apply inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-semibold text-red-600;
