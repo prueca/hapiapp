@@ -37,36 +37,52 @@
      </div>
 
      <div class="actions">
-         <button
-            type="button"
-            class="btn btn-ghost"
-            disabled={state.deployStep === 1}
-            onclick={() => state.prevStep()}
-         >
-            Back
-         </button>
+          <button
+             type="button"
+             class="btn btn-ghost"
+             disabled={state.deployStep === 1}
+             onclick={() => state.prevStep()}
+           >
+             Back
+           </button>
 
-         {#if state.deployStep < 3}
-             <button
-                type="button"
-                class="btn"
-                disabled={!state.canReachStep(state.deployStep + 1)}
-                onclick={() => state.nextStep()}
-             >
-                Next
-             </button>
-         {:else}
-             <button
-                type="button"
-                class="btn"
-                disabled={state.submitting ||
+          <button
+             type="button"
+             class="btn btn-ghost"
+             onclick={() => state.cancelWizard()}
+           >
+             Cancel
+           </button>
+
+          <div class="grow"></div>
+
+           {#if state.deployStep < 3}
+               <button
+                 type="button"
+                 class="btn"
+                 disabled={!state.canReachStep(state.deployStep + 1)}
+                 onclick={() => state.nextStep()}
+               >
+                 Next
+               </button>
+           {:else}
+               <button
+                 type="button"
+                 class="btn"
+                 disabled={state.submitting ||
                     state.selectedFreezers.length === 0 ||
-                    !state.designatedAccount}
-                onclick={() => state.submitBatch()}
+                     !state.designatedAccount}
+                 onclick={() => state.submitBatch()}
              >
-                {#if state.submitting}Deploying...{:else}Deploy {state.selectedFreezers.length} FREEZERS{/if}
-             </button>
-         {/if}
+              {#if state.submitting}
+                    {state.isCreate ? 'Deploying...' : 'Saving...'}
+                 {:else}
+                     {state.isCreate
+                       ? `Deploy ${state.selectedFreezers.length} FREEZERS`
+                       : 'Update deployment'}
+                 {/if}
+               </button>
+           {/if}
      </div>
 </div>
 
