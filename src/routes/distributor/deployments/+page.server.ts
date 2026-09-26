@@ -15,8 +15,7 @@ const SORT_KEYS = new Set<string>([
 
 const STATUS_VALUES = new Set<string>(['all', ...Object.values(deploymentStatus)])
 
-export const load = async ({ locals, request }) => {
-     const url = new URL(request.url)
+export const load = async ({ locals, url }) => {
      const originId = locals.account?.id
 
      const query = (url.searchParams.get('query') ?? '').trim()
