@@ -43,9 +43,11 @@ export const freezerStatusEnum = pgEnum('freezer_status', [
   * Enum for Deployment Status. Tracks the logistics state of a deployment record.
   */
 export const deploymentStatus = pgEnum('deployment_status', [
-     deploymentStatusValues.IN_TRANSIT,
-     deploymentStatusValues.DELIVERED,
-     deploymentStatusValues.CANCELLED,
-     deploymentStatusValues.PROCESSING,
-     deploymentStatusValues.PENDING
+      deploymentStatusValues.IN_TRANSIT,
+      deploymentStatusValues.DELIVERED,
+      deploymentStatusValues.CANCELLED,
+      deploymentStatusValues.PROCESSING,
+      deploymentStatusValues.PENDING,
+      deploymentStatusValues.TO_BE_DELIVERED
+
 ])
