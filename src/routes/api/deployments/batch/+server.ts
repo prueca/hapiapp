@@ -65,7 +65,7 @@ export const POST = async ({ request, locals }) => {
                 .values({
                     originId: account.id,
                     designationId,
-                    status: deploymentStatus.PROCESSING,
+                     status: deploymentStatus.TO_BE_DELIVERED,
                     deploymentDate
                 })
                 .returning()
