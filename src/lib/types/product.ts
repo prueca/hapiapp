@@ -1,22 +1,51 @@
-import z from 'zod'
+import { product } from '$lib/drizzle/schema/product'
+import {
+    type CategoryFilter,
+    type PackagingFilter,
+    type EnlistedForFilter,
+    PRODUCT_CATEGORY_OPTIONS,
+    PRODUCT_PACKAGING_OPTIONS,
+    PRODUCT_ENLISTED_FOR_OPTIONS,
+    PRODUCT_ENLISTED_FOR_OPTIONS_ALL,
+    DEFAULT_CATEGORY_FILTER,
+    DEFAULT_PACKAGING_FILTER,
+    DEFAULT_ENLISTED_FOR_FILTER
+} from '$lib/config/product.options'
 
-export const ProductSchema = z.object({
-    name: z.string(),
-    description: z.string(),
-    category: z.string(),
-    price: z.number(),
-    currency: z.string(),
-    size_value: z.number(),
-    size_unit: z.string(),
-    packaging: z.string()
-})
+export {
+    type CategoryFilter,
+    type PackagingFilter,
+    type EnlistedForFilter,
+    PRODUCT_CATEGORY_OPTIONS,
+    PRODUCT_PACKAGING_OPTIONS,
+    PRODUCT_ENLISTED_FOR_OPTIONS,
+    PRODUCT_ENLISTED_FOR_OPTIONS_ALL,
+    DEFAULT_CATEGORY_FILTER,
+    DEFAULT_PACKAGING_FILTER,
+    DEFAULT_ENLISTED_FOR_FILTER
+}
 
-export type Product = z.infer<typeof ProductSchema>
+export type Product = typeof product.$inferSelect
 
-export type SortKey = 'name' | 'price-asc' | 'price-desc'
+export type ProductRow = Product
+
+export type SortKey = 'name-asc' | 'price-asc' | 'price-desc' | 'createdAt-desc'
 
 export const SORT_OPTIONS: { value: SortKey; label: string }[] = [
-    { value: 'name', label: 'Name (A-Z)' },
+    { value: 'createdAt-desc', label: 'Recently Added' },
+    { value: 'name-asc', label: 'Name (A-Z)' },
     { value: 'price-asc', label: 'Price (Low to High)' },
     { value: 'price-desc', label: 'Price (High to Low)' }
 ]
+
+export type ProductMeta = {
+    sort: SortKey
+    filterCategory: CategoryFilter
+    filterPackaging: PackagingFilter
+    filterEnlistedFor: EnlistedForFilter
+    categoryOptions: string[]
+    packagingOptions: string[]
+    enlistedForOptions: string[]
+    page: number
+    hasMore: boolean
+}

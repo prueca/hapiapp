@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm'
-import { account, user, freezer, deployment, deploymentItem, cabcon, cabconItem } from './schema'
+import { account, user, freezer, deployment, deploymentItem, cabcon, cabconItem, product } from './schema'
 
 export const accountRelation = relations(account, ({ one, many }) => ({
     users: many(user),
@@ -78,6 +78,8 @@ export const cabconRelations = relations(cabcon, ({ one, many }) => ({
          relationName: 'cabcon_item'
       })
 }))
+
+export const productRelations = relations(product, () => ({}))
 
 export const cabconItemRelations = relations(cabconItem, ({ one }) => ({
     cabcon: one(cabcon, {

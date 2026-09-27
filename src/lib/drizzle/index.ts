@@ -9,7 +9,8 @@ import {
      deploymentRelations,
      deploymentItemRelations,
      cabconRelations,
-     cabconItemRelations
+     cabconItemRelations,
+     productRelations
 } from './relations'
 
 const pool = new Pool({
@@ -27,7 +28,8 @@ const db = drizzle(pool, {
          deploymentRelations,
          deploymentItemRelations,
          cabconRelations,
-         cabconItemRelations
+         cabconItemRelations,
+         productRelations
      }
 })
 

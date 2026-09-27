@@ -4,6 +4,7 @@ import userRoles from '$lib/config/user.roles'
 import { freezerStatus } from '$lib/config/freezer.options'
 import { deploymentStatus as deploymentStatusValues } from '$lib/config/deployment.status'
 import { cabconItemStatus } from '$lib/config/cabcon.options'
+import { productCategory, productPackaging, productEnlistedFor } from '$lib/config/product.options'
 
 /**
  * Enum for Account Types. Defines the specific roles permitted within the ecosystem.
@@ -63,4 +64,39 @@ export const cabconItemStatusEnum = pgEnum('cabcon_item_status', [
     cabconItemStatus.MANUAL_SUBMIT,
     cabconItemStatus.MATCHED,
     cabconItemStatus.MISMATCH
+])
+
+/**
+  * Enum for Product Category. Classifies a product within the catalog.
+  */
+export const productCategoryEnum = pgEnum('enum_product_category', [
+    productCategory.COMBINATION_PACKS,
+    productCategory.LIMITED_EDITION,
+    productCategory.MULTI_SERVE_TUBS,
+    productCategory.PREMIUM_NOVELTIES,
+    productCategory.SINGLE_SERVE_NOVELTIES,
+    productCategory.SPECIALTY_TUBS
+])
+
+/**
+  * Enum for Product Packaging. Describes the physical packaging of a product.
+  */
+export const productPackagingEnum = pgEnum('enum_product_packaging', [
+    productPackaging.BOX,
+    productPackaging.CONE,
+    productPackaging.CUP,
+    productPackaging.GALLON,
+    productPackaging.PINT,
+    productPackaging.STICK,
+    productPackaging.TUB
+])
+
+/**
+ * Enum for Product Enlisted For. Indicates the account type a product is
+ * enlisted for (direct account vs. dealers).
+ */
+export const productEnlistedForEnum = pgEnum('enum_product_enlisted_for', [
+     productEnlistedFor.FOR_DIRECT_ACCOUNT,
+     productEnlistedFor.FOR_DEALERS,
+     productEnlistedFor.ALL
 ])
