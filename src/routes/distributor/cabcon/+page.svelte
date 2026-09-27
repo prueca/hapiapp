@@ -1,14 +1,11 @@
 <script lang="ts">
     import Dock from '../../components/Dock.svelte'
     import TopBar from '../../components/TopBar'
-    import type { CabconRow, CabconMeta } from '$lib/types/cabcon'
     import List from './components/List.svelte'
     import Toolbar from './components/Toolbar.svelte'
     import Create from './components/Create.svelte'
     import ConfirmDelete from './components/ConfirmDelete.svelte'
     import state from './cabcon.context.svelte'
-
-    let { data }: { data: { data: CabconRow[]; meta: CabconMeta } } = $props()
 </script>
 
 <div class="content-wrapper">
@@ -41,7 +38,7 @@
                         <div class="overflow-hidden rounded-lg bg-white">
                             <Toolbar />
 
-                            <List rows={data.data} meta={data.meta} />
+                            <List />
 
                             <ConfirmDelete />
                         </div>

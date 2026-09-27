@@ -9,13 +9,18 @@ import {
 } from '$lib/types/cabcon'
 import api from '$lib/api'
 import moment from 'moment'
-import { invalidateAll, goto } from '$app/navigation'
 import _ from 'lodash'
 
 const today = () => new Date().toISOString().slice(0, 10)
 
 const toDateKey = (d: unknown) =>
     d instanceof Date && !Number.isNaN(d.getTime()) ? d.toISOString().slice(0, 10) : today()
+
+const toDateOrNull = (v: unknown): Date | null => {
+    if (v == null) return null
+    const d = typeof v === 'string' ? new Date(v) : (v as Date)
+    return Number.isNaN(d.getTime()) ? null : d
+}
 
 const formatDate = (d: Date) => moment(d).format('MMM-DD-YYYY, ddd')
 
@@ -25,8 +30,6 @@ const errorText = (e: any, fallback: string) =>
 const DEFAULT_SORT: SortKey = 'codeMonth-desc'
 
 const DEFAULT_CODE_MONTH_FILTER = 'all'
-
-let searchTimer: ReturnType<typeof setTimeout> | undefined
 
 type FormMode = 'create' | 'update'
 
@@ -47,6 +50,9 @@ class Cabcon {
     page = $state(1)
     hasMore = $state(false)
     canLoadMore = $state(false)
+
+    loading = $state(false)
+    error = $state<string | null>(null)
 
     openFilters = $state(false)
 
@@ -74,47 +80,64 @@ class Cabcon {
     pendingDelete: CabconRow | null = $state(null)
     deleteError = $state('')
 
-    private go(
-        page: number,
-        patch: Partial<{ sort: SortKey; filterStatus: StatusFilter; filterCodeMonth: string }>
-    ) {
-        const params = new URLSearchParams()
-        const sort = patch.sort ?? this.sort
-        const filterStatus = patch.filterStatus ?? this.filterStatus
-        const filterCodeMonth = patch.filterCodeMonth ?? this.filterCodeMonth
+    async load() {
+        if (this.loading) return
 
-        if (sort && sort !== DEFAULT_SORT) params.set('sort', sort)
-        if (filterStatus && filterStatus !== DEFAULT_STATUS_FILTER) {
-            params.set('filterStatus', filterStatus)
-        }
-        if (filterCodeMonth && filterCodeMonth !== DEFAULT_CODE_MONTH_FILTER) {
-            params.set('filterCodeMonth', filterCodeMonth)
-        }
-        if (page > 1) params.set('page', String(page))
+        this.loading = true
+        this.error = null
 
-        const base = typeof document !== 'undefined' ? document.location.pathname : ''
-        const suffix = params.toString()
-        goto(suffix ? `${base}?${suffix}` : base, { replaceState: true })
+        try {
+            const res = await api.post('distributor/cabcon', {
+                json: {
+                    sort: this.sort,
+                    filterStatus: this.filterStatus,
+                    filterCodeMonth: this.filterCodeMonth,
+                    page: this.page
+                }
+            })
+            const body: Data<{ rows: CabconRow[]; meta: CabconMeta }> = await res.json()
+            const { rows, meta } = body.data
+
+            this.cabcons = rows.map((row) => ({
+                ...row,
+                closeDate: toDateOrNull(row.closeDate) as Date
+            }))
+            this.meta = meta
+            this.sort = meta.sort
+            this.filterStatus = meta.filterStatus
+            this.filterCodeMonth = meta.filterCodeMonth
+            this.page = meta.page
+            this.hasMore = meta.hasMore
+            this.canLoadMore = meta.hasMore
+        } catch (e: any) {
+            this.error = errorText(e, 'Unable to load codes of the month.')
+        } finally {
+            this.loading = false
+        }
     }
 
     setSort(sort: SortKey) {
         this.sort = sort
-        this.go(1, {})
+        this.page = 1
+        this.load()
     }
 
     setStatusFilter(filterStatus: StatusFilter) {
         this.filterStatus = filterStatus
-        this.go(1, {})
+        this.page = 1
+        this.load()
     }
 
     setCodeMonthFilter(value: string) {
         this.filterCodeMonth = value
-        this.go(1, {})
+        this.page = 1
+        this.load()
     }
 
     loadMore() {
         if (!this.canLoadMore) return
-        this.go(this.page + 1, {})
+        this.page = this.page + 1
+        this.load()
     }
 
     closeFilters() {
@@ -125,18 +148,8 @@ class Cabcon {
         this.sort = DEFAULT_SORT
         this.filterStatus = DEFAULT_STATUS_FILTER
         this.filterCodeMonth = DEFAULT_CODE_MONTH_FILTER
-        this.go(1, {})
-    }
-
-    load(rows: CabconRow[], meta: CabconMeta) {
-        this.cabcons = rows
-        this.meta = meta
-        this.sort = meta.sort
-        this.filterStatus = meta.filterStatus
-        this.filterCodeMonth = meta.filterCodeMonth
-        this.page = meta.page
-        this.hasMore = meta.hasMore
-        this.canLoadMore = meta.hasMore
+        this.page = 1
+        this.load()
     }
 
     openCreate() {
@@ -184,7 +197,7 @@ class Cabcon {
 
         try {
             if (this.formMode === 'update' && this.editing) {
-                await api.post('cabcon/update', {
+                await api.post('distributor/cabcon/update', {
                     json: {
                         id: this.editing.id,
                         codeMonth,
@@ -192,7 +205,7 @@ class Cabcon {
                     }
                 })
             } else {
-                await api.post('cabcon', {
+                await api.post('distributor/cabcon/create', {
                     json: {
                         codeMonth,
                         closeDate: this.newCloseDate
@@ -200,7 +213,7 @@ class Cabcon {
                 })
             }
 
-            await invalidateAll()
+            await this.load()
             this.openCreate()
         } catch (e: any) {
             this.submitError = errorText(
@@ -231,13 +244,13 @@ class Cabcon {
         this.deleting = next
 
         try {
-            await api.post('cabcon/delete', { json: { id: row.id } })
+            await api.post('distributor/cabcon/delete', { json: { id: row.id } })
 
             this.cabcons = this.cabcons.filter((item) => item.id !== row.id)
             this.pendingDelete = null
             this.deleteError = ''
 
-            await invalidateAll()
+            await this.load()
         } catch (e: any) {
             this.deleteError = errorText(
                 e,

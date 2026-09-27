@@ -1,16 +1,20 @@
 <script lang="ts">
-    import type { CabconRow, CabconMeta } from '$lib/types/cabcon'
+    import { onMount } from 'svelte'
     import Item from './Item.svelte'
     import state from '../cabcon.context.svelte'
 
-    let { rows, meta }: { rows: CabconRow[]; meta: CabconMeta } = $props()
-
-    $effect(() => {
-        state.load(rows, meta)
-    })
+    onMount(() => state.load())
 </script>
 
-{#if !state.cabcons.length}
+{#if state.loading}
+    <div class="state p-4">
+        <span class="loading loading-sm loading-spinner"></span>
+    </div>
+{:else if state.error}
+    <div class="state p-4">
+        <p>{state.error}</p>
+    </div>
+{:else if !state.cabcons.length}
     <div class="state p-4">
         <p>No codes match your filters.</p>
         {#if state.hasFilters}
