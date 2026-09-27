@@ -7,10 +7,8 @@
     let { cabcon }: { cabcon: CabconRow } = $props()
 
     let date = $derived(
-        cabcon.closeDate && !Number.isNaN(cabcon.closeDate.getTime())
-            ? state.formatDate(cabcon.closeDate)
-            : '—'
-    )
+        cabcon.closeDate ? state.formatDate(new Date(cabcon.closeDate)) : '—'
+     )
 
     let updating = $derived(state.isUpdating(cabcon.id))
     let deleting = $derived(state.isDeleting(cabcon.id))

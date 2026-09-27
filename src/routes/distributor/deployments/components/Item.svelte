@@ -11,10 +11,10 @@
 
     let designation = $derived(deployment.designation)
     let date = $derived(
-        deployment.deploymentDate && !Number.isNaN(deployment.deploymentDate.getTime())
-             ? deployments.formatDate(deployment.deploymentDate)
-             : '—'
-     )
+        deployment.deploymentDate
+              ? deployments.formatDate(new Date(deployment.deploymentDate))
+              : '—'
+      )
 
     let overdue = $derived(deployments.isOverdue(deployment))
     let days = $derived(deployments.daysOverdue(deployment))
