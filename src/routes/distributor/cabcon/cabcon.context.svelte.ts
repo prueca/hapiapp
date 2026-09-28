@@ -27,9 +27,11 @@ const formatDate = (d: Date) => moment(d).format('MMM-DD-YYYY, ddd')
 const errorText = (e: any, fallback: string) =>
     e?.data?.message ?? e?.data?.code ?? e?.message ?? fallback
 
-const DEFAULT_SORT: SortKey = 'codeMonth-desc'
+const DEFAULT_SORT: SortKey = 'startDate-desc'
 
 const DEFAULT_CODE_MONTH_FILTER = 'all'
+
+let searchTimer: ReturnType<typeof setTimeout> | undefined
 
 type FormMode = 'create' | 'update'
 
@@ -39,6 +41,7 @@ class Cabcon {
         sort: DEFAULT_SORT,
         filterStatus: DEFAULT_STATUS_FILTER,
         filterCodeMonth: DEFAULT_CODE_MONTH_FILTER,
+        query: '',
         codeMonthOptions: [],
         page: 1,
         hasMore: false
@@ -47,6 +50,7 @@ class Cabcon {
     sort: SortKey = $state(DEFAULT_SORT)
     filterStatus: StatusFilter = $state(DEFAULT_STATUS_FILTER)
     filterCodeMonth = $state(DEFAULT_CODE_MONTH_FILTER)
+    queryInput = $state('')
     page = $state(1)
     hasMore = $state(false)
     canLoadMore = $state(false)
@@ -56,7 +60,7 @@ class Cabcon {
 
     openFilters = $state(false)
 
-    activeTab = $state<'listing' | 'create'>('create')
+    activeTab = $state<'listing' | 'create'>('listing')
 
     formMode = $state<FormMode>('create')
     editing: CabconRow | null = $state(null)
@@ -72,7 +76,8 @@ class Cabcon {
     hasFilters = $derived(
         this.sort !== DEFAULT_SORT ||
             this.filterStatus !== DEFAULT_STATUS_FILTER ||
-            this.filterCodeMonth !== DEFAULT_CODE_MONTH_FILTER
+            this.filterCodeMonth !== DEFAULT_CODE_MONTH_FILTER ||
+            this.queryInput.trim() !== ''
     )
 
     isCreate = $derived(this.formMode === 'create')
@@ -93,6 +98,7 @@ class Cabcon {
                     sort: this.sort,
                     filterStatus: this.filterStatus,
                     filterCodeMonth: this.filterCodeMonth,
+                    query: this.queryInput,
                     page: this.page
                 }
             })
@@ -105,6 +111,7 @@ class Cabcon {
                 endDate: toDateOrNull(row.endDate) as Date
             }))
             this.meta = meta
+            this.queryInput = meta.query
             this.sort = meta.sort
             this.filterStatus = meta.filterStatus
             this.filterCodeMonth = meta.filterCodeMonth
@@ -136,6 +143,14 @@ class Cabcon {
         this.load()
     }
 
+    onSearchInput() {
+        if (searchTimer) clearTimeout(searchTimer)
+        this.page = 1
+        searchTimer = setTimeout(() => {
+            this.load()
+        }, 300)
+    }
+
     loadMore() {
         if (!this.canLoadMore) return
         this.page = this.page + 1
@@ -147,9 +162,11 @@ class Cabcon {
     }
 
     resetFilters() {
+        if (searchTimer) clearTimeout(searchTimer)
         this.sort = DEFAULT_SORT
         this.filterStatus = DEFAULT_STATUS_FILTER
         this.filterCodeMonth = DEFAULT_CODE_MONTH_FILTER
+        this.queryInput = ''
         this.page = 1
         this.load()
     }
@@ -185,6 +202,7 @@ class Cabcon {
     }
 
     resetToListing() {
+        if (searchTimer) clearTimeout(searchTimer)
         this.formMode = 'create'
         this.editing = null
         this.newCodeMonth = ''
@@ -194,6 +212,7 @@ class Cabcon {
         this.sort = DEFAULT_SORT
         this.filterStatus = DEFAULT_STATUS_FILTER
         this.filterCodeMonth = DEFAULT_CODE_MONTH_FILTER
+        this.queryInput = ''
         this.page = 1
         this.activeTab = 'listing'
     }
