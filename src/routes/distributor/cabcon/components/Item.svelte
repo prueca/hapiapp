@@ -6,9 +6,8 @@
 
     let { cabcon }: { cabcon: CabconRow } = $props()
 
-    let date = $derived(
-        cabcon.closeDate ? state.formatDate(new Date(cabcon.closeDate)) : '—'
-     )
+    let startDate = $derived(cabcon.startDate ? state.formatDate(new Date(cabcon.startDate)) : '—')
+    let endDate = $derived(cabcon.endDate ? state.formatDate(new Date(cabcon.endDate)) : '—')
 
     let updating = $derived(state.isUpdating(cabcon.id))
     let deleting = $derived(state.isDeleting(cabcon.id))
@@ -28,8 +27,14 @@
         <div class="meta">
             <div class="date-line">
                 <span class="date">
-                    <span class="label">Close Date:</span>
-                    {date}
+                    <span class="label">Start:</span>
+                    {startDate}
+                </span>
+            </div>
+            <div class="date-line">
+                <span class="date">
+                    <span class="label">End:</span>
+                    {endDate}
                 </span>
                 {#if updating}
                     <span class="loading loading-xs loading-spinner"></span>
