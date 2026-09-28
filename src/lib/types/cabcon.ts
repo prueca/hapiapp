@@ -39,6 +39,7 @@ export type CabconMeta = {
     sort: SortKey
     filterStatus: StatusFilter
     filterCodeMonth: string
+    query: string
     codeMonthOptions: string[]
     page: number
     hasMore: boolean
