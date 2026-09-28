@@ -31,6 +31,7 @@ const schema = z.object({
     sort: z.string().optional(),
     filterStatus: z.string().optional(),
     filterCodeMonth: z.string().optional(),
+    query: z.string().optional(),
     page: z.coerce.number().int().positive().optional()
 })
 
@@ -39,9 +40,10 @@ export const POST = async ({ request, locals }) => {
         const account = locals.account!
 
         const meta: CabconMeta = {
-            sort: 'codeMonth-desc',
+            sort: 'startDate-desc',
             filterStatus: DEFAULT_STATUS_FILTER,
             filterCodeMonth: 'all',
+            query: '',
             codeMonthOptions: [],
             page: 1,
             hasMore: false
@@ -65,7 +67,7 @@ export const POST = async ({ request, locals }) => {
 
         const resolvedSort: SortKey = SORT_KEYS.has(validation.data.sort ?? '')
             ? (validation.data.sort as SortKey)
-            : 'codeMonth-desc'
+            : 'startDate-desc'
 
         meta.sort = resolvedSort
 
@@ -79,6 +81,8 @@ export const POST = async ({ request, locals }) => {
         const filterCodeMonth = _.trim(validation.data.filterCodeMonth ?? '') || 'all'
 
         meta.filterCodeMonth = filterCodeMonth
+
+        const query = _.trim(validation.data.query ?? '')
 
         const page =
             validation.data.page &&
@@ -110,6 +114,7 @@ export const POST = async ({ request, locals }) => {
         const filtered = rows.filter((row) => {
             if (filterCodeMonth !== 'all' && row.codeMonth !== filterCodeMonth) return false
             if (filterStatus !== 'all' && statusOf(row) !== filterStatus) return false
+            if (query && !row.codeMonth.toLowerCase().includes(query.toLowerCase())) return false
             return true
         })
 
@@ -138,6 +143,7 @@ export const POST = async ({ request, locals }) => {
         const data = filtered.slice(0, cap)
 
         meta.codeMonthOptions = codeMonthOptions
+        meta.query = query
         meta.hasMore = filtered.length > cap
 
         return json({ data: { rows: data, meta } })
