@@ -61,7 +61,8 @@ class Cabcon {
     formMode = $state<FormMode>('create')
     editing: CabconRow | null = $state(null)
     newCodeMonth = $state('')
-    newCloseDate = $state(today())
+    newStartDate = $state(today())
+    newEndDate = $state(today())
     submitting = $state(false)
     submitError = $state('')
 
@@ -100,7 +101,8 @@ class Cabcon {
 
             this.cabcons = rows.map((row) => ({
                 ...row,
-                closeDate: toDateOrNull(row.closeDate) as Date
+                startDate: toDateOrNull(row.startDate) as Date,
+                endDate: toDateOrNull(row.endDate) as Date
             }))
             this.meta = meta
             this.sort = meta.sort
@@ -156,7 +158,8 @@ class Cabcon {
         this.formMode = 'create'
         this.editing = null
         this.newCodeMonth = ''
-        this.newCloseDate = today()
+        this.newStartDate = today()
+        this.newEndDate = today()
         this.submitError = ''
         this.activeTab = 'create'
     }
@@ -165,7 +168,8 @@ class Cabcon {
         this.formMode = 'update'
         this.editing = row
         this.newCodeMonth = row.codeMonth
-        this.newCloseDate = toDateKey(row.closeDate)
+        this.newStartDate = toDateKey(row.startDate)
+        this.newEndDate = toDateKey(row.endDate)
         this.submitError = ''
         this.activeTab = 'create'
     }
@@ -174,8 +178,23 @@ class Cabcon {
         this.formMode = 'create'
         this.editing = null
         this.newCodeMonth = ''
-        this.newCloseDate = today()
+        this.newStartDate = today()
+        this.newEndDate = today()
         this.submitError = ''
+        this.activeTab = 'listing'
+    }
+
+    resetToListing() {
+        this.formMode = 'create'
+        this.editing = null
+        this.newCodeMonth = ''
+        this.newStartDate = today()
+        this.newEndDate = today()
+        this.submitError = ''
+        this.sort = DEFAULT_SORT
+        this.filterStatus = DEFAULT_STATUS_FILTER
+        this.filterCodeMonth = DEFAULT_CODE_MONTH_FILTER
+        this.page = 1
         this.activeTab = 'listing'
     }
 
@@ -187,8 +206,12 @@ class Cabcon {
             this.submitError = 'Code month is required.'
             return
         }
-        if (!this.newCloseDate) {
-            this.submitError = 'Close date is required.'
+        if (!this.newStartDate) {
+            this.submitError = 'Start date is required.'
+            return
+        }
+        if (!this.newEndDate) {
+            this.submitError = 'End date is required.'
             return
         }
 
@@ -201,20 +224,21 @@ class Cabcon {
                     json: {
                         id: this.editing.id,
                         codeMonth,
-                        closeDate: this.newCloseDate
+                        startDate: this.newStartDate,
+                        endDate: this.newEndDate
                     }
                 })
             } else {
                 await api.post('distributor/cabcon/create', {
                     json: {
                         codeMonth,
-                        closeDate: this.newCloseDate
+                        startDate: this.newStartDate,
+                        endDate: this.newEndDate
                     }
                 })
             }
 
-            await this.load()
-            this.openCreate()
+            this.resetToListing()
         } catch (e: any) {
             this.submitError = errorText(
                 e,
