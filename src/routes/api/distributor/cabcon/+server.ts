@@ -15,15 +15,17 @@ const MAX_ROWS = 600
 const SORT_KEYS = new Set<string>([
     'codeMonth-asc',
     'codeMonth-desc',
-    'closeDate-asc',
-    'closeDate-desc',
+    'startDate-asc',
+    'startDate-desc',
+    'endDate-asc',
+    'endDate-desc',
     'status-asc',
     'status-desc'
 ])
 
 const STATUS_VALUES = new Set<string>(['all', 'open', 'closed'])
 
-const STATUS_EXPR = sql`case when "cabcon"."close_date" >= current_date then 'open' else 'closed' end`
+const STATUS_EXPR = sql`case when "cabcon"."end_date" >= current_date then 'open' else 'closed' end`
 
 const schema = z.object({
     sort: z.string().optional(),
@@ -91,7 +93,7 @@ export const POST = async ({ request, locals }) => {
 
         const today = new Date().toISOString().slice(0, 10)
         const statusOf = (row: CabconRow): 'open' | 'closed' =>
-            (row.closeDate as Date).toISOString().slice(0, 10) >= today ? 'open' : 'closed'
+            (row.endDate as Date).toISOString().slice(0, 10) >= today ? 'open' : 'closed'
 
         const rows = (await db.query.cabcon.findMany({
             where: (cabcon, { and, eq, isNull }) =>
@@ -117,10 +119,14 @@ export const POST = async ({ request, locals }) => {
                     return a.codeMonth.localeCompare(b.codeMonth)
                 case 'codeMonth-desc':
                     return b.codeMonth.localeCompare(a.codeMonth)
-                case 'closeDate-asc':
-                    return (a.closeDate as Date).getTime() - (b.closeDate as Date).getTime()
-                case 'closeDate-desc':
-                    return (b.closeDate as Date).getTime() - (a.closeDate as Date).getTime()
+                case 'startDate-asc':
+                    return (a.startDate as Date).getTime() - (b.startDate as Date).getTime()
+                case 'startDate-desc':
+                    return (b.startDate as Date).getTime() - (a.startDate as Date).getTime()
+                case 'endDate-asc':
+                    return (a.endDate as Date).getTime() - (b.endDate as Date).getTime()
+                case 'endDate-desc':
+                    return (b.endDate as Date).getTime() - (a.endDate as Date).getTime()
                 case 'status-asc':
                     return statusOf(a).localeCompare(statusOf(b))
                 case 'status-desc':
