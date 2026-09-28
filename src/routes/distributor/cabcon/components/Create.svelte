@@ -32,13 +32,19 @@
         </fieldset>
 
         <fieldset class="fieldset">
-            <label class="label" for="close-date">Close Date</label>
+            <label class="label" for="start-date">Start Date</label>
             <input
-                id="close-date"
+                id="start-date"
                 type="date"
                 class="input w-full"
-                bind:value={state.newCloseDate}
+                bind:value={state.newStartDate}
             />
+            <p class="hint">Reporting window opens on this date.</p>
+        </fieldset>
+
+        <fieldset class="fieldset">
+            <label class="label" for="end-date">End Date</label>
+            <input id="end-date" type="date" class="input w-full" bind:value={state.newEndDate} />
             <p class="hint">Report submissions open until this date.</p>
         </fieldset>
 
@@ -57,7 +63,10 @@
             <button
                 type="submit"
                 class="btn"
-                disabled={state.submitting || !state.newCodeMonth.trim() || !state.newCloseDate}
+                disabled={state.submitting ||
+                    !state.newCodeMonth.trim() ||
+                    !state.newStartDate ||
+                    !state.newEndDate}
                 onclick={() => state.submit()}
             >
                 {#if state.submitting}
