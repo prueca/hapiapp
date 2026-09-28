@@ -11,7 +11,8 @@ import { eq, and, isNull } from 'drizzle-orm'
 const schema = z.object({
     id: z.string().optional(),
     codeMonth: z.string().nonempty(),
-    closeDate: z.coerce.date()
+    startDate: z.coerce.date(),
+    endDate: z.coerce.date()
 })
 
 const DUPLICATE_CODE_MONTH = 'This code month already exists'
@@ -47,7 +48,7 @@ export const POST = async ({ request, locals }) => {
             )
         }
 
-        const { codeMonth, closeDate } = validation.data
+        const { codeMonth, startDate, endDate } = validation.data
 
         const [existing] = await db
             .select()
@@ -63,7 +64,8 @@ export const POST = async ({ request, locals }) => {
             .insert(t.cabcon)
             .values({
                 codeMonth,
-                closeDate,
+                startDate,
+                endDate,
                 authorId: account.id
             })
             .returning()
