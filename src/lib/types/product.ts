@@ -39,6 +39,7 @@ export const SORT_OPTIONS: { value: SortKey; label: string }[] = [
 ]
 
 export type ProductMeta = {
+    search: string
     sort: SortKey
     filterCategory: CategoryFilter
     filterPackaging: PackagingFilter
