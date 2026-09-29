@@ -28,9 +28,12 @@ const errorText = (e: any, fallback: string) =>
 
 const formatDate = (d: Date) => moment(d).format('MMM-DD-YYYY, ddd')
 
+let searchTimer: ReturnType<typeof setTimeout> | undefined
+
 class Products {
     products: ProductRow[] = $state([])
     meta: ProductMeta = $state({
+        search: '',
         sort: DEFAULT_SORT,
         filterCategory: DEFAULT_CATEGORY_FILTER,
         filterPackaging: DEFAULT_PACKAGING_FILTER,
@@ -42,6 +45,7 @@ class Products {
         hasMore: false
     })
 
+    search = $state('')
     sort: SortKey = $state(DEFAULT_SORT)
     filterCategory: CategoryFilter = $state(DEFAULT_CATEGORY_FILTER)
     filterPackaging: PackagingFilter = $state(DEFAULT_PACKAGING_FILTER)
@@ -79,7 +83,8 @@ class Products {
     enlistedForFormOptions = PRODUCT_ENLISTED_FOR_OPTIONS_ALL
 
     hasFilters = $derived(
-        this.sort !== DEFAULT_SORT ||
+        this.search !== '' ||
+            this.sort !== DEFAULT_SORT ||
             this.filterCategory !== DEFAULT_CATEGORY_FILTER ||
             this.filterPackaging !== DEFAULT_PACKAGING_FILTER ||
             this.filterEnlistedFor !== DEFAULT_ENLISTED_FOR_FILTER
@@ -94,6 +99,7 @@ class Products {
     private go(
         page: number,
         patch: Partial<{
+            search: string
             sort: SortKey
             filterCategory: CategoryFilter
             filterPackaging: PackagingFilter
@@ -101,11 +107,13 @@ class Products {
         }>
     ) {
         const params = new URLSearchParams()
+        const search = _.trim(patch.search ?? this.search)
         const sort = patch.sort ?? this.sort
         const filterCategory = patch.filterCategory ?? this.filterCategory
         const filterPackaging = patch.filterPackaging ?? this.filterPackaging
         const filterEnlistedFor = patch.filterEnlistedFor ?? this.filterEnlistedFor
 
+        if (search) params.set('search', search)
         if (sort && sort !== DEFAULT_SORT) params.set('sort', sort)
         if (filterCategory && filterCategory !== DEFAULT_CATEGORY_FILTER) {
             params.set('filterCategory', filterCategory)
@@ -121,6 +129,18 @@ class Products {
         const base = typeof document !== 'undefined' ? document.location.pathname : ''
         const suffix = params.toString()
         goto(suffix ? `${base}?${suffix}` : base, { replaceState: true })
+    }
+
+    onSearchInput() {
+        if (searchTimer) clearTimeout(searchTimer)
+        this.page = 1
+        searchTimer = setTimeout(() => {
+            this.applySearch()
+        }, 300)
+    }
+
+    applySearch() {
+        this.go(1, {})
     }
 
     setSort(sort: SortKey) {
@@ -153,6 +173,8 @@ class Products {
     }
 
     resetFilters() {
+        if (searchTimer) clearTimeout(searchTimer)
+        this.search = ''
         this.sort = DEFAULT_SORT
         this.filterCategory = DEFAULT_CATEGORY_FILTER
         this.filterPackaging = DEFAULT_PACKAGING_FILTER
@@ -163,6 +185,7 @@ class Products {
     load(rows: ProductRow[], meta: ProductMeta) {
         this.products = rows
         this.meta = meta
+        this.search = meta.search
         this.sort = meta.sort
         this.filterCategory = meta.filterCategory
         this.filterPackaging = meta.filterPackaging
