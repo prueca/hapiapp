@@ -22,6 +22,8 @@ const PACKAGING_VALUES = new Set<string>(['all', ...Object.values(productPackagi
 const ENLISTED_FOR_VALUES = new Set<string>(['all', ...Object.values(productEnlistedFor)])
 
 export const load = async ({ locals, url }) => {
+    const search = (url.searchParams.get('search') ?? '').trim()
+
     const rawFilterCategory = url.searchParams.get('filterCategory')
     const filterCategory: CategoryFilter =
         rawFilterCategory && CATEGORY_VALUES.has(rawFilterCategory)
@@ -48,7 +50,10 @@ export const load = async ({ locals, url }) => {
 
     const cap = Math.min(page * PAGE_SIZE, MAX_ROWS)
 
+    const query = search.toLowerCase()
+
     const meta: ProductMeta = {
+        search,
         sort,
         filterCategory,
         filterPackaging,
@@ -81,6 +86,15 @@ export const load = async ({ locals, url }) => {
     ) as string[]
 
     const filtered = rows.filter((row) => {
+        if (
+            query &&
+            !(
+                row.name.toLowerCase().includes(query) ||
+                (row.category?.toLowerCase().includes(query) ?? false)
+            )
+        ) {
+            return false
+        }
         if (filterCategory !== 'all' && row.category !== filterCategory) return false
         if (filterPackaging !== 'all' && row.packaging !== filterPackaging) return false
         if (filterEnlistedFor !== 'all' && row.enlistedFor !== filterEnlistedFor) return false
