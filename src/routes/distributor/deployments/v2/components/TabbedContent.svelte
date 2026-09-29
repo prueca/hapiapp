@@ -14,7 +14,7 @@
         </label>
         <label class="tab flex-1 rounded-t-lg">
             <input type="radio" name="tabs" bind:group={activeTab} value="B" />
-            <span>Schedule Deployment</span>
+            <span>Add Deployment</span>
         </label>
     </div>
 

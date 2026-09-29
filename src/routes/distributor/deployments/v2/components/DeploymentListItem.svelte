@@ -40,7 +40,7 @@
             <div class="badge bg-(--c1) badge-sm text-white">{data.freezerCount}</div>
         </button>
     </div>
-    <div class="collapse" class:collapse-open={freezerListOpen}>
+    <div class="collapse rounded-none" class:collapse-open={freezerListOpen}>
         <div class="collapse-content p-0">
             <div class="flex flex-col gap-2 border-t border-gray-200 p-2">
                 <DeploymentFreezer />
