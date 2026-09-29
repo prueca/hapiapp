@@ -5,7 +5,7 @@
 
 <div>
     <SearchDeployment />
-    <div class="flex flex-col gap-4 bg-gray-50 p-4">
+    <div class="flex flex-col gap-2 bg-gray-50 p-2">
         <DeploymentListItem />
         <DeploymentListItem />
         <DeploymentListItem />
