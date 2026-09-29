@@ -20,13 +20,13 @@
             </span>
             <div class="item-label">Users</div>
         </a>
-         <a href="/distributor/freezers" class="menu-item">
-             <span class="text-(--c1)">
-                 <Icon icon="reicon:fridge-filled" width="42" />
-             </span>
-             <div class="item-label">Freezers</div>
+        <a href="/distributor/freezers" class="menu-item">
+            <span class="text-(--c1)">
+                <Icon icon="reicon:fridge-filled" width="42" />
+            </span>
+            <div class="item-label">Freezers</div>
         </a>
-        <a href="/distributor/freezer" class="menu-item">
+        <a href="/distributor/deployments" class="menu-item">
             <span class="text-(--c1)">
                 <Icon icon="reicon:truck-fast-filled" width="42" />
             </span>

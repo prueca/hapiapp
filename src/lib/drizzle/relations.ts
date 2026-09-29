@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm'
-import { account, user, freezer } from './schema'
+import { account, user, freezer, deployment, deploymentItem, cabcon, cabconItem, product } from './schema'
 
 export const accountRelation = relations(account, ({ one, many }) => ({
     users: many(user),
@@ -20,13 +20,81 @@ export const accountRelation = relations(account, ({ one, many }) => ({
     })
 }))
 
-export const freezerRelations = relations(freezer, ({ one }) => ({
+export const freezerRelations = relations(freezer, ({ one, many }) => ({
     distributor: one(account, {
         fields: [freezer.distributorId],
-        references: [account.id]
+        references: [account.id],
+        relationName: 'freezer_distributor'
+    }),
+    deploymentItems: many(deploymentItem, {
+         relationName: 'deployment_item_freezer'
+       }),
+    cabconItems: many(cabconItem, {
+         relationName: 'cabcon_item_freezer'
+       })
+}))
+
+export const deploymentRelations = relations(deployment, ({ one, many }) => ({
+    origin: one(account, {
+        fields: [deployment.originId],
+        references: [account.id],
+        relationName: 'deployment_origin'
     }),
     designation: one(account, {
-        fields: [freezer.designationId],
-        references: [account.id]
+        fields: [deployment.designationId],
+        references: [account.id],
+        relationName: 'deployment_designation'
+    }),
+    deploymentItems: many(deploymentItem, {
+        relationName: 'deployment_item'
     })
+}))
+
+export const deploymentItemRelations = relations(deploymentItem, ({ one }) => ({
+    deployment: one(deployment, {
+         fields: [deploymentItem.deploymentId],
+         references: [deployment.id],
+         relationName: 'deployment_item'
+      }),
+    designation: one(account, {
+         fields: [deploymentItem.designationId],
+         references: [account.id],
+         relationName: 'deployment_item_designation'
+      }),
+    freezer: one(freezer, {
+         fields: [deploymentItem.freezerId],
+         references: [freezer.id],
+         relationName: 'deployment_item_freezer'
+      })
+}))
+
+export const cabconRelations = relations(cabcon, ({ one, many }) => ({
+    author: one(account, {
+         fields: [cabcon.authorId],
+         references: [account.id],
+         relationName: 'cabcon_author'
+      }),
+    cabconItems: many(cabconItem, {
+         relationName: 'cabcon_item'
+      })
+}))
+
+export const productRelations = relations(product, () => ({}))
+
+export const cabconItemRelations = relations(cabconItem, ({ one }) => ({
+    cabcon: one(cabcon, {
+         fields: [cabconItem.cabconId],
+         references: [cabcon.id],
+         relationName: 'cabcon_item'
+      }),
+    account: one(account, {
+         fields: [cabconItem.accountId],
+         references: [account.id],
+         relationName: 'cabcon_item_account'
+      }),
+    freezer: one(freezer, {
+         fields: [cabconItem.freezerId],
+         references: [freezer.id],
+         relationName: 'cabcon_item_freezer'
+      })
 }))

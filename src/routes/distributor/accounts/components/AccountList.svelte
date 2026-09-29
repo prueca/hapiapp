@@ -24,7 +24,7 @@
                 class="create-account btn btn-ghost btn-xs"
                 onclick={() => create.toggle()}
             >
-                <span>&plus;</span>
+                <span class="-mt-0.5">&plus;</span>
                 <span>Create</span>
             </button>
         </div>
@@ -42,8 +42,8 @@
         {:else}
             <!-- account list -->
             <div class="p-4">
-                {#each accounts.filtered as item}
-                    <AccountListItem {item} />
+                {#each accounts.filtered as item, idx}
+                    <AccountListItem {item} isLast={idx === accounts.filtered.length - 1} />
                 {/each}
             </div>
             {#if accounts.filtered.length < accounts.total}

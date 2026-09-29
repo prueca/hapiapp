@@ -11,7 +11,6 @@
     $effect(() => {
         state.query
         state.sort
-        state.statusFilter
         state.resetVisibleCount()
     })
 </script>

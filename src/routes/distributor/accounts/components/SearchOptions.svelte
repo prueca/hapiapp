@@ -37,6 +37,7 @@
                         <option value="">All</option>
                         <option value={accountTypes.DEALER}>Dealer</option>
                         <option value={accountTypes.HAPISTORE}>Hapistore</option>
+                        <option value={accountTypes.DIRECT_STORE}>Direct Store</option>
                     </select>
                 </fieldset>
 

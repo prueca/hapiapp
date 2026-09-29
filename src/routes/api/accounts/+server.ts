@@ -10,11 +10,11 @@ import * as t from '$lib/drizzle/schema'
 import errors from '$lib/errors'
 
 export const POST = async ({ locals }) => {
-    const account = locals.account!
+    const authAccount = locals.account!
 
     let items: (typeof t.account.$inferSelect)[] = []
 
-    switch (account.type) {
+    switch (authAccount.type) {
         case accountTypes.DISTRIBUTOR:
             const parent = alias(t.account, 'parent')
 
@@ -24,7 +24,10 @@ export const POST = async ({ locals }) => {
                 .leftJoin(parent, eq(parent.id, t.account.parentId))
                 .where(
                     and(
-                        or(eq(t.account.parentId, account.id), eq(parent.parentId, account.id)),
+                        or(
+                            eq(t.account.parentId, authAccount.id),
+                            eq(parent.parentId, authAccount.id)
+                        ),
                         isNull(t.account.deletedAt)
                     )
                 )
@@ -33,7 +36,7 @@ export const POST = async ({ locals }) => {
             break
 
         case accountTypes.DEALER:
-            items = await db.select().from(t.account).where(eq(t.account.parentId, account.id))
+            items = await db.select().from(t.account).where(eq(t.account.parentId, authAccount.id))
 
             break
 

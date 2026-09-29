@@ -3,7 +3,6 @@
     import TopBar from '../components/TopBar'
     import Dashboard from './components/Dashboard.svelte'
     import WelcomeBanner from './components/WelcomeBanner.svelte'
-    import accountTypes from '$lib/config/account.types'
 </script>
 
 <div class="content-wrapper">
@@ -12,7 +11,7 @@
         <WelcomeBanner />
         <Dashboard />
     </div>
-    <Dock accountType={accountTypes.DISTRIBUTOR} />
+    <Dock />
 </div>
 
 <style lang="postcss">

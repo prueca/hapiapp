@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes'
 import z from 'zod'
 import errors from '$lib/errors'
 import _ from 'lodash'
+import userRoles from '$lib/config/user.roles'
 
 import db from '$lib/drizzle'
 import { eq, or, and, isNull } from 'drizzle-orm'
@@ -13,7 +14,7 @@ const schema = z.object({
     id: z.ulid()
 })
 
-const verifyAccess = async (currentAccountId: string, id: string) => {
+const verifyAccess = async (authAccountId: string, id: string) => {
     const parent = alias(t.account, 'parent')
 
     const [account] = await db
@@ -24,7 +25,7 @@ const verifyAccess = async (currentAccountId: string, id: string) => {
             and(
                 eq(t.account.id, id),
                 isNull(t.account.deletedAt),
-                or(eq(t.account.parentId, currentAccountId), eq(parent.parentId, currentAccountId))
+                or(eq(t.account.parentId, authAccountId), eq(parent.parentId, authAccountId))
             )
         )
         .limit(1)
@@ -36,6 +37,20 @@ const verifyAccess = async (currentAccountId: string, id: string) => {
 
 export const POST = async ({ locals, request }) => {
     try {
+        const authAccount = locals.account!
+        const authUser = locals.user!
+
+        switch (authUser.role) {
+            case userRoles.DISTRIBUTOR_ADMIN:
+                // We do not fail the process at this point as
+                // these roles are allowed to delete account.
+                break
+            default:
+                // Any other roles are not allowed to perform
+                // the operation.
+                error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
+        }
+
         const payload = await request.json()
         const validation = schema.safeParse(payload)
 
@@ -43,24 +58,35 @@ export const POST = async ({ locals, request }) => {
             error(StatusCodes.BAD_REQUEST, errors.INVALID_DATA_FORMAT)
         }
 
-        const { id } = validation.data
-        const currentAccountId = locals.account!.id
+        const { id: accountId } = validation.data
 
-        await verifyAccess(currentAccountId, id)
+        await verifyAccess(authAccount.id, accountId)
 
-        const [account] = await db
-            .update(t.account)
-            .set({
-                deletedAt: new Date()
-            })
-            .where(and(eq(t.account.id, id as string), isNull(t.account.deletedAt)))
-            .returning()
+        const deletedAccount = await db.transaction(async (txn) => {
+            const [account] = await db
+                .update(t.account)
+                .set({
+                    deletedAt: new Date()
+                })
+                .where(and(eq(t.account.id, accountId), isNull(t.account.deletedAt)))
+                .returning()
 
-        if (!account) {
-            error(StatusCodes.NOT_FOUND, errors.NOT_FOUND)
-        }
+            await db
+                .update(t.access)
+                .set({
+                    deletedAt: new Date()
+                })
+                .where(and(eq(t.access.accountId, accountId), isNull(t.access.deletedAt)))
+                .returning()
 
-        return json({ data: account })
+            if (!account) {
+                error(StatusCodes.NOT_FOUND, errors.NOT_FOUND)
+            }
+
+            return account
+        })
+
+        return json({ data: deletedAccount })
     } catch (e: any) {
         if (isHttpError(e)) throw e
 

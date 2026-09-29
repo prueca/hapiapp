@@ -1,14 +1,12 @@
-import {
-    SORT_OPTIONS,
-    STATUS_FILTER_OPTIONS,
-    DEFAULT_STATUS_FILTER,
-    type Freezer as FreezerType,
-    type SortKey,
-    type StatusFilter
-} from '$lib/types/freezer'
+import { SORT_OPTIONS, type Freezer as FreezerType, type SortKey } from '$lib/types/freezer'
 import { invalidateAll } from '$app/navigation'
 import api from '$lib/api'
-import { modelOptions, capacityOptions, yearModelOptions, brandOptions } from '$lib/config/freezer.options'
+import {
+    modelOptions,
+    capacityOptions,
+    yearModelOptions,
+    brandOptions
+} from '$lib/config/freezer.options'
 import _ from 'lodash'
 
 class Freezers {
@@ -16,7 +14,6 @@ class Freezers {
 
     query = $state('')
     sort: SortKey = $state('createdAt-desc')
-    statusFilter: StatusFilter = $state(DEFAULT_STATUS_FILTER)
 
     pageSize = 12
     visibleCount = $state(12)
@@ -34,15 +31,13 @@ class Freezers {
     newBarcode = $state('')
 
     sortOptions = SORT_OPTIONS
-    statusFilterOptions = STATUS_FILTER_OPTIONS
-     modelOptions = modelOptions as unknown as string[]
-     capacityOptions = capacityOptions as unknown as number[]
-     yearModelOptions = yearModelOptions as unknown as number[]
-     brandOptions = brandOptions as unknown as string[]
+    modelOptions = modelOptions as unknown as string[]
+    capacityOptions = capacityOptions as unknown as number[]
+    yearModelOptions = yearModelOptions as unknown as number[]
+    brandOptions = brandOptions as unknown as string[]
 
     filtered = $derived(
         _.chain(this.items)
-            .filter((f) => (this.statusFilter === 'all' ? true : f.status === this.statusFilter))
             .filter((f) => {
                 const q = _.toLower(_.trim(this.query))
                 if (!q) return true
@@ -59,11 +54,7 @@ class Freezers {
 
     sorted = $derived(sortItems(this.filtered, this.sort))
 
-    hasFilters = $derived(
-        this.query !== '' ||
-            this.sort !== 'createdAt-desc' ||
-            this.statusFilter !== DEFAULT_STATUS_FILTER
-    )
+    hasFilters = $derived(this.query !== '' || this.sort !== 'createdAt-desc')
 
     visible = $derived(this.sorted.slice(0, this.visibleCount))
     canLoadMore = $derived(this.visibleCount < this.sorted.length)
@@ -75,7 +66,6 @@ class Freezers {
     resetFilters() {
         this.query = ''
         this.sort = 'createdAt-desc'
-        this.statusFilter = DEFAULT_STATUS_FILTER
     }
 
     resetVisibleCount() {

@@ -8,8 +8,7 @@ export const load = async ({ locals }) => {
     }
 
     const freezers = await db.query.freezer.findMany({
-        where: (f, { eq, or }) =>
-            or(eq(f.distributorId, distributorId), eq(f.designationId, distributorId)),
+        where: (f, { eq }) => eq(f.distributorId, distributorId),
         columns: {
             createdAt: false,
             deletedAt: false,

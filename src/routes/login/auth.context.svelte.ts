@@ -2,7 +2,7 @@ import api from '$lib/api'
 import _ from 'lodash'
 import z from 'zod'
 import { goto } from '$app/navigation'
-import accountTypes from '$lib/config/account.types'
+import userRoles from '$lib/config/user.roles'
 import errors from '$lib/errors'
 
 class AuthContext {
@@ -56,7 +56,7 @@ class AuthContext {
 
             this.status = 1
 
-            const response = await api.post('users/login', { json })
+            const response = await api.post('login', { json })
             const body: Data<{ accounts: AuthAccount[] }> = await response.json()
 
             this.accounts = body.data.accounts
@@ -96,21 +96,14 @@ class AuthContext {
             this.toggleAccountSelection()
 
             const json = { accountId }
-            const res = await api.post('users/authorize', { json })
-            const response: Data<{ user: AuthUser; account: AuthAccount }> = await res.json()
-            const { account } = response.data
+            const res = await api.post('authorize', { json })
+            const body: Data<{ user: AuthUser; account: AuthAccount }> = await res.json()
+            const { user } = body.data
 
-            switch (account.type) {
-                case accountTypes.DISTRIBUTOR:
+            switch (user.role) {
+                case userRoles.DISTRIBUTOR_ADMIN:
+                case userRoles.DISTRIBUTOR_USER:
                     goto('/distributor')
-                    break
-
-                case accountTypes.DEALER:
-                    goto('/dealer')
-                    break
-
-                case accountTypes.HAPISTORE:
-                    goto('/hapistore')
                     break
             }
         } catch (e: any) {

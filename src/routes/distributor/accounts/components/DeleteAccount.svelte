@@ -35,7 +35,7 @@
             </div>
         </div>
         <div class="modal-action">
-            <button class="close-btn btn rounded-lg btn-sm" onclick={() => del.setOpen(false)}>
+            <button class="close-btn btn rounded-lg" onclick={() => del.setOpen(false)}>
                 Close
             </button>
         </div>
@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="modal-action">
-            <button class="close-btn btn rounded-lg btn-sm" onclick={() => del.setOpen(false)}>
+            <button class="close-btn btn rounded-lg" onclick={() => del.setOpen(false)}>
                 Close
             </button>
         </div>

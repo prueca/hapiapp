@@ -3,14 +3,14 @@
     import TopBar from '../../components/TopBar'
     import AccountName from '../../components/AccountName.svelte'
     import AccountList from './components/AccountList.svelte'
-    import Chart from './components/Chart.svelte'
+    import Chart from '../../components/Chart.svelte'
     import CreateAccount from './components/CreateAccount.svelte'
     import DeleteAccount from './components/DeleteAccount.svelte'
     import UpdateAccount from './components/UpdateAccount.svelte'
 </script>
 
 <div class="content-wrapper">
-    <div class="mb-21">
+    <div class="pb-21">
         <TopBar />
         <AccountName />
         <Chart />
