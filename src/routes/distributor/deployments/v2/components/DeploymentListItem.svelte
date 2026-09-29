@@ -40,12 +40,14 @@
             <div class="badge bg-(--c1) badge-sm text-white">{data.freezerCount}</div>
         </button>
     </div>
-    {#if freezerListOpen}
-        <div class="flex flex-col gap-2 border-t border-gray-200 p-2">
-            <DeploymentFreezer />
-            <DeploymentFreezer />
+    <div class="collapse" class:collapse-open={freezerListOpen}>
+        <div class="collapse-content p-0">
+            <div class="flex flex-col gap-2 border-t border-gray-200 p-2">
+                <DeploymentFreezer />
+                <DeploymentFreezer />
+            </div>
         </div>
-    {/if}
+    </div>
 </div>
 
 <style lang="postcss">
