@@ -1,24 +1,21 @@
 <script lang="ts">
+    import _ from 'lodash'
+    import moment from 'moment'
     import Icon from '@iconify/svelte'
     import DeploymentFreezer from './DeploymentFreezer.svelte'
 
-    let data = {
-        name: 'NovaTech Consulting',
-        address: '412 Quantum Way Lakeside Nebula 79053',
-        status: 'To Be Delivered',
-        date: 'Sep-28-2026 Mon',
-        freezerCount: 5
-    }
-
+    let { data } = $props()
     let freezerListOpen = $state(false)
+    let status = $derived(_.startCase(data.status))
+    let deploymentDate = $derived(moment(data.deploymentDate).format('MMM-DD-YYYY ddd'))
 </script>
 
 <div class="list-item">
     <div class="details">
-        <div class="flex-1 font-semibold">{data.name}</div>
-        <div class="status-badge badge badge-xs">{data.status}</div>
-        <div class="text-xs text-gray-400">{data.address}</div>
-        <div class="text-xs text-gray-400">{data.date}</div>
+        <div class="flex-1 font-semibold">{data.designation.name}</div>
+        <div class="status-badge badge badge-xs">{status}</div>
+        <div class="text-xs text-gray-400">{data.designation.address}</div>
+        <div class="text-xs text-gray-400">{deploymentDate}</div>
     </div>
     <div class="actions">
         <div class="flex items-center">
@@ -37,7 +34,7 @@
             onclick={() => (freezerListOpen = !freezerListOpen)}
         >
             <Icon icon="carbon:list-boxes" />
-            <div class="badge bg-(--c1) badge-sm text-white">{data.freezerCount}</div>
+            <div class="badge bg-(--c1) badge-sm text-white">{data.deploymentItemCount}</div>
         </button>
     </div>
     <div class="collapse rounded-none" class:collapse-open={freezerListOpen}>
