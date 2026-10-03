@@ -10,7 +10,7 @@
     const chooseAccount = (account: (typeof state.accountResults)[number]) =>
         state.selectAccount(account)
 
-    const clearSelectedAccount = () => state.clearDesignation()
+    const clearSelectedAccount = () => state.clearDestination()
 
     const selectType = (type: 'dealer' | 'hapistore') => state.setAccountType(type)
 
@@ -23,7 +23,7 @@
 </script>
 
 <fieldset class="fieldset">
-    <legend class="legend">Designation account</legend>
+    <legend class="legend">Destination account</legend>
 
     <div class="type-toggle" role="radiogroup" aria-label="Account type">
         {#each accountOptions as option (option.value)}
@@ -59,13 +59,13 @@
         <p class="hint">Searching accounts...</p>
     {:else if state.accountError}
         <p class="hint error">{state.accountError}</p>
-    {:else if state.designatedAccount}
+    {:else if state.destinationAccount}
         <div class="account-results">
             <div class="account-card selected">
                 <div class="account-card-header">
                     <div>
-                        <div class="account-name">{state.designatedAccount.name}</div>
-                        <div class="account-type">{_.upperFirst(state.designatedAccount.type)}</div>
+                        <div class="account-name">{state.destinationAccount.name}</div>
+                        <div class="account-type">{_.upperFirst(state.destinationAccount.type)}</div>
                     </div>
                 </div>
                 <div class="card-action">
@@ -99,7 +99,7 @@
                             class="btn btn-sm"
                             onclick={() => chooseAccount(account)}
                         >
-                            Designate
+                            Select
                         </button>
                     </div>
                 </div>
@@ -107,9 +107,9 @@
         </div>
     {/if}
 
-    {#if !state.designatedAccount}
+    {#if !state.destinationAccount}
         <p class="hint">
-            Select a {_.startCase(state.accountType)} to designate it for the deployment.
+            Select a {_.startCase(state.accountType)} to use as the deployment destination.
         </p>
     {/if}
 </fieldset>

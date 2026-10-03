@@ -15,7 +15,7 @@ export type DeploymentItemWithFreezer = DeploymentItem & {
 }
 
 export type DeploymentRow = Deployment & {
-    designation: (typeof account.$inferSelect) | null
+    destination: (typeof account.$inferSelect) | null
     deploymentItems: DeploymentItemWithFreezer[]
     deploymentItemCount: number
     overdue: boolean

@@ -10,6 +10,7 @@ import {
 import type { Freezer } from '$lib/types/freezer'
 import type * as t from '$lib/drizzle/schema'
 import accountTypes from '$lib/config/account.types'
+import { deploymentStatus, type DeploymentStatusValue } from '$lib/config/deployment.status'
 import api from '$lib/api'
 import moment from 'moment'
 import _ from 'lodash'
@@ -47,6 +48,10 @@ const toDateInput = (d: unknown) => (isDeployedDate(d) ? toDateKey(d) : today())
 
 const errorText = (e: any, fallback: string) =>
     e?.data?.message ?? e?.data?.code ?? e?.message ?? fallback
+
+const STATUS_CHANGE_OPTIONS: { value: DeploymentStatusValue; label: string }[] = Object.values(
+    deploymentStatus
+).map((value) => ({ value, label: _.startCase(value.replace(/-/g, ' ')) }))
 
 const DEFAULT_SORT: SortKey = 'deploymentDate-desc'
 
@@ -95,9 +100,10 @@ class Deployments {
     accountSearching = $state(false)
     accountResults: Account[] = $state([])
     accountError = $state('')
-    designatedAccount: Account | null = $state(null)
+    destinationAccount: Account | null = $state(null)
 
     deploymentDate = $state(today())
+    deploymentStatus = $state<DeploymentStatusValue>(deploymentStatus.FOR_DELIVERY)
 
     submitting = $state(false)
     submitError = $state('')
@@ -116,6 +122,12 @@ class Deployments {
     editDate = $state(today())
     updating = $state<Set<string>>(new Set())
     updateError = $state('')
+
+    editingStatusDeployment: DeploymentRow | null = $state(null)
+    editStatus = $state<DeploymentStatusValue>(deploymentStatus.FOR_DELIVERY)
+    updatingStatus = $state<Set<string>>(new Set())
+    statusUpdateError = $state('')
+    statusChangeOptions = STATUS_CHANGE_OPTIONS
 
     async load() {
         if (this.loading) return
@@ -136,9 +148,9 @@ class Deployments {
             const { rows, meta } = body.data
 
             this.deployments = rows.map((row) => ({
-                 ...row,
+                ...row,
                 deploymentDate: toDateOrNull(row.deploymentDate)
-             }))
+            }))
             this.queryInput = meta.query
             this.sort = meta.sort
             this.filterStatus = meta.filterStatus
@@ -237,7 +249,7 @@ class Deployments {
     }
 
     selectAccount(account: Account) {
-        this.designatedAccount = account
+        this.destinationAccount = account
         this.accountQuery = account.name
         this.accountType = (account.type as 'dealer' | 'hapistore') ?? this.accountType
     }
@@ -248,8 +260,8 @@ class Deployments {
         this.searchAccounts()
     }
 
-    clearDesignation() {
-        this.designatedAccount = null
+    clearDestination() {
+        this.destinationAccount = null
         this.accountQuery = ''
         this.accountResults = []
         this.accountType = 'dealer'
@@ -310,9 +322,10 @@ class Deployments {
         this.clearSearchedFreezer()
         this.accountQuery = ''
         this.accountResults = []
-        this.designatedAccount = null
+        this.destinationAccount = null
         this.accountType = 'dealer'
         this.deploymentDate = today()
+        this.deploymentStatus = deploymentStatus.FOR_DELIVERY
         this.submitError = ''
         this.deployStep = 1
         this.editing = null
@@ -333,15 +346,16 @@ class Deployments {
 
         this.selectedFreezerIds = freezers.map((freezer) => freezer.id)
         this.selectedFreezers = freezers
-        this.designatedAccount = (deployment.designation as Account) ?? null
+        this.destinationAccount = (deployment.destination as Account) ?? null
 
-        if (this.designatedAccount) {
-            this.accountQuery = this.designatedAccount.name
+        if (this.destinationAccount) {
+            this.accountQuery = this.destinationAccount.name
             this.accountType =
-                (this.designatedAccount.type as 'dealer' | 'hapistore') ?? this.accountType
+                (this.destinationAccount.type as 'dealer' | 'hapistore') ?? this.accountType
         }
 
         this.deploymentDate = toDateInput(deployment.deploymentDate)
+        this.deploymentStatus = deployment.status ?? deploymentStatus.FOR_DELIVERY
         this.deployStep = 3
         this.activeTab = 'available'
     }
@@ -349,7 +363,7 @@ class Deployments {
     canReachStep(step: number) {
         if (step <= this.deployStep) return true
         if (this.selectedFreezerIds.length === 0) return false
-        if (step === 3 && !this.designatedAccount) return false
+        if (step === 3 && !this.destinationAccount) return false
         return true
     }
 
@@ -376,8 +390,8 @@ class Deployments {
             return
         }
 
-        if (!this.designatedAccount) {
-            this.submitError = 'Please select a designation account.'
+        if (!this.destinationAccount) {
+            this.submitError = 'Please select a destination account.'
             return
         }
 
@@ -389,17 +403,19 @@ class Deployments {
                 await api.post('distributor/deployments/update', {
                     json: {
                         deploymentId: this.editing.id,
-                        designationId: this.designatedAccount.id,
+                        destinationId: this.destinationAccount.id,
                         freezerIds: this.selectedFreezerIds,
-                        deploymentDate: this.deploymentDate
+                        deploymentDate: this.deploymentDate,
+                        status: this.deploymentStatus
                     }
                 })
             } else {
                 await api.post('distributor/deployments/batch', {
                     json: {
                         freezerIds: this.selectedFreezerIds,
-                        designationId: this.designatedAccount.id,
-                        deploymentDate: this.deploymentDate
+                        destinationId: this.destinationAccount.id,
+                        deploymentDate: this.deploymentDate,
+                        status: this.deploymentStatus
                     }
                 })
             }
@@ -520,6 +536,56 @@ class Deployments {
 
     isUpdating(key: string) {
         return this.updating.has(key)
+    }
+
+    isUpdatingStatus(key: string) {
+        return this.updatingStatus.has(key)
+    }
+
+    openEditStatus(deployment: DeploymentRow) {
+        this.editingStatusDeployment = deployment
+        this.editStatus = deployment.status ?? deploymentStatus.FOR_DELIVERY
+        this.statusUpdateError = ''
+    }
+
+    closeEditStatus() {
+        this.editingStatusDeployment = null
+        this.statusUpdateError = ''
+    }
+
+    async submitEditStatus() {
+        const deployment = this.editingStatusDeployment
+        if (!deployment || this.isUpdatingStatus(deployment.id)) return
+
+        this.statusUpdateError = ''
+
+        const next = new Set(this.updatingStatus)
+        next.add(deployment.id)
+        this.updatingStatus = next
+
+        const status = this.editStatus
+
+        try {
+            await api.post('distributor/deployments/status', {
+                json: {
+                    deploymentId: deployment.id,
+                    status
+                }
+            })
+
+            this.deployments = this.deployments.map((row) =>
+                row.id === deployment.id ? { ...row, status } : row
+            )
+
+            await this.load()
+            this.editingStatusDeployment = null
+        } catch (e: any) {
+            this.statusUpdateError = errorText(e, 'Something went wrong while updating the status.')
+        } finally {
+            const updated = new Set(this.updatingStatus)
+            updated.delete(deployment.id)
+            this.updatingStatus = updated
+        }
     }
 
     isDeleting(id: string) {

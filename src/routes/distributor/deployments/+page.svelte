@@ -4,6 +4,7 @@
     import List from './components/List.svelte'
     import Toolbar from './components/Toolbar.svelte'
     import EditDate from './components/EditDate.svelte'
+    import EditStatus from './components/EditStatus.svelte'
     import ConfirmDelete from './components/ConfirmDelete.svelte'
     import DeployFreezers from './components/DeployFreezers.svelte'
     import state from './deployments.context.svelte'
@@ -40,6 +41,8 @@
                             <Toolbar />
 
                             <EditDate />
+
+                            <EditStatus />
 
                             <ConfirmDelete />
 

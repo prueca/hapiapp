@@ -71,7 +71,7 @@
                  class="btn"
                  disabled={state.submitting ||
                     state.selectedFreezers.length === 0 ||
-                     !state.designatedAccount}
+                     !state.destinationAccount}
                  onclick={() => state.submitBatch()}
              >
               {#if state.submitting}

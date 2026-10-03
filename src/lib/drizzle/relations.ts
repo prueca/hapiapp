@@ -40,11 +40,11 @@ export const deploymentRelations = relations(deployment, ({ one, many }) => ({
         references: [account.id],
         relationName: 'deployment_origin'
     }),
-    designation: one(account, {
-        fields: [deployment.designationId],
+    destination: one(account, {
+        fields: [deployment.destinationId],
         references: [account.id],
-        relationName: 'deployment_designation'
-    }),
+        relationName: 'deployment_destination'
+     }),
     deploymentItems: many(deploymentItem, {
         relationName: 'deployment_item'
     })

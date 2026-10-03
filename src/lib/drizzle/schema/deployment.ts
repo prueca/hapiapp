@@ -6,9 +6,9 @@ import { deploymentStatus, freezerStatusEnum } from './enum'
 import { timestampMixin } from '../mixin'
 
 /**
- * A deployment record: a shipment moved from an origin (distributor) account to a
- * designation (dealer) account. A single deployment batches many deploymentItems,
- * each tracking a freezer unit and its freezer-level status under the designation.
+  * A deployment record: a shipment moved from an origin (distributor) account to a
+  * destination (dealer) account. A single deployment batches many deploymentItems,
+  * each tracking a freezer unit and its freezer-level status under the destination.
  */
 export const deployment = pgTable(
     'deployment',
@@ -17,7 +17,7 @@ export const deployment = pgTable(
         originId: varchar('origin_id', { length: 26 })
             .references(() => account.id)
             .notNull(),
-        designationId: varchar('designation_id', { length: 26 })
+        destinationId: varchar('destination_id', { length: 26 })
             .references(() => account.id)
             .notNull(),
         status: deploymentStatus('status').notNull(),

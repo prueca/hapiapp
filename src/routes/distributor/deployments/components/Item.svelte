@@ -9,12 +9,12 @@
 
     let expanded = $state(false)
 
-    let designation = $derived(deployment.designation)
+    let destination = $derived(deployment.destination)
     let date = $derived(
         deployment.deploymentDate
-              ? deployments.formatDate(new Date(deployment.deploymentDate))
-              : '—'
-      )
+            ? deployments.formatDate(new Date(deployment.deploymentDate))
+            : '—'
+    )
 
     let overdue = $derived(deployments.isOverdue(deployment))
     let days = $derived(deployments.daysOverdue(deployment))
@@ -25,13 +25,25 @@
 
 <div class="deployment-item">
     <div class="main">
-        <div class="designation">
-            <div class="name">{designation?.name ?? '—'}</div>
-            {#if designation?.address}<div class="address">{designation.address}</div>{/if}
+        <div class="destination">
+            <div class="name">{destination?.name ?? '—'}</div>
+            {#if destination?.address}<div class="address">{destination.address}</div>{/if}
         </div>
 
         <div class="meta">
-            <span class="status-badge">{statusLabel}</span>
+            <button
+                type="button"
+                class="status-badge"
+                aria-label="Change deployment status"
+                disabled={deployments.isUpdatingStatus(deployment.id)}
+                onclick={() => deployments.openEditStatus(deployment)}
+            >
+                {#if deployments.isUpdatingStatus(deployment.id)}
+                    <span class="loading loading-xs loading-spinner"></span>
+                {:else}
+                    {statusLabel}
+                {/if}
+            </button>
             <div class="date-line">
                 <span class="date">
                     <span class="label">Deployment Date:</span>
@@ -43,60 +55,60 @@
                     <button
                         type="button"
                         class="edit"
-                         aria-label="Change deployment date"
-                         onclick={() => deployments.openEditDate(deployment)}
+                        aria-label="Change deployment date"
+                        onclick={() => deployments.openEditDate(deployment)}
                     >
                         <Icon icon="bi:calendar2-day" width="14" />
                     </button>
                 {/if}
             </div>
-              {#if overdue}
-                  <span class="overdue-badge">Overdue · {days} {days === 1 ? 'day' : 'days'}</span>
-                {/if}
-              <div class="row-actions">
-                  <button
-                     type="button"
-                     class="action"
-                     aria-label="Edit deployment items"
-                     onclick={() => deployments.openEdit(deployment)}
-                  >
-                     <Icon icon="bi:pencil" width="14" />
-                  </button>
-                  <button
-                     type="button"
-                     class="action action-danger"
-                     aria-label="Delete deployment"
-                     disabled={deployments.isDeleting(deployment.id)}
-                     onclick={() => deployments.requestDelete(deployment)}
-                  >
-                      {#if deployments.isDeleting(deployment.id)}
-                          <span class="loading loading-sm loading-spinner"></span>
-                      {:else}
-                          <Icon icon="bi:trash" width="14" />
-                      {/if}
-                  </button>
-              </div>
-              <button
-                 type="button"
-                 class="qty"
-                 aria-label={expanded
-                      ? 'Hide freezers in this deployment'
-                      : 'View freezers in this deployment'}
-                 aria-expanded={expanded}
-                 onclick={() => (expanded = !expanded)}
-              >
-                  <Icon icon="bi:boxes" width="16" />
-                  <span>{quantity}</span>
-                  <Icon icon={expanded ? 'bi:chevron-up' : 'bi:chevron-down'} width="14" />
-              </button>
+            {#if overdue}
+                <span class="overdue-badge">Overdue · {days} {days === 1 ? 'day' : 'days'}</span>
+            {/if}
+            <div class="row-actions">
+                <button
+                    type="button"
+                    class="action"
+                    aria-label="Edit deployment items"
+                    onclick={() => deployments.openEdit(deployment)}
+                >
+                    <Icon icon="bi:pencil" width="14" />
+                </button>
+                <button
+                    type="button"
+                    class="action action-danger"
+                    aria-label="Delete deployment"
+                    disabled={deployments.isDeleting(deployment.id)}
+                    onclick={() => deployments.requestDelete(deployment)}
+                >
+                    {#if deployments.isDeleting(deployment.id)}
+                        <span class="loading loading-sm loading-spinner"></span>
+                    {:else}
+                        <Icon icon="bi:trash" width="14" />
+                    {/if}
+                </button>
+            </div>
+            <button
+                type="button"
+                class="qty"
+                aria-label={expanded
+                    ? 'Hide freezers in this deployment'
+                    : 'View freezers in this deployment'}
+                aria-expanded={expanded}
+                onclick={() => (expanded = !expanded)}
+            >
+                <Icon icon="bi:boxes" width="16" />
+                <span>{quantity}</span>
+                <Icon icon={expanded ? 'bi:chevron-up' : 'bi:chevron-down'} width="14" />
+            </button>
         </div>
     </div>
 
-      {#if expanded}
-          <div class="collapsible">
-              <FreezerList {deployment} />
-          </div>
-      {/if}
+    {#if expanded}
+        <div class="collapsible">
+            <FreezerList {deployment} />
+        </div>
+    {/if}
 </div>
 
 <style lang="postcss">
@@ -110,7 +122,7 @@
         @apply flex items-start justify-between gap-4;
     }
 
-    .designation {
+    .destination {
         @apply min-w-0;
     }
 
@@ -138,28 +150,28 @@
         @apply flex items-center justify-end gap-1.5;
     }
 
-     .edit {
-          @apply inline-flex cursor-pointer items-center justify-center rounded p-0.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600;
-      }
+    .edit {
+        @apply inline-flex cursor-pointer items-center justify-center rounded p-0.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600;
+    }
 
-      .row-actions {
-          @apply flex items-center gap-1;
-      }
+    .row-actions {
+        @apply flex items-center gap-1;
+    }
 
-      .action {
-          @apply inline-flex cursor-pointer items-center justify-center rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 disabled:cursor-not-allowed disabled:opacity-60;
-      }
+    .action {
+        @apply inline-flex cursor-pointer items-center justify-center rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 disabled:cursor-not-allowed disabled:opacity-60;
+    }
 
-      .action-danger {
-          @apply hover:bg-red-50 hover:text-red-500;
-      }
+    .action-danger {
+        @apply hover:bg-red-50 hover:text-red-500;
+    }
 
     .overdue-badge {
         @apply inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-semibold text-red-600;
     }
 
     .status-badge {
-        @apply inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-semibold text-gray-600;
+        @apply inline-flex cursor-pointer items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-semibold text-gray-600 hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-60;
     }
 
     .qty {

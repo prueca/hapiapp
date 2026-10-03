@@ -5,7 +5,7 @@
     let data = {
         name: 'NovaTech Consulting',
         address: '412 Quantum Way Lakeside Nebula 79053',
-        status: 'To Be Delivered',
+        status: 'For Delivery',
         date: 'Sep-28-2026 Mon',
         freezerCount: 5
     }

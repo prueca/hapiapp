@@ -12,11 +12,14 @@ import { eq, and, desc, isNull } from 'drizzle-orm'
 
 const schema = z.object({
     freezerIds: z.array(z.string().nonempty()).nonempty(),
-    designationId: z.string().nonempty(),
-    deploymentDate: z.coerce.date()
+    destinationId: z.string().nonempty(),
+    deploymentDate: z.coerce.date(),
+    status: z.string().optional()
 })
 
 const AVAILABLE_STATUSES = new Set<string>([freezerStatus.HOUSED_AVAILABLE, freezerStatus.PULLOUT])
+
+const DEPLOYMENT_STATUS_VALUES = new Set<string>(Object.values(deploymentStatus))
 
 export const POST = async ({ request, locals }) => {
     try {
@@ -31,7 +34,18 @@ export const POST = async ({ request, locals }) => {
             )
         }
 
-        const { freezerIds, designationId, deploymentDate } = validation.data
+        const { freezerIds, destinationId, deploymentDate, status } = validation.data
+
+        if (status && !DEPLOYMENT_STATUS_VALUES.has(status)) {
+            return json(
+                { message: errors.INVALID_DATA_FORMAT.message },
+                { status: StatusCodes.BAD_REQUEST }
+            )
+        }
+
+        const resolvedStatus =
+            status ??
+            (deploymentStatus.FOR_DELIVERY as (typeof t.deployment.$inferSelect)['status'])
 
         const root = await db.query.account.findFirst({
             where: eq(t.account.id, account.id),
@@ -55,7 +69,7 @@ export const POST = async ({ request, locals }) => {
             ])
         )
 
-        if (!descendantIds.has(designationId)) {
+        if (!descendantIds.has(destinationId)) {
             error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
         }
 
@@ -64,8 +78,8 @@ export const POST = async ({ request, locals }) => {
                 .insert(t.deployment)
                 .values({
                     originId: account.id,
-                    designationId,
-                     status: deploymentStatus.TO_BE_DELIVERED,
+                    destinationId,
+                    status: resolvedStatus,
                     deploymentDate
                 })
                 .returning()
@@ -114,7 +128,7 @@ export const POST = async ({ request, locals }) => {
                     .insert(t.deploymentItem)
                     .values({
                         deploymentId: parent.id,
-                        designationId,
+                        designationId: destinationId,
                         freezerId: freezer.id,
                         status: freezerStatus.FOR_DEPLOYMENT
                     })

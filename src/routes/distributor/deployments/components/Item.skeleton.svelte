@@ -1,6 +1,6 @@
 <div class="deployment-item">
      <div class="main">
-           <div class="designation">
+           <div class="destination">
                 <span class="block w-1/3"></span>
                 <span class="block w-1/2"></span>
            </div>
@@ -19,7 +19,7 @@
           @apply flex items-start justify-between gap-4;
       }
 
-     .designation {
+     .destination {
           @apply min-w-0;
       }
 

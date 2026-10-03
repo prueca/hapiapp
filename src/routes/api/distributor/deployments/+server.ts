@@ -79,14 +79,14 @@ export const POST = async ({ request, locals }) => {
                         ? sql`EXISTS (
                                         SELECT 1
                                         FROM account
-                                        WHERE account.id = ${deployment.designationId}
+                                        WHERE account.id = ${deployment.destinationId}
                                               AND (account.name ILIKE ${likePattern}
                                                     OR account.address ILIKE ${likePattern})
                                  )`
                         : undefined
                 ),
             with: {
-                designation: true,
+                destination: true,
                 deploymentItems: {
                     with: {
                         freezer: true
@@ -118,7 +118,7 @@ export const POST = async ({ request, locals }) => {
                         'deployment_item_count'
                     ),
                 overdue:
-                    sql`case when "deployment"."status" = 'to-be-delivered' and "deployment"."deployment_date" < current_date then true else false end`.as(
+                    sql`case when "deployment"."status" = 'for-delivery' and "deployment"."deployment_date" < current_date then true else false end`.as(
                         'overdue'
                     )
             },

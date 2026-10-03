@@ -13,7 +13,23 @@
     />
 </fieldset>
 
-{#if state.selectedFreezers.length || state.designatedAccount}
+<!-- allow user here to set deployment status -->
+<fieldset class="fieldset">
+    <legend class="label">Status</legend>
+    <select
+        class="input w-full"
+        value={state.deploymentStatus}
+        oninput={(e) =>
+            (state.deploymentStatus = (e.currentTarget as HTMLSelectElement)
+                .value as typeof state.deploymentStatus)}
+    >
+        {#each state.statusChangeOptions as opt}
+            <option value={opt.value}>{opt.label}</option>
+        {/each}
+    </select>
+</fieldset>
+
+{#if state.selectedFreezers.length || state.destinationAccount}
     <fieldset class="fieldset">
         <legend class="label">Summary</legend>
         <div class="summary">
@@ -22,8 +38,8 @@
                 <span>{state.selectedFreezers.length}</span>
             </div>
             <div class="summary-row">
-                <span class="summary-label">Designated to</span>
-                <span>{state.designatedAccount?.name ?? '—'}</span>
+                <span class="summary-label">Destination</span>
+                <span>{state.destinationAccount?.name ?? '—'}</span>
             </div>
             <div class="summary-row">
                 <span class="summary-label">Date</span>
