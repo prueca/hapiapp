@@ -5,7 +5,7 @@ import z from 'zod'
 import db from '$lib/drizzle'
 import * as t from '$lib/drizzle/schema'
 import { freezerStatus } from '$lib/config/freezer.options'
-import { and, desc, eq, inArray, isNull } from 'drizzle-orm'
+import { and, desc, eq, isNull } from 'drizzle-orm'
 
 const schema = z.object({
     barcode: z.string().nonempty()
@@ -42,15 +42,7 @@ export const POST = async ({ request, locals }) => {
                         status: true,
                         designationId: true
                     },
-                    where: (deploymentItem, { and, eq, inArray, isNull }) =>
-                        and(
-                            eq(deploymentItem.designationId, account.id),
-                            inArray(deploymentItem.status, [
-                                freezerStatus.HOUSED_AVAILABLE,
-                                freezerStatus.PULLOUT
-                            ]),
-                            isNull(deploymentItem.deletedAt)
-                        ),
+                    where: (deploymentItem, { isNull }) => isNull(deploymentItem.deletedAt),
                     orderBy: desc(t.deploymentItem.createdAt),
                     limit: 1
                 }
