@@ -43,9 +43,8 @@ export const POST = async ({ request, locals }) => {
             )
         }
 
-        const resolvedStatus =
-            status ??
-            (deploymentStatus.FOR_DELIVERY as (typeof t.deployment.$inferSelect)['status'])
+        const resolvedStatus = (status ??
+            deploymentStatus.FOR_DELIVERY) as (typeof t.deployment.$inferSelect)['status']
 
         const root = await db.query.account.findFirst({
             where: eq(t.account.id, account.id),
