@@ -4,7 +4,7 @@ import type { Handle } from '@sveltejs/kit'
 import { StatusCodes, ReasonPhrases } from 'http-status-codes'
 import jwt, { type JwtPayload } from 'jsonwebtoken'
 
-const LOGIN_ROUTES = ['/api/users/login', '/api/users/authorize']
+const LOGIN_ROUTES = ['/api/login', '/api/authorize']
 
 /**
  * Handles access verification and serves as a middleware.
