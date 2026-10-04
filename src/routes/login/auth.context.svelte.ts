@@ -105,6 +105,11 @@ class AuthContext {
                 case userRoles.DISTRIBUTOR_USER:
                     goto('/distributor')
                     break
+
+                case userRoles.DEALER_ADMIN:
+                case userRoles.DEALER_USER:
+                    goto('/dealer')
+                    break
             }
         } catch (e: any) {
             this.error = errors.UNEXPECTED_ERROR.message
