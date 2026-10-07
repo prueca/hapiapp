@@ -1,6 +1,30 @@
 **Revised Deployment Schema**
 
 ```ts
+export const originStatusEnum = pgEnum('origin_status', [
+    'processing',
+    'pending',
+    'cancelled',
+    'for-delivery',
+    'in-transit',
+    'delivered',
+    'for-pullout',
+    'subject-for-pullout',
+    'for-replacement - broken-unit',
+    'for-replacement - upgrade',
+    'for-replacement - downgrade'
+])
+
+export const destinationStatusEnum = pgEnum('destination_status', [
+    'processing',
+    'pending',
+    'cancelled',
+    'to-receive',
+    'received',
+    'pullout-by-dealer',
+    'pullout-by-distributor'
+])
+
 export const deployment = pgTable(
     'deployment',
     {
@@ -8,30 +32,55 @@ export const deployment = pgTable(
         originId: varchar('origin_id', { length: 26 })
             .references(() => account.id)
             .notNull(),
-        originStatus: originStatusEnum('origin_status').notNull(), // processing, pending, cancelled, for-delivery, in-transit, delivered
+        originStatus: originStatusEnum('origin_status').notNull(), // processing, pending, cancelled, for-delivery, in-transit, delivered, for-pullout, subject-for-pullout, for-replacement - broken-unit, for-replacement - upgrade, for-replacement - downgrade
         destinationId: varchar('destination_id', { length: 26 })
             .references(() => account.id)
             .notNull(),
-        destinationStatus: destinationStatusEnum('destination_status').notNull(), // to-recieve, received, cancelled
+        destinationStatus: destinationStatusEnum('destination_status').notNull(), // to-receive, received, pullout-by-dealer, pullout-by-distributor
         deploymentDate: date('deployment_date', { mode: 'date' }),
         ...timestampMixin
     },
-    (t) => [index('deployment_origin_status_date_idx').on(t.originId, t.status, t.deploymentDate)]
+    (t) => [
+        index('deployment_origin_status_date_idx').on(t.originId, t.originStatus, t.deploymentDate)
+    ]
 )
 ```
 
+---
+
 **Deployment Context**
 
-_Deployment Matrix_
+_Deployment Matrix - Processing, Pending and Cancelled - Distributor to Dealer_
 
-| origin      | designation  |
-| ----------- | ------------ |
-| distributor | dealer       |
-| distributor | direct-store |
-| distributor | hapistore    |
-| dealer      | hapistore    |
+| origin      | origin_status | designation | designation_status |
+| ----------- | ------------- | ----------- | ------------------ |
+| distributor | processing    | dealer      | processing         |
+| distributor | pending       | dealer      | pending            |
+| distributor | cancelled     | dealer      | cancelled          |
 
----
+_Deployment Matrix - Processing, Pending and Cancelled - Distributor to Direct Store_
+
+| origin      | origin_status | designation  | designation_status |
+| ----------- | ------------- | ------------ | ------------------ |
+| distributor | processing    | direct-store | processing         |
+| distributor | pending       | direct-store | pending            |
+| distributor | cancelled     | direct-store | cancelled          |
+
+_Deployment Matrix - Processing, Pending and Cancelled - Distributor to Hapistore_
+
+| origin      | origin_status | designation | designation_status |
+| ----------- | ------------- | ----------- | ------------------ |
+| distributor | processing    | hapistore   | processing         |
+| distributor | pending       | hapistore   | pending            |
+| distributor | cancelled     | hapistore   | cancelled          |
+
+_Deployment Matrix - Processing, Pending and Cancelled - Dealer to Hapistore_
+
+| origin | origin_status | designation | designation_status |
+| ------ | ------------- | ----------- | ------------------ |
+| dealer | processing    | hapistore   | processing         |
+| dealer | pending       | hapistore   | pending            |
+| dealer | cancelled     | hapistore   | cancelled          |
 
 _Deployment Status With Processing, Pending and Cancelled - (Internal Arrangement By Distributor Or Dealer)_
 
@@ -56,6 +105,22 @@ _Deployment Status With Processing, Pending and Cancelled - (Internal Arrangemen
 ```
 
 ---
+
+_Deployment Matrix - For Delivery, In-Transit And Delivered - Distributor To Dealer_
+
+| origin      | origin_status | designation | designation_status |
+| ----------- | ------------- | ----------- | ------------------ |
+| distributor | for-delivery  | dealer      | to-receive         |
+| distributor | in-transit    | dealer      | to-receive         |
+| distributor | delivered     | dealer      | received           |
+
+_Deployment Matrix - For Delivery And In-Transit And Delivered - Dealer to Hapistore_
+
+| origin | origin_status | designation | designation_status |
+| ------ | ------------- | ----------- | ------------------ |
+| dealer | for-delivery  | hapistore   | to-recieve         |
+| dealer | in-transit    | hapistore   | to-recieve         |
+| dealer | delivered     | hapistore   | received           |
 
 _Deployment Status With For-Delivery And In-Transit - (Outgoing Freezer From The Origin Account And Incoming Freezer For Receiving Account)_
 
@@ -83,13 +148,37 @@ _Deployment Status With For-Delivery And In-Transit - (Outgoing Freezer From The
 
 **Pullout Context**
 
-_Pullout Matrix_
+_Pullout Matrix - For Pullout - Hapistore to Dealer_
 
-| origin       | designation |
-| ------------ | ----------- |
-| hapistore    | dealer      |
-| direct-store | distributor |
-| dealer       | distributor |
+| origin    | origin_status | designation | designation_status |
+| --------- | ------------- | ----------- | ------------------ |
+| hapistore | for-pullout   | dealer      | pullout-by-dealer  |
+
+_Pullout Matrix - For Pullout - Direct Store to Distributor_
+
+| origin       | origin_status | designation | designation_status     |
+| ------------ | ------------- | ----------- | ---------------------- |
+| direct-store | for-pullout   | distributor | pullout-by-distributor |
+
+_Pullout Matrix - For Pullout - Dealer to Distributor_
+
+| origin | origin_status | designation | designation_status     |
+| ------ | ------------- | ----------- | ---------------------- |
+| dealer | for-pullout   | distributor | pullout-by-distributor |
+
+_Pullout Matrix - Subject For Pullout - Dealer to Hapistore (Outlets With Below Target Performance On Sales And Freezer Reporting)_
+
+| origin    | origin_status       | designation | designation_status |
+| --------- | ------------------- | ----------- | ------------------ |
+| hapistore | subject-for-pullout | dealer      | pullout-by-dealer  |
+
+_Pullout Matrix - For Replacement - Hapistore To Dealer_
+
+| origin    | origin_status                 | designation | designation_status |
+| --------- | ----------------------------- | ----------- | ------------------ |
+| hapistore | for-replacement - broken-unit | dealer      | pullout-by-dealer  |
+| hapistore | for-replacement - upgrade     | dealer      | pullout-by-dealer  |
+| hapistore | for-replacement - downgrade   | dealer      | pullout-by-dealer  |
 
 _Deployment Status With For-Pullout - (Request From hapistore, direct_store or dealer)_
 
