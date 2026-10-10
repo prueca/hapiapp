@@ -168,9 +168,9 @@
     }
 
     .close-btn {
-        @apply cursor-pointer rounded-lg border-none;
+        @apply cursor-pointer rounded-lg border-none bg-(--c1) text-white;
     }
     .submit-btn {
-        @apply cursor-pointer rounded-lg border-none bg-(--c1) text-white;
+        @apply cursor-pointer rounded-lg border-none bg-(--c6) text-white;
     }
 </style>
