@@ -11,16 +11,16 @@ const TO_RECEIVE = 'to-receive'
 const RECEIVED = 'received'
 const SUBJECT_FOR_PULLOUT = 'subject-for-pullout'
 const FOR_PULLOUT = 'for-pullout'
-const FOR_REPLACEMENT_BROKEN_UNIT = 'for-replacement - broken-unit'
-const FOR_REPLACEMENT_UPGRADE = 'for-replacement - upgrade'
-const FOR_REPLACEMENT_DOWNGRADE = 'for-replacement - downgrade'
+const FOR_REPLACEMENT_BROKEN_UNIT = 'for-replacement-broken-unit'
+const FOR_REPLACEMENT_UPGRADE = 'for-replacement-upgrade'
+const FOR_REPLACEMENT_DOWNGRADE = 'for-replacement-downgrade'
 const PULLOUT_BY_DISTRIBUTOR = 'pullout-by-distributor'
 const PULLOUT_BY_DEALER = 'pullout-by-dealer'
 
 // deployment item status values
-const HOUSED_AVAILABLE = 'housed - available'
-const FOR_DEPLOYMENT = 'for deployment'
-const DEPLOYED_DESIGNATED = 'deployed - designated'
+const HOUSED_AVAILABLE = 'housed-available'
+const FOR_DEPLOYMENT = 'for-deployment'
+const DEPLOYED_DESIGNATED = 'deployed-designated'
 const PULLOUT = 'pullout'
 
 export const originStatus = {
