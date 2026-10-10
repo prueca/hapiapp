@@ -10,7 +10,7 @@
 
 <div>
     <SearchDeployment />
-    <div class="flex flex-col gap-2 bg-gray-50 p-2">
+    <div class="flex flex-col gap-2 bg-gray-50 p-2 md:gap-4 md:p-4">
         {#if state.loading}
             <Skeleton class="h-45 w-full" />
         {:else}
