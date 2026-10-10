@@ -1,8 +1,9 @@
 <!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
 <script lang="ts">
     import DeploymentList from './DeploymentList.svelte'
+    import CreateDeployment from './CreateDeployment.svelte'
 
-    let activeTab = $state<'A' | 'B'>('A')
+    let activeTab = $state<'A' | 'B'>('B')
 </script>
 
 <div class="px-4">
@@ -27,11 +28,7 @@
         {#if activeTab === 'A'}
             <DeploymentList />
         {:else if activeTab === 'B'}
-            <div class="p-4">
-                B. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fuga eius omnis
-                explicabo tempore natus consequuntur provident, amet numquam deleniti eligendi
-                atque, molestiae, nihil animi quasi optio sapiente nisi nam.
-            </div>
+            <CreateDeployment />
         {/if}
     </div>
 </div>
