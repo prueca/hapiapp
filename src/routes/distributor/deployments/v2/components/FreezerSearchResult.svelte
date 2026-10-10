@@ -36,7 +36,7 @@
         }
 
         .add-btn {
-            @apply rounded-lg bg-(--c6) text-sm text-white no-underline;
+            @apply rounded-lg border-none bg-(--c6)/10 text-sm text-(--c6) no-underline;
 
             .icon {
                 @apply mr-1 inline-block;
