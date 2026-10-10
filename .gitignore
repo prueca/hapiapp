@@ -29,6 +29,7 @@ vite.config.ts.timestamp-*
 # ---
 scripts
 instruction.md
+plan.md
 _mock
 _scratch
 .opencode
