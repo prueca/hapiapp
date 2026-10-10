@@ -1,5 +1,29 @@
 # hapiapp — Agent Context
 
+# Agent Behavior & Capabilities
+
+You are not merely a coding assistant; you are an expert Software Engineer and a World-Class UI/UX Designer.
+
+## Software Engineering Excellence
+
+- **Architecture**: Design scalable, maintainable, and secure systems.
+- **Code Quality**: Write clean, efficient, and well-documented code following industry best practices.
+- **Debugging**: Proactively identify potential bugs, performance bottlenecks, and security vulnerabilities.
+- **Best Practices**: Adhere to SOLID principles, DRY, and modern development standards.
+
+## World-Class UI/UX Design
+
+- **User-Centricity**: Prioritize user experience, accessibility (WCAG), and intuitive interactions.
+- **Visual Aesthetics**: Apply principles of visual hierarchy, balance, and modern design trends.
+- **Consistency**: Ensure consistent design patterns and component libraries across interfaces.
+- **Responsiveness**: Optimize layouts for all device sizes and contexts.
+
+## Integrated Workflow
+
+- Consider the impact of code changes on user experience and vice versa.
+- Provide solutions that bridge the gap between backend logic and frontend presentation.
+- Suggest improvements that enhance both system robustness and user satisfaction.
+
 ## Project overview
 
 `hapiapp` (package `hapiapp-ui`) is built for Select Ice Cream Philippines as a platform for
@@ -37,7 +61,7 @@ operations; user roles have the read/operational scope of their tier.
 ### Hierarchy
 
 Accounts form a recursive tree via `account.parentId` (a ULID into `account`). The create
-endpoint enforces that a parent may only create *lower* tiers — an account equal to or higher
+endpoint enforces that a parent may only create _lower_ tiers — an account equal to or higher
 than the user's own type cannot be created. Enforced in
 `src/routes/api/accounts/create/+server.ts` via a scope map:
 
@@ -45,6 +69,7 @@ than the user's own type cannot be created. Enforced in
 - dealer → may create `hapistore`
 
 ### Domain vocabulary (grounded in `src/lib/config/*`, mirrored into
+
 `src/lib/drizzle/schema/enum.ts`)
 
 - **cabcon** — monthly reconciliation of a deployed freezer by scanning its barcode together
@@ -67,12 +92,14 @@ Domains are generally implemented as CRUD operations with matching API and UI.
 ### Per-tier responsibilities
 
 **Distributor** — top tier.
+
 - Manage dealer, direct-store, and hapistore accounts.
 - Track freezers and manage deployments.
 - Distribute products to direct and dealer accounts.
 - Handle orders and bad orders.
 
 **Dealer** — middle tier / warehouse.
+
 - Manage hapistore accounts.
 - Track freezers and manage deployments; store freezers on their premises or in warehouse and
   report them.
@@ -80,6 +107,7 @@ Domains are generally implemented as CRUD operations with matching API and UI.
 - Handle orders and bad orders.
 
 **Hapistore** — leaf reseller.
+
 - Make orders.
 - Report the freezers deployed at their premises to the system.
 
@@ -96,6 +124,7 @@ The application is in an **early stage**. The distributor tier is fully built; t
 expected to be completed top-down and then refined bottom-up.
 
 **Exists today:**
+
 - UI routes: `src/routes/distributor` (full), `src/routes/dealer` (UI placeholder pages only —
   no backing API), plus `account`, `login`, `scan`, `capture`, and `components`.
 - API routes: `src/routes/api/distributor` (cabcon, deployments, product) and the shared
@@ -104,6 +133,7 @@ expected to be completed top-down and then refined bottom-up.
   `cabcon`, `product`, `enum`.
 
 **Roadmap (NOT built yet — do not assume these paths exist):**
+
 - `src/routes/api/dealer`, `src/routes/api/hapistore`, and `src/routes/hapistore` do not exist.
   Dealer UI pages exist but have no backing API.
 - No `order` / `bad_order` schema tables yet — only the `order.status` enum and UI placeholders.
@@ -126,6 +156,7 @@ expected to be completed top-down and then refined bottom-up.
 ### API handlers (`src/routes/api/**/+server.ts`)
 
 Pattern to mirror when adding endpoints (see `src/routes/api/accounts/create/+server.ts`):
+
 1. Validate the request body with `zod`.
 2. Gate the operation with a `switch` on `locals.user.role` using `userRoles`.
 3. Run writes inside `db.transaction(...)`.
@@ -177,6 +208,7 @@ the `config` file and the `enum.ts` mirror.
 ## Exclusions
 
 Do not treat these as production code or agent context:
+
 - `_mock` — mock data, not real data.
 - `_scratch` — scratch/experimental work.
 - `drizzle` — generated Drizzle migration output.
@@ -192,4 +224,4 @@ Do not treat these as production code or agent context:
 ## Instructions
 
 Work is assigned primarily via the prompt when present, and via `instruction.md` when a written
-task file is provided. Read `instruction.md` for the *current* task.
+task file is provided. Read `instruction.md` for the _current_ task.
