@@ -4,21 +4,23 @@
 </script>
 
 <div class="content-wrapper">
-    <div class="nav-wrap">
-        <TopBar />
+    <TopBar />
+    <div class="merchant p-4">
+        <div class="px-4 pb-4">
+            <h1 class="text-xl font-bold">Global Logistics Solutions</h1>
+        </div>
+        <nav class="nav px-4">
+            <a href="/distributor">Home</a>
+            <a href="/distributor/deployments">Deployments</a>
+            <a href="/distributor/deployments/pullout" class="current">Pullout</a>
+        </nav>
     </div>
-
-    <nav class="nav">
-        <a href="/distributor">Home</a>
-        <a href="/distributor/deployments">Deployments</a>
-        <a href="/distributor/deployments/pullout" class="current">Pullout</a>
-    </nav>
 
     <!-- searching, sorting and filtering section -->
     <div class="toolbar">
         <label class="search">
             <Icon icon="bytesize:search" width="20" />
-            <input type="search" placeholder="Search destinations or barcodes..." />
+            <input type="search" placeholder="Search for Name or Address..." />
         </label>
         <button type="button" class="filter-btn" aria-label="Filter deployments">
             <Icon icon="bi:filter" width="24" />
@@ -37,7 +39,7 @@
                 <div class="account-type">dealer</div>
                 <div class="account-address">456 Industrial St, Detroit, MI 48201</div>
             </div>
-            <div class="bot-row">
+            <div class="listing-row">
                 <button type="button" class="list-btn" aria-label="Toggle freezer list">
                     <Icon icon="carbon:list-boxes" width="24" />
                     <span class="count">5</span>
@@ -56,6 +58,9 @@
                     <div class="item-meta">12-cu-2023</div>
                 </li>
             </ul>
+            <div class="btn-row">
+                <button class="btn-receive btn">Receive</button>
+            </div>
         </li>
         <li class="sub-container">
             <div class="top-row">
@@ -67,7 +72,7 @@
                 <div class="account-type">dealer</div>
                 <div class="account-address">789 Oak Rd, Chicago, IL 60601</div>
             </div>
-            <div class="bot-row">
+            <div class="listing-row">
                 <button type="button" class="list-btn" aria-label="Toggle freezer list">
                     <Icon icon="carbon:list-boxes" width="24" />
                     <span class="count">5</span>
@@ -86,6 +91,9 @@
                     <div class="item-meta">12-cu-2023</div>
                 </li>
             </ul>
+            <div class="btn-row">
+                <button class="btn-receive btn">Receive</button>
+            </div>
         </li>
         <li class="sub-container">
             <div class="top-row">
@@ -97,7 +105,7 @@
                 <div class="account-type">dealer</div>
                 <div class="account-address">321 Pine Ln, Los Angeles, CA 90001</div>
             </div>
-            <div class="bot-row">
+            <div class="listing-row">
                 <button type="button" class="list-btn" aria-label="Toggle freezer list">
                     <Icon icon="carbon:list-boxes" width="24" />
                     <span class="count">5</span>
@@ -116,6 +124,9 @@
                     <div class="item-meta">12-cu-2023</div>
                 </li>
             </ul>
+            <div class="btn-row">
+                <button class="btn-receive btn">Receive</button>
+            </div>
         </li>
     </ul>
 </div>
@@ -127,20 +138,30 @@
         --border: var(--color-gray-200, #e5e7eb);
     }
 
-    .nav-wrap {
-        @apply pb-21;
+    .merchant {
+        background: linear-gradient(
+            225deg,
+            #ff6f70 0%,
+            #ffa091 20%,
+            #ffc7b1 40%,
+            #ffe4d0 60%,
+            #fff6ee 80%,
+            #fffcff 100%
+        );
+
+        mask-image: linear-gradient(to bottom, black 0%, black 25%, transparent 100%);
     }
 
     /* Breadcrumb nav */
     .nav {
-        @apply flex gap-4 border-b border-b-gray-100 px-4 py-3 text-sm text-gray-500;
+        @apply flex gap-4 py-3 text-sm text-gray-500;
 
         a {
-            @apply text-gray-500 hover:text-gray-700;
+            @apply font-semibold text-gray-900 hover:text-gray-700;
         }
 
         a.current {
-            @apply font-medium text-(--c1);
+            @apply font-semibold text-(--c1);
         }
     }
 
@@ -150,15 +171,15 @@
     }
 
     .search {
-        @apply flex w-full items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-gray-500;
+        @apply flex w-full items-center gap-2 rounded-lg border border-gray-200 bg-(--c5) px-3 py-2 text-gray-500;
 
         input {
-            @apply w-full grow bg-transparent outline-none;
+            @apply w-full grow border-none bg-transparent outline-none;
         }
     }
 
     .filter-btn {
-        @apply shrink-0 rounded-lg border border-gray-200 px-3 text-gray-500 hover:text-(--c1);
+        @apply shrink-0 rounded-lg border border-gray-200 bg-(--c5) px-3 text-gray-500 hover:text-(--c1);
     }
 
     /* Listing */
@@ -201,12 +222,23 @@
     }
 
     /* Action row: toggle + count */
-    .bot-row {
-        @apply flex items-center gap-1.5 pt-3 text-sm font-medium;
+    .listing-row {
+        @apply mt-2.5 flex items-center gap-1.5 border-t border-gray-200 pt-3 text-sm font-medium;
+    }
 
-        margin-top: 1rem;
-        padding-top: 1rem;
-        border-top: 1px solid var(--border);
+    .btn-row {
+        margin-inline: auto;
+        margin-block: 1rem;
+        border-radius: 1rem;
+        background-color: var(--c1);
+    }
+
+    .btn-receive {
+        display: flex;
+        margin-inline: auto;
+        border: none;
+        background-color: inherit;
+        color: var(--c5);
     }
 
     .list-btn {
@@ -214,7 +246,7 @@
     }
 
     .count {
-        @apply ml-0.5 rounded-sm bg-(--c1) px-1.5 text-xs text-white;
+        @apply ml-2 rounded-sm bg-(--c1) px-1.5 text-xs text-white;
     }
 
     .count-label {
@@ -227,19 +259,13 @@
     }
 
     .item {
-        position: relative;
-        @apply flex flex-col gap-0.5 rounded-lg bg-gray-50 p-3;
+        @apply relative mt-3 flex flex-col gap-0.5 rounded-lg bg-gray-50 p-3;
 
         &[data-status='pullout']::before {
-            @apply absolute top-0 right-3 bg-(--c1) font-medium uppercase;
-
+            @apply absolute -top-2 right-3 bg-(--c1) px-3 py-0.5 text-[0.625rem] font-medium tracking-wider uppercase;
             content: attr(data-status);
-            top: -0.5rem;
-            padding: 0.125rem 0.75rem;
-            border-radius: 0.5rem;
-            font-size: 0.625rem;
-            letter-spacing: 0.05em;
             color: var(--c5);
+            border-radius: 0.5rem;
         }
     }
 
