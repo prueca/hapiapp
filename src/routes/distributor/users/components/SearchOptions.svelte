@@ -111,6 +111,6 @@
         }
     }
     .close-btn {
-        @apply cursor-pointer rounded-lg border-none;
+        @apply cursor-pointer rounded-lg;
     }
 </style>

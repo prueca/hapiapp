@@ -204,9 +204,9 @@
     }
 
     .close-btn {
-        @apply cursor-pointer rounded-lg border-none;
+        @apply cursor-pointer rounded-lg;
     }
     .submit-btn {
-        @apply cursor-pointer rounded-lg border-none bg-(--c1) text-white;
+        @apply cursor-pointer rounded-lg;
     }
 </style>

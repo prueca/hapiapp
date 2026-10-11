@@ -98,9 +98,9 @@
     @reference 'tailwindcss';
 
     .close-btn {
-        @apply cursor-pointer rounded-lg border-none;
+        @apply cursor-pointer rounded-lg;
     }
     .confirm-btn {
-        @apply cursor-pointer rounded-lg border-none bg-(--c1) text-white;
+        @apply cursor-pointer rounded-lg;
     }
 </style>
