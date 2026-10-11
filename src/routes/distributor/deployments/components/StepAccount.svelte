@@ -2,6 +2,17 @@
     import AccountSearch from './AccountSearch.svelte'
     import AccountSearchResult from './AccountSearchResult.svelte'
     import AccountSelected from './AccountSelected.svelte'
+    import create from '../create.svelte'
+
+    const next = () => {
+        create.setCurrentStep(3)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+
+    const back = () => {
+        create.setCurrentStep(1)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
 </script>
 
 <div class="flex flex-col gap-2 md:gap-4">
@@ -23,8 +34,8 @@
         </div>
         <AccountSelected />
         <div class="flex flex-row-reverse gap-2 text-right">
-            <button type="button" class="btn btn-ghost btn-sm">Next</button>
-            <button type="button" class="btn btn-ghost btn-sm">Back</button>
+            <button type="button" class="btn btn-ghost btn-sm" onclick={next}>Next</button>
+            <button type="button" class="btn btn-ghost btn-sm" onclick={back}>Back</button>
         </div>
     </div>
 </div>

@@ -4,16 +4,15 @@
     import StepFreezers from './StepFreezers.svelte'
     import StepAccount from './StepAccount.svelte'
     import StepDate from './StepDate.svelte'
-
-    let step = $state(3)
+    import create from '../create.svelte'
 </script>
 
 <div>
     <Stepper />
     <div class="content">
-        {#if step === 3}
+        {#if create.currentStep === 3}
             <StepDate />
-        {:else if step === 2}
+        {:else if create.currentStep === 2}
             <StepAccount />
         {:else}
             <StepFreezers />

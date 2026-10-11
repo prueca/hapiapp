@@ -2,6 +2,12 @@
     import FreezerSearch from './FreezerSearch.svelte'
     import FreezerSearchResult from './FreezerSearchResult.svelte'
     import FreezerAdded from './FreezerAdded.svelte'
+    import create from '../create.svelte'
+
+    const next = () => {
+        create.setCurrentStep(2)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
 </script>
 
 <div class="flex flex-col gap-2 md:gap-4">
@@ -23,7 +29,7 @@
             <FreezerAdded />
         </div>
         <div class="flex flex-row-reverse gap-2 text-right">
-            <button type="button" class="btn btn-ghost btn-sm">Next</button>
+            <button type="button" class="btn btn-ghost btn-sm" onclick={next}>Next</button>
             <button type="button" class="btn btn-ghost btn-sm">Cancel</button>
         </div>
     </div>

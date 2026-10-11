@@ -1,6 +1,7 @@
 <!--svelte-ignore a11y_missing_attribute -->
 <script lang="ts">
     import Icon from '@iconify/svelte'
+    import create from '../create.svelte'
 </script>
 
 <div class="stepper">
@@ -14,11 +15,13 @@
 
     <!-- Connector Line -->
     <div class="connector">
-        <div class="active"></div>
+        {#if create.currentStep >= 2}
+            <div class="active"></div>
+        {/if}
     </div>
 
     <!-- Step 2: Select Account -->
-    <div class="step active">
+    <div class="step" class:active={create.currentStep >= 2}>
         <div class="step-icon">
             <Icon icon="bi:passport-fill" width="24" />
         </div>
@@ -27,11 +30,13 @@
 
     <!-- Connector Line -->
     <div class="connector">
-        <!-- <div class="active"></div> -->
+        {#if create.currentStep === 3}
+            <div class="active"></div>
+        {/if}
     </div>
 
     <!-- Step 3: Select Date -->
-    <div class="step">
+    <div class="step" class:active={create.currentStep === 3}>
         <div class="step-icon">
             <Icon icon="clarity:calendar-solid-badged" width="24" />
         </div>
@@ -49,7 +54,7 @@
     }
 
     .step {
-        @apply flex h-auto flex-1 cursor-pointer flex-col items-center text-gray-300;
+        @apply flex h-auto flex-1 flex-col items-center text-gray-300;
 
         &.active {
             @apply text-(--active-color);
