@@ -14,9 +14,9 @@
     </div>
 
     {#if added}
-        <div class="added badge">Added to selection</div>
+        <div class="added badge badge-sm">Added to selection</div>
     {:else}
-        <button type="button" class="add-btn btn btn-sm">
+        <button type="button" class="add-btn btn btn-xs">
             <div class="icon">
                 <Icon icon="boxicons:check-square-filled" />
             </div>
@@ -37,10 +37,10 @@
     }
 
     .add-btn {
-        @apply rounded border-none bg-(--c6)/10 text-sm text-(--c6) no-underline;
+        @apply rounded border-none bg-(--c6)/10 text-xs text-(--c6) no-underline;
 
         .icon {
-            @apply mr-1 inline-block;
+            @apply inline-block;
         }
     }
 </style>

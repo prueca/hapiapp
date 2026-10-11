@@ -10,7 +10,7 @@
         <div class="text-gray-400">Aucma - Curved Sliding Glass Lighted</div>
         <div class="text-gray-400">12 • cu • 2022</div>
     </div>
-    <button type="button" class="remove-btn btn btn-sm">
+    <button type="button" class="remove-btn btn btn-xs">
         <div class="icon">
             <Icon icon="boxicons:minus-square-filled" />
         </div>
@@ -30,10 +30,10 @@
     }
 
     .remove-btn {
-        @apply border-none bg-(--c1)/10 text-sm text-(--c1) no-underline;
+        @apply border-none bg-(--c1)/10 text-xs text-(--c1) no-underline;
 
         .icon {
-            @apply mr-1 inline-block text-sm;
+            @apply inline-block text-sm;
         }
     }
 </style>

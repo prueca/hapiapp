@@ -27,9 +27,9 @@
     </div>
 
     {#if selected}
-        <div class="selected badge">Selected</div>
+        <div class="selected badge badge-sm">Selected</div>
     {:else}
-        <button type="button" class="set-btn btn btn-sm">
+        <button type="button" class="set-btn btn btn-xs">
             <div class="icon">
                 <Icon icon="boxicons:check-square-filled" />
             </div>
@@ -54,10 +54,10 @@
     }
 
     .set-btn {
-        @apply border-none bg-(--c6)/10 text-sm text-(--c6) no-underline;
+        @apply border-none bg-(--c6)/10 text-xs text-(--c6) no-underline;
 
         .icon {
-            @apply mr-1 inline-block;
+            @apply inline-block;
         }
     }
 </style>

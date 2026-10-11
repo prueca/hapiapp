@@ -4,7 +4,7 @@
     import StepFreezers from './StepFreezers.svelte'
     import StepAccount from './StepAccount.svelte'
 
-    let step = $state(2)
+    let step = $state(1)
 </script>
 
 <div>
