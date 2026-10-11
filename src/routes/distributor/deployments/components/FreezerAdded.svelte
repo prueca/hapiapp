@@ -27,13 +27,13 @@
         &:nth-child(odd) {
             @apply bg-gray-50;
         }
+    }
 
-        .remove-btn {
-            @apply rounded-lg border-none bg-(--c1)/10 text-sm text-(--c1) no-underline;
+    .remove-btn {
+        @apply rounded-lg border-none bg-(--c1)/10 text-sm text-(--c1) no-underline;
 
-            .icon {
-                @apply mr-1 inline-block text-sm;
-            }
+        .icon {
+            @apply mr-1 inline-block text-sm;
         }
     }
 </style>

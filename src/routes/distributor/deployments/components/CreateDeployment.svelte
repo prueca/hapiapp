@@ -2,12 +2,19 @@
 <script lang="ts">
     import Stepper from './Stepper.svelte'
     import StepFreezers from './StepFreezers.svelte'
+    import StepAccount from './StepAccount.svelte'
+
+    let step = $state(1)
 </script>
 
 <div>
     <Stepper />
     <div class="content">
-        <StepFreezers />
+        {#if step === 1}
+            <StepFreezers />
+        {:else if step === 2}
+            <StepAccount />
+        {/if}
     </div>
 </div>
 

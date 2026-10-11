@@ -7,9 +7,6 @@
 <div class="flex flex-col gap-2 md:gap-4">
     <!-- search freezer -->
     <div class="section bg-base-100">
-        <div class="mb-2">
-            <div class="mb-1 text-lg">Search Freezer</div>
-        </div>
         <FreezerSearch />
         <FreezerSearchResult />
     </div>
@@ -18,7 +15,7 @@
     <div class="section bg-base-100">
         <div class="mb-4">
             <div class="mb-1 text-lg">Freezers Added</div>
-            <div class="text-xs text-gray-400">Select atleast one freezer to proceed</div>
+            <div class="text-xs text-gray-400">List of items set for deployment</div>
         </div>
         <div class="mb-4 overflow-hidden rounded-lg">
             <FreezerAdded />
@@ -26,8 +23,8 @@
             <FreezerAdded />
         </div>
         <div class="flex flex-row-reverse gap-2 text-right">
-            <button type="button" class="next-btn btn">Next</button>
-            <button type="button" class="cancel-btn btn">Cancel</button>
+            <button type="button" class="btn btn-ghost btn-sm">Next</button>
+            <button type="button" class="btn btn-ghost btn-sm">Cancel</button>
         </div>
     </div>
 </div>
@@ -39,8 +36,7 @@
         @apply rounded-lg p-4 shadow;
     }
 
-    .next-btn,
-    .cancel-btn {
-        @apply w-20 rounded-lg;
+    .btn {
+        @apply no-underline;
     }
 </style>

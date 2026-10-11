@@ -6,7 +6,7 @@
     let { added = false } = $props()
 </script>
 
-<div class="search-result">
+<div class="freezer-search-result">
     <div class="mb-4 flex flex-col gap-1">
         <div class="font-medium">929991192693409444629843</div>
         <div class="text-gray-400">Aucma - Curved Sliding Glass Lighted</div>
@@ -28,19 +28,19 @@
 <style lang="postcss">
     @reference 'tailwindcss';
 
-    .search-result {
+    .freezer-search-result {
         @apply rounded-lg bg-gray-50 p-4 text-left text-sm;
+    }
 
-        .added {
-            @apply mt-2 rounded-sm border-none bg-(--c6) text-white;
-        }
+    .added {
+        @apply rounded-sm border-none bg-(--c6) text-white;
+    }
 
-        .add-btn {
-            @apply rounded-lg border-none bg-(--c6)/10 text-sm text-(--c6) no-underline;
+    .add-btn {
+        @apply rounded-lg border-none bg-(--c6)/10 text-sm text-(--c6) no-underline;
 
-            .icon {
-                @apply mr-1 inline-block;
-            }
+        .icon {
+            @apply mr-1 inline-block;
         }
     }
 </style>
