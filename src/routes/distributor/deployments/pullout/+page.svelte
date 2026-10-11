@@ -13,6 +13,7 @@
             <a href="/distributor">Home</a>
             <a href="/distributor/deployments">Deployments</a>
             <a href="/distributor/deployments/pullout" class="current">Pullout</a>
+            <a href="/distributor/deployments/received" class="current">Received</a>
         </nav>
     </div>
 
@@ -266,6 +267,7 @@
             content: attr(data-status);
             color: var(--c5);
             border-radius: 0.5rem;
+            text-transform: lowercase;
         }
     }
 
