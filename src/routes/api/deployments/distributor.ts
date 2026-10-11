@@ -25,7 +25,7 @@ export default async (data: Json) => {
     }
 
     if (data.status) {
-        conditions.push(eq(t.deployment.status, data.status))
+        conditions.push(eq(t.deployment.originStatus, data.status))
     }
 
     if (data.sort) {
@@ -39,11 +39,11 @@ export default async (data: Json) => {
                 break
 
             case 'status-asc':
-                sort.unshift(asc(t.deployment.status))
+                sort.unshift(asc(t.deployment.originStatus))
                 break
 
             case 'status-desc':
-                sort.unshift(desc(t.deployment.status))
+                sort.unshift(desc(t.deployment.originStatus))
                 break
         }
     }

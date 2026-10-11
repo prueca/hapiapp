@@ -3,7 +3,7 @@ import z from 'zod'
 import { StatusCodes } from 'http-status-codes'
 import { json, error, isHttpError } from '@sveltejs/kit'
 import errors from '$lib/errors'
-import { deploymentStatus } from '$lib/config/deployment.status'
+import { originStatus } from '$lib/config/deployment.status'
 import accountTypes from '$lib/config/account.types'
 
 type Handler = (data: Json) => Promise<{ items: Json[]; nextCursor: string }>
@@ -14,13 +14,17 @@ const schema = z.object({
         .optional(),
     status: z
         .enum([
-            deploymentStatus.CANCELLED,
-            deploymentStatus.DELIVERED,
-            deploymentStatus.FOR_DELIVERY,
-            deploymentStatus.IN_TRANSIT,
-            deploymentStatus.PENDING,
-            deploymentStatus.PROCESSING,
-            deploymentStatus.RECEIVED
+            originStatus.PROCESSING,
+            originStatus.PENDING,
+            originStatus.CANCELLED,
+            originStatus.FOR_DELIVERY,
+            originStatus.IN_TRANSIT,
+            originStatus.DELIVERED,
+            originStatus.FOR_PULLOUT,
+            originStatus.SUBJECT_FOR_PULLOUT,
+            originStatus.FOR_REPLACEMENT_BROKEN_UNIT,
+            originStatus.FOR_REPLACEMENT_UPGRADE,
+            originStatus.FOR_REPLACEMENT_DOWNGRADE
         ])
         .optional(),
     query: z.string().optional(),
