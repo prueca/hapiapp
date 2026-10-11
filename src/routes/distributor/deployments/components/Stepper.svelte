@@ -27,11 +27,11 @@
 
     <!-- Connector Line -->
     <div class="connector">
-        <div class="active"></div>
+        <!-- <div class="active"></div> -->
     </div>
 
     <!-- Step 3: Select Date -->
-    <div class="step active">
+    <div class="step">
         <div class="step-icon">
             <Icon icon="clarity:calendar-solid-badged" width="24" />
         </div>
@@ -43,27 +43,16 @@
     @reference 'tailwindcss';
 
     .stepper {
-        --step-color: var(--c2);
+        --active-color: var(--c2);
 
         @apply mx-auto mt-1 flex items-center justify-between px-2 py-4 md:px-4;
     }
 
     .step {
-        @apply flex h-auto flex-1 cursor-pointer flex-col items-center text-gray-500;
+        @apply flex h-auto flex-1 cursor-pointer flex-col items-center text-gray-300;
 
         &.active {
-            @apply text-(--step-color);
-        }
-
-        &:hover,
-        &:active {
-            .step-icon {
-                @apply text-(--c1);
-            }
-
-            .step-label {
-                @apply text-(--c1);
-            }
+            @apply text-(--active-color);
         }
 
         .step-icon {
@@ -79,7 +68,7 @@
         @apply mx-2 hidden h-0.5 flex-1 bg-gray-300 md:block;
 
         .active {
-            @apply h-full bg-(--step-color);
+            @apply h-full bg-(--active-color);
         }
     }
 </style>
