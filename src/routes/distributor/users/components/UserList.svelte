@@ -24,7 +24,7 @@
             </button>
         </div>
     </div>
-    <div class="overflow-hidden rounded-lg bg-white">
+    <div class="overflow-hidden rounded bg-white">
         <!-- search components -->
         <Search />
         <SearchOptions />
@@ -58,6 +58,6 @@
     @reference 'tailwindcss';
 
     .create-user {
-        @apply flex items-center gap-2 rounded-md text-sm;
+        @apply flex items-center gap-2 text-sm;
     }
 </style>

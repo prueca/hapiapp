@@ -50,7 +50,7 @@
     }
 
     .dropdown-content {
-        @apply z-1 w-52 rounded-lg p-2 shadow-sm;
+        @apply z-1 w-52 p-2 shadow-sm;
     }
 
     .menu li > button:active {

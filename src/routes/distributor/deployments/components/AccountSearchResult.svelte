@@ -31,7 +31,7 @@
     {:else}
         <button type="button" class="set-btn btn btn-sm">
             <div class="icon">
-                <Icon icon="akar-icons:check-box-fill" />
+                <Icon icon="boxicons:check-square-filled" />
             </div>
             <span>Select account</span>
         </button>
@@ -50,11 +50,11 @@
     }
 
     .selected {
-        @apply rounded-sm border-none bg-(--c6) text-white;
+        @apply rounded border-none bg-(--c6) text-white;
     }
 
     .set-btn {
-        @apply rounded-lg border-none bg-(--c6)/10 text-sm text-(--c6) no-underline;
+        @apply border-none bg-(--c6)/10 text-sm text-(--c6) no-underline;
 
         .icon {
             @apply mr-1 inline-block;

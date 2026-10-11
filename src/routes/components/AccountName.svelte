@@ -16,7 +16,7 @@
     @reference 'tailwindcss';
 
     .account-name {
-        @apply mx-4 mb-6 rounded-lg bg-(--c1) px-4 py-3 text-(--c5);
+        @apply mx-4 mb-6 rounded bg-(--c1) px-4 py-3 text-(--c5);
         /*background: linear-gradient(135deg, #e16660, #f5b8b4);*/
     }
 </style>

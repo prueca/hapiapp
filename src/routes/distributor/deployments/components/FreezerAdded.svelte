@@ -30,7 +30,7 @@
     }
 
     .remove-btn {
-        @apply rounded-lg border-none bg-(--c1)/10 text-sm text-(--c1) no-underline;
+        @apply border-none bg-(--c1)/10 text-sm text-(--c1) no-underline;
 
         .icon {
             @apply mr-1 inline-block text-sm;

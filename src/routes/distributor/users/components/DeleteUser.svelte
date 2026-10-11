@@ -44,9 +44,7 @@
             </div>
         </div>
         <div class="modal-action">
-            <button class="close-btn btn rounded-lg" onclick={() => del.toggle(false)}>
-                Close
-            </button>
+            <button class="close-btn btn" onclick={() => del.toggle(false)}> Close </button>
         </div>
     </div>
 </div>
@@ -63,9 +61,7 @@
             </div>
         </div>
         <div class="modal-action">
-            <button class="close-btn btn rounded-lg" onclick={() => del.toggle(false)}>
-                Close
-            </button>
+            <button class="btn" onclick={() => del.toggle(false)}> Close </button>
         </div>
     </div>
 </div>
@@ -91,19 +87,8 @@
             </div>
         </div>
         <div class="modal-action">
-            <button class="confirm-btn btn" onclick={() => del.proceed()}> Confirm </button>
-            <button class="close-btn btn" onclick={() => del.toggle(false)}> Close </button>
+            <button class="btn" onclick={() => del.proceed()}> Confirm </button>
+            <button class="btn" onclick={() => del.toggle(false)}> Close </button>
         </div>
     </div>
 </div>
-
-<style lang="postcss">
-    @reference 'tailwindcss';
-
-    .close-btn {
-        @apply cursor-pointer rounded-lg;
-    }
-    .confirm-btn {
-        @apply cursor-pointer rounded-lg;
-    }
-</style>

@@ -18,7 +18,7 @@
     {:else}
         <button type="button" class="add-btn btn btn-sm">
             <div class="icon">
-                <Icon icon="akar-icons:check-box-fill" />
+                <Icon icon="boxicons:check-square-filled" />
             </div>
             <span>Add to selection</span>
         </button>
@@ -29,7 +29,7 @@
     @reference 'tailwindcss';
 
     .freezer-search-result {
-        @apply rounded-lg bg-gray-50 p-4 text-left text-sm;
+        @apply rounded bg-gray-50 p-4 text-left text-sm;
     }
 
     .added {
@@ -37,7 +37,7 @@
     }
 
     .add-btn {
-        @apply rounded-lg border-none bg-(--c6)/10 text-sm text-(--c6) no-underline;
+        @apply rounded border-none bg-(--c6)/10 text-sm text-(--c6) no-underline;
 
         .icon {
             @apply mr-1 inline-block;

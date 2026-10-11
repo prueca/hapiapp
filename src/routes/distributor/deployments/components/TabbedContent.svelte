@@ -9,11 +9,11 @@
 <div class="px-4">
     <!-- Tabs -->
     <div class="tabs-lift tabs">
-        <label class="tab flex-1 rounded-t-lg">
+        <label class="tab flex-1 rounded-t">
             <input type="radio" name="tabs" bind:group={activeTab} value="A" />
             <span>For Deployment</span>
         </label>
-        <label class="tab flex-1 rounded-t-lg">
+        <label class="tab flex-1 rounded-t">
             <input type="radio" name="tabs" bind:group={activeTab} value="B" />
             <span>Add Deployment</span>
         </label>
@@ -21,7 +21,7 @@
 
     <!-- Content -->
     <div
-        class="overflow-hidden rounded-b-lg border border-t-0 border-base-300 bg-base-100"
+        class="overflow-hidden rounded-b border border-t-0 border-base-300 bg-base-100"
         class:rounded-tl-lg={activeTab === 'B'}
         class:rounded-tr-lg={activeTab === 'A'}
     >

@@ -104,13 +104,5 @@
 
     .fieldset {
         @apply not-last:mb-4;
-
-        input,
-        select {
-            @apply rounded-lg;
-        }
-    }
-    .close-btn {
-        @apply cursor-pointer rounded-lg;
     }
 </style>

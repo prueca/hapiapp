@@ -29,7 +29,7 @@
             </button>
         </div>
     </div>
-    <div class="overflow-hidden rounded-lg bg-white">
+    <div class="overflow-hidden rounded bg-base-100">
         <!-- search components -->
         <Search />
         <SearchOptions />
@@ -50,7 +50,7 @@
                 <div class="border-t border-gray-100 p-4 text-center">
                     <button
                         type="button"
-                        class="btn rounded-lg btn-ghost btn-sm"
+                        class="btn btn-ghost btn-sm"
                         onclick={() => accounts.loadMore()}
                     >
                         Load More
@@ -66,6 +66,6 @@
 
     .create-account,
     .delete-account {
-        @apply flex items-center gap-2 rounded-md text-sm;
+        @apply flex items-center gap-2 rounded text-sm;
     }
 </style>

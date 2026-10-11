@@ -16,7 +16,7 @@
             <!-- user role -->
             <fieldset class="fieldset" class:error={update.issues.isAdmin !== null}>
                 <legend class="label">Set User Role</legend>
-                <div class="flex items-start gap-4 rounded-lg border border-gray-300 p-4">
+                <div class="flex items-start gap-4 rounded border border-gray-300 p-4">
                     <input
                         id="update-role-normal"
                         type="radio"
@@ -30,7 +30,7 @@
                         <div class="text-sm text-gray-400">Can only view records</div>
                     </label>
                 </div>
-                <div class="mb-2 flex items-start gap-4 rounded-lg border border-gray-300 p-4">
+                <div class="mb-2 flex items-start gap-4 rounded border border-gray-300 p-4">
                     <input
                         id="update-role-admin"
                         type="radio"
@@ -154,7 +154,7 @@
             </div>
         </div>
         <div class="modal-action">
-            <button class="btn rounded-lg" onclick={() => update.toggle(false)}> Close </button>
+            <button class="btn" onclick={() => update.toggle(false)}> Close </button>
         </div>
     </div>
 </div>
@@ -171,9 +171,7 @@
             </div>
         </div>
         <div class="modal-action">
-            <button class="close-btn btn rounded-lg" onclick={() => update.toggle(false)}>
-                Close
-            </button>
+            <button class="close-btn btn" onclick={() => update.toggle(false)}> Close </button>
         </div>
     </div>
 </div>
@@ -185,7 +183,7 @@
         @apply not-last:mb-4;
 
         input[type='text'] {
-            @apply w-full rounded-lg;
+            @apply w-full;
         }
 
         .help-text {
@@ -201,12 +199,5 @@
                 @apply block;
             }
         }
-    }
-
-    .close-btn {
-        @apply cursor-pointer rounded-lg;
-    }
-    .submit-btn {
-        @apply cursor-pointer rounded-lg;
     }
 </style>

@@ -165,7 +165,7 @@
 
         select,
         input[type='text'] {
-            @apply w-full rounded-lg;
+            @apply w-full;
         }
 
         .help-text {
@@ -182,12 +182,5 @@
                 @apply block;
             }
         }
-    }
-
-    .close-btn {
-        @apply cursor-pointer rounded-lg;
-    }
-    .submit-btn {
-        @apply cursor-pointer rounded-lg;
     }
 </style>

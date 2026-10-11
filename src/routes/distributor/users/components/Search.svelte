@@ -7,7 +7,7 @@
     <div class="flex gap-2">
         <!-- Search -->
         <div class="grow">
-            <label class="input w-full rounded-lg">
+            <label class="input w-full">
                 <Icon icon="bytesize:search" width="20" />
                 <input
                     type="search"
@@ -19,11 +19,7 @@
             </label>
         </div>
 
-        <button
-            type="button"
-            class="btn rounded-lg"
-            onclick={() => users.toggleSearchOptions(true)}
-        >
+        <button type="button" class="btn" onclick={() => users.toggleSearchOptions(true)}>
             <Icon icon="bi:filter" width="24" />
         </button>
     </div>

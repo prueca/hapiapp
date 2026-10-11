@@ -17,7 +17,7 @@
             <div class="mb-1 text-lg">Freezers Added</div>
             <div class="text-xs text-gray-400">List of items set for deployment</div>
         </div>
-        <div class="mb-4 overflow-hidden rounded-lg">
+        <div class="mb-4 overflow-hidden rounded">
             <FreezerAdded />
             <FreezerAdded />
             <FreezerAdded />
@@ -33,7 +33,7 @@
     @reference 'tailwindcss';
 
     .section {
-        @apply rounded-lg p-4 shadow;
+        @apply rounded p-4 shadow;
     }
 
     .btn {

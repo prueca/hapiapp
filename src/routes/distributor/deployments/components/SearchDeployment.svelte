@@ -5,12 +5,12 @@
 <div class="border-b border-b-gray-100 p-4">
     <div class="flex gap-2">
         <div class="grow">
-            <label class="input w-full rounded-lg">
+            <label class="input w-full">
                 <Icon icon="bytesize:search" width="20" />
                 <input type="search" class="grow" placeholder="Search deployment..." />
             </label>
         </div>
-        <button type="button" class="btn rounded-lg">
+        <button type="button" class="btn">
             <Icon icon="bi:filter" width="24" />
         </button>
     </div>

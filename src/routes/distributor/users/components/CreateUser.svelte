@@ -49,7 +49,7 @@
                 <div class="dropdown w-full">
                     <input
                         tabindex="0"
-                        class="input w-full rounded-lg"
+                        class="input w-full"
                         placeholder="Search account..."
                         bind:this={accountSearchInput}
                         bind:value={accounts.query}
@@ -57,10 +57,10 @@
                     />
                     <ul
                         tabindex="-1"
-                        class="dropdown-content menu z-10 w-full rounded-lg bg-base-100 p-2 shadow"
+                        class="dropdown-content menu z-10 w-full bg-base-100 p-2 shadow"
                     >
                         {#if accounts.loading}
-                            <Skeleton class="h-36 w-full rounded-lg" />
+                            <Skeleton class="h-36 w-full rounded" />
                         {:else}
                             {#each accounts.filtered as item}
                                 <AccountOption {item} onclick={() => selectAccount(item.id)} />
@@ -69,7 +69,7 @@
                                 <div class="border-t border-gray-100 pt-2 text-center">
                                     <button
                                         type="button"
-                                        class="btn rounded-lg btn-ghost btn-sm"
+                                        class="btn btn-ghost btn-sm"
                                         onclick={() => showMoreAccounts()}
                                     >
                                         Show More
@@ -87,7 +87,7 @@
             <!-- user role -->
             <fieldset class="fieldset" class:error={create.issues.isAdmin !== null}>
                 <legend class="label">Set User Role</legend>
-                <div class="flex items-start gap-4 rounded-lg border border-gray-300 p-4">
+                <div class="flex items-start gap-4 rounded border border-gray-300 p-4">
                     <input
                         id="create-role-normal"
                         type="radio"
@@ -101,7 +101,7 @@
                         <div class="text-sm text-gray-400">Can only view records</div>
                     </label>
                 </div>
-                <div class="mb-2 flex items-start gap-4 rounded-lg border border-gray-300 p-4">
+                <div class="mb-2 flex items-start gap-4 rounded border border-gray-300 p-4">
                     <input
                         id="create-role-admin"
                         type="radio"
@@ -237,7 +237,7 @@
             </div>
         </div>
         <div class="modal-action">
-            <button class="btn rounded-lg" onclick={() => create.toggle(false)}> Close </button>
+            <button class="btn" onclick={() => create.toggle(false)}> Close </button>
         </div>
     </div>
 </div>
@@ -254,9 +254,7 @@
             </div>
         </div>
         <div class="modal-action">
-            <button class="close-btn btn rounded-lg" onclick={() => create.toggle(false)}>
-                Close
-            </button>
+            <button class="close-btn btn" onclick={() => create.toggle(false)}> Close </button>
         </div>
     </div>
 </div>
@@ -268,7 +266,7 @@
         @apply not-last:mb-4;
 
         input[type='text'] {
-            @apply w-full rounded-lg;
+            @apply w-full;
         }
 
         .help-text {
@@ -284,12 +282,5 @@
                 @apply block;
             }
         }
-    }
-
-    .close-btn {
-        @apply cursor-pointer rounded-lg;
-    }
-    .submit-btn {
-        @apply cursor-pointer rounded-lg;
     }
 </style>

@@ -8,7 +8,7 @@
     <!-- search account -->
     <div class="section bg-base-100">
         <AccountSearch />
-        <div class="overflow-hidden rounded-lg">
+        <div class="overflow-hidden rounded">
             <AccountSearchResult selected />
             <AccountSearchResult />
             <AccountSearchResult />
@@ -33,7 +33,7 @@
     @reference 'tailwindcss';
 
     .section {
-        @apply rounded-lg p-4 shadow;
+        @apply rounded p-4 shadow;
     }
 
     .btn {

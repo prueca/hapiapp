@@ -19,18 +19,18 @@
     </div>
     <div class="actions">
         <div class="flex items-center">
-            <button class="btn rounded-lg py-4 btn-ghost btn-xs">
+            <button class="btn py-4 btn-ghost btn-xs">
                 <Icon icon="boxicons:calendar-alt" />
             </button>
-            <button class="btn rounded-lg py-4 btn-ghost btn-xs">
+            <button class="btn py-4 btn-ghost btn-xs">
                 <Icon icon="ci:note-edit" />
             </button>
-            <button class="btn rounded-lg py-4 btn-ghost btn-xs">
+            <button class="btn py-4 btn-ghost btn-xs">
                 <Icon icon="boxicons:trash" />
             </button>
         </div>
         <button
-            class="toggle-freezer-list btn rounded-lg py-4 btn-xs"
+            class="toggle-freezer-list btn py-4 btn-xs"
             onclick={() => (freezerListOpen = !freezerListOpen)}
         >
             <Icon icon="carbon:list-boxes" />
@@ -51,7 +51,7 @@
     @reference 'tailwindcss';
 
     .list-item {
-        @apply relative overflow-hidden rounded-lg bg-white shadow;
+        @apply relative overflow-hidden rounded bg-white shadow;
     }
 
     .details {

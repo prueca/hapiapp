@@ -9,7 +9,7 @@
     }
 </script>
 
-<div class="mb-4 rounded-lg bg-gray-50 p-4">
+<div class="mb-4 rounded bg-gray-50 p-4">
     <div class="flex items-start justify-between">
         <div class="mb-1 font-medium">
             {account.name}

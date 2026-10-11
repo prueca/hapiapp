@@ -37,10 +37,10 @@
     }
 
     .input {
-        @apply rounded-l-lg;
+        @apply rounded-l;
     }
 
     .btn {
-        @apply rounded-r-lg;
+        @apply rounded-r;
     }
 </style>
