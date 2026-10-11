@@ -1,7 +1,7 @@
 <script lang="ts">
     import logo from '$lib/assets/Selecta_Logo_2003.svg'
     import Icon from '@iconify/svelte'
-    import auth from '../auth.context.svelte'
+    import auth from '../auth.svelte'
 </script>
 
 <div class="login-form">

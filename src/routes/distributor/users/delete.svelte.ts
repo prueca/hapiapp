@@ -1,7 +1,7 @@
 import api from '$lib/api'
 import _ from 'lodash'
 import errors from '$lib/errors'
-import accounts from './accounts.context.svelte'
+import users from './users.svelte'
 
 class DeleteContext {
     open = $state(false)
@@ -12,7 +12,7 @@ class DeleteContext {
     success = $state(false)
     error: App.Error | null = $state(null)
 
-    setOpen(flag: boolean) {
+    toggle(flag: boolean) {
         if (!this.open) {
             this.error = null
         }
@@ -26,24 +26,24 @@ class DeleteContext {
 
     confirm(id: string) {
         this.target = id
-        this.setOpen(true)
+        this.toggle(true)
     }
 
     async proceed() {
         if (this.loading) return
 
         try {
-            this.setOpen(false)
+            this.toggle(false)
             this.loading = true
 
-            await api.post('accounts/delete', {
+            await api.post('users/delete', {
                 json: { id: this.target }
             })
 
             this.loading = false
             this.success = true
 
-            accounts.remove(this.target as string)
+            users.remove(this.target as string)
         } catch (e: any) {
             this.loading = false
             this.error = errors.UNEXPECTED_ERROR

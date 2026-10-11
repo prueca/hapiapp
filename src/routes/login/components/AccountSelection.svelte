@@ -1,6 +1,6 @@
 <script lang="ts">
     import Account from './Account.svelte'
-    import auth from '../auth.context.svelte'
+    import auth from '../auth.svelte'
 </script>
 
 <div class="account-selection">

@@ -2,7 +2,7 @@ import api from '$lib/api'
 import errors from '$lib/errors'
 import z from 'zod'
 import _ from 'lodash'
-import users from './users.context.svelte'
+import users from './users.svelte'
 
 class UpdateContext {
     open = $state(false)

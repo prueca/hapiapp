@@ -1,9 +1,9 @@
 <script lang="ts">
     import { onMount } from 'svelte'
-    import users from '../users.context.svelte'
+    import users from '../users.svelte'
     import Skeleton from '../../../components/Skeleton.svelte'
     import UserListItem from './UserListItem.svelte'
-    import create from '../create.context.svelte'
+    import create from '../create.svelte'
     import Search from './Search.svelte'
     import SearchOptions from './SearchOptions.svelte'
 

@@ -1,7 +1,7 @@
 <script lang="ts">
     import _ from 'lodash'
     import accountTypes, { getDisplayText } from '$lib/config/account.types'
-    import create from '../create.context.svelte'
+    import create from '../create.svelte'
     import Icon from '@iconify/svelte'
 </script>
 

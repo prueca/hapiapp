@@ -1,8 +1,8 @@
 <script lang="ts">
     import _ from 'lodash'
     import Icon from '@iconify/svelte'
-    import del from '../delete.context.svelte'
-    import users from '../users.context.svelte'
+    import del from '../delete.svelte'
+    import users from '../users.svelte'
     import { getDisplayText } from '$lib/config/user.roles'
 
     let user = $derived.by(() => {

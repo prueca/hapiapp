@@ -1,7 +1,7 @@
 <!-- svelte-ignore a11y_label_has_associated_control -->
 
 <script lang="ts">
-    import accounts from '../accounts.context.svelte'
+    import accounts from '../accounts.svelte'
     import accountTypes from '$lib/config/account.types'
 </script>
 

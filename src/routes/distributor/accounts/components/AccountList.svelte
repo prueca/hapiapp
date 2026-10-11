@@ -4,8 +4,8 @@
     import Skeleton from '../../../components/Skeleton.svelte'
     import Search from './Search.svelte'
     import SearchOptions from './SearchOptions.svelte'
-    import accounts from '../accounts.context.svelte'
-    import create from '../create.context.svelte'
+    import accounts from '../accounts.svelte'
+    import create from '../create.svelte'
 
     onMount(() => accounts.load())
 </script>

@@ -3,7 +3,7 @@
 <!-- svelte-ignore  a11y_no_static_element_interactions -->
 <script lang="ts">
     import _ from 'lodash'
-    import update from '../update.context.svelte'
+    import update from '../update.svelte'
     import Icon from '@iconify/svelte'
 </script>
 

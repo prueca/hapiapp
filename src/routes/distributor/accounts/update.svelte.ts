@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import api from '$lib/api'
 import errors from '$lib/errors'
-import accounts from './accounts.context.svelte'
+import accounts from './accounts.svelte'
 import z from 'zod'
 import accountTypes from '$lib/config/account.types'
 

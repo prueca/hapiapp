@@ -1,8 +1,8 @@
 <script lang="ts">
     import _ from 'lodash'
     import Icon from '@iconify/svelte'
-    import del from '../delete.context.svelte'
-    import accounts from '../accounts.context.svelte'
+    import del from '../delete.svelte'
+    import accounts from '../accounts.svelte'
 
     let account = $derived.by(() => {
         return _.find(accounts.list, (x) => x.id === del.target)

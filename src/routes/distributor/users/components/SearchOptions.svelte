@@ -1,7 +1,7 @@
 <!-- svelte-ignore a11y_label_has_associated_control -->
 <script lang="ts">
     import userRoles, { getDisplayText } from '$lib/config/user.roles'
-    import users from '../users.context.svelte'
+    import users from '../users.svelte'
 </script>
 
 <div class="user-selection">

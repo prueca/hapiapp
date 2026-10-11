@@ -1,8 +1,8 @@
 <script lang="ts">
     import _ from 'lodash'
     import Icon from '@iconify/svelte'
-    import del from '../delete.context.svelte'
-    import update from '../update.context.svelte'
+    import del from '../delete.svelte'
+    import update from '../update.svelte'
     import { getDisplayText } from '$lib/config/account.types'
 
     let { item, isLast = false } = $props()

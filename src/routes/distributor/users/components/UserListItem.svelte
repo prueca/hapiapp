@@ -2,8 +2,8 @@
     import _ from 'lodash'
     import Icon from '@iconify/svelte'
     import { getDisplayText } from '$lib/config/user.roles'
-    import update from '../update.context.svelte'
-    import del from '../delete.context.svelte'
+    import update from '../update.svelte'
+    import del from '../delete.svelte'
 
     let { item, isLast = false } = $props()
 

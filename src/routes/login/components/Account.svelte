@@ -1,6 +1,6 @@
 <script lang="ts">
     import Icon from '@iconify/svelte'
-    import auth from '../auth.context.svelte'
+    import auth from '../auth.svelte'
     import _ from 'lodash'
 
     type Account = {

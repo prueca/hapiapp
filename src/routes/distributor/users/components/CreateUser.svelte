@@ -4,8 +4,8 @@
 <script lang="ts">
     import _ from 'lodash'
     import { onMount } from 'svelte'
-    import accounts from '../accounts.context.svelte'
-    import create from '../create.context.svelte'
+    import accounts from '../accounts.svelte'
+    import create from '../create.svelte'
     import AccountOption from './AccountOption.svelte'
     import Skeleton from '../../../components/Skeleton.svelte'
     import Icon from '@iconify/svelte'

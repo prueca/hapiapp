@@ -1,6 +1,6 @@
 <script lang="ts">
     import Icon from '@iconify/svelte'
-    import users from '../users.context.svelte'
+    import users from '../users.svelte'
 </script>
 
 <div class="border-b border-b-gray-100 p-4">
