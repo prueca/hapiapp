@@ -1,187 +1,158 @@
-import { json, error, isHttpError } from '@sveltejs/kit'
-import { StatusCodes } from 'http-status-codes'
+import _ from 'lodash'
 import z from 'zod'
+import { StatusCodes } from 'http-status-codes'
+import { json, error, isHttpError } from '@sveltejs/kit'
+import errors from '$lib/errors'
+import { originStatus } from '$lib/config/deployment.status'
 
 import db from '$lib/drizzle'
-import * as t from '$lib/drizzle/schema'
-import {
-    originStatus,
-    destinationStatus,
-    DEFAULT_ORIGIN_STATUS_FILTER,
-    type OriginStatusFilter,
-    type DestinationStatusFilter
-} from '$lib/config/deployment.status'
-import {
-    type DeploymentRow,
-    type DeploymentMeta,
-    type DeploymentSortKey
-} from '$lib/types/deployment'
-import errors from '$lib/errors'
-import _ from 'lodash'
-import { eq, and, isNull, desc, asc, sql, getTableColumns } from 'drizzle-orm'
+import { eq, and, getTableColumns, gt, ilike, desc, asc } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
+import * as t from '$lib/drizzle/schema'
+import userRoles from '$lib/config/user.roles.js'
 
-const PAGE_SIZE = 12
-const MAX_ROWS = 600
-
-const SORT_VALUES = new Set<string>([
-    'deploymentDate-desc',
-    'deploymentDate-asc',
-    'originStatus-asc',
-    'originStatus-desc'
-])
-
-const STATUS_VALUES = new Set<string>(['all', ...Object.values(originStatus)])
-const DESTINATION_STATUS_VALUES = new Set<string>(['all', ...Object.values(destinationStatus)])
-
-const destination = alias(t.account, 'destination')
+const LIMIT = 12
 
 const schema = z.object({
-    sort: z.string().optional(),
-    filterStatus: z.string().optional(),
-    filterDestinationStatus: z.string().optional(),
-    overdueOnly: z.boolean().optional(),
+    sort: z
+        .enum(['deploymentDate-desc', 'deploymentDate-asc', 'status-asc', 'status-desc'])
+        .optional(),
+    status: z
+        .enum([
+            originStatus.PROCESSING,
+            originStatus.PENDING,
+            originStatus.CANCELLED,
+            originStatus.FOR_DELIVERY,
+            originStatus.IN_TRANSIT,
+            originStatus.DELIVERED,
+            originStatus.FOR_PULLOUT,
+            originStatus.SUBJECT_FOR_PULLOUT,
+            originStatus.FOR_REPLACEMENT_BROKEN_UNIT,
+            originStatus.FOR_REPLACEMENT_UPGRADE,
+            originStatus.FOR_REPLACEMENT_DOWNGRADE
+        ])
+        .optional(),
     query: z.string().optional(),
-    page: z.coerce.number().int().positive().optional()
+    cursor: z.ulid().optional()
 })
 
-// A deployment is "overdue" when it is awaiting delivery (`for-delivery`) and its
-// deployment date is already in the past.
-const overdueCondition = sql`
-    ${t.deployment.originStatus} = ${originStatus.FOR_DELIVERY}
-    AND ${t.deployment.deploymentDate} < current_date
-`
-
-const sortColumn = (sort: DeploymentSortKey) => {
-    switch (sort) {
-        case 'deploymentDate-asc':
-            return asc(t.deployment.deploymentDate)
-        case 'originStatus-asc':
-            return asc(t.deployment.originStatus)
-        case 'originStatus-desc':
-            return desc(t.deployment.originStatus)
-        case 'deploymentDate-desc':
-        default:
-            return desc(t.deployment.deploymentDate)
-    }
-}
-
-export const POST = async ({ request, locals }) => {
+export const POST = async ({ locals, request }) => {
     try {
+        const authUser = locals.user!
         const authAccount = locals.account!
 
-        const payload = await request.json()
-        const validation = schema.safeParse(payload)
-
-        if (!validation.success) {
-            return json(
-                { message: errors.INVALID_DATA_FORMAT.message },
-                { status: StatusCodes.BAD_REQUEST }
-            )
+        switch (authUser.role) {
+            case userRoles.DISTRIBUTOR_ADMIN:
+            case userRoles.DISTRIBUTOR_USER:
+                // Users of these roles are allowed
+                // to access this resource
+                break
+            default:
+                // Any other roles are not allowed to perform
+                // the operation.
+                error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
         }
 
-        const resolvedSort: DeploymentSortKey = SORT_VALUES.has(validation.data.sort ?? '')
-            ? (validation.data.sort as DeploymentSortKey)
-            : 'deploymentDate-desc'
+        const payload = await request.json()
+        const { data, success } = schema.safeParse(payload)
 
-        // Origin status defaults to the normal flow (`for-delivery`);
-        // destination status defaults to `all` (no destination filter).
-        const filterStatus: OriginStatusFilter =
-            validation.data.filterStatus && STATUS_VALUES.has(validation.data.filterStatus)
-                ? (validation.data.filterStatus as OriginStatusFilter)
-                : DEFAULT_ORIGIN_STATUS_FILTER
+        if (!success) {
+            error(StatusCodes.BAD_REQUEST, errors.INVALID_DATA_FORMAT)
+        }
 
-        const filterDestinationStatus: DestinationStatusFilter =
-            validation.data.filterDestinationStatus &&
-            DESTINATION_STATUS_VALUES.has(validation.data.filterDestinationStatus)
-                ? (validation.data.filterDestinationStatus as DestinationStatusFilter)
-                : ('all' as DestinationStatusFilter)
+        const origin = alias(t.account, 'origin')
+        const destination = alias(t.account, 'destination')
+        const deploymentItem = alias(t.deploymentItem, 'deploymentItem')
 
-        const overdueOnly = validation.data.overdueOnly === true
-        const query = _.trim(validation.data.query ?? '')
-        const page =
-            validation.data.page &&
-            Number.isFinite(validation.data.page) &&
-            validation.data.page > 0
-                ? Math.floor(validation.data.page)
-                : 1
+        const conditions = [eq(t.deployment.originId, authAccount.id)]
+        let sort = [desc(t.deployment.createdAt)]
 
-        const cap = Math.min(page * PAGE_SIZE, MAX_ROWS)
-        const likePattern = `%${query}%`
-        const hasQuery = query.length > 0
+        if (data.cursor) {
+            conditions.push(gt(t.deployment.id, data.cursor))
+        }
 
-        const rows = await db
+        if (data.query) {
+            conditions.push(ilike(destination.name, `%${data.query}%`))
+        }
+
+        if (data.status) {
+            conditions.push(eq(t.deployment.originStatus, data.status))
+        }
+
+        if (data.sort) {
+            switch (data.sort) {
+                case 'deploymentDate-asc':
+                    sort.unshift(asc(t.deployment.deploymentDate))
+                    break
+
+                case 'deploymentDate-desc':
+                    sort.unshift(desc(t.deployment.deploymentDate))
+                    break
+
+                case 'status-asc':
+                    sort.unshift(asc(t.deployment.originStatus))
+                    break
+
+                case 'status-desc':
+                    sort.unshift(desc(t.deployment.originStatus))
+                    break
+            }
+        }
+
+        let items: Json[] = await db
             .select({
                 ...getTableColumns(t.deployment),
-                destinationName: destination.name,
-                destinationAddress: destination.address,
-                destinationType: destination.type,
-                overdue: sql<boolean>`${overdueCondition}`.as('overdue'),
-                deploymentItemCount: sql<number>`(
-                    select count(*)
-                    from deployment_item
-                    where deployment_id = ${t.deployment.id}
-                      and deleted_at is null
-                )`.as('deployment_item_count')
+                origin,
+                destination,
+                deploymentItem
             })
             .from(t.deployment)
-            .leftJoin(destination, eq(destination.id, t.deployment.destinationId))
-            .where(
-                and(
-                    isNull(t.deployment.deletedAt),
-                    eq(t.deployment.originId, authAccount.id),
-                    filterStatus !== 'all'
-                        ? eq(t.deployment.originStatus, filterStatus)
-                        : undefined,
-                    filterDestinationStatus !== 'all'
-                        ? eq(t.deployment.destinationStatus, filterDestinationStatus)
-                        : undefined,
-                    overdueOnly ? overdueCondition : undefined,
-                    hasQuery
-                        ? sql`
-                            EXISTS (
-                                SELECT 1
-                                FROM account
-                                WHERE account.id = ${t.deployment.destinationId}
-                                  AND (account.name ILIKE ${likePattern}
-                                        OR account.address ILIKE ${likePattern})
-                            )
-                        `
-                        : undefined
-                )
-            )
-            .orderBy(sortColumn(resolvedSort))
-            .limit(cap + 1)
+            .innerJoin(origin, eq(origin.id, t.deployment.originId))
+            .innerJoin(destination, eq(destination.id, t.deployment.destinationId))
+            .leftJoin(deploymentItem, eq(deploymentItem.deploymentId, t.deployment.id))
+            .where(conditions.length === 1 ? conditions[0] : and(...conditions))
+            .orderBy(...sort)
+            .limit(LIMIT)
 
-        const data = rows.slice(0, cap) as unknown as DeploymentRow[]
+        /**
+         * Transform items to proper shape to group deployment
+         * items into array
+         */
 
-        const meta: DeploymentMeta = {
-            sort: resolvedSort,
-            filterStatus,
-            filterDestinationStatus,
-            overdueOnly,
-            query,
-            page,
-            hasMore: rows.length > cap
-        }
+        items = _.values(_.groupBy(items, 'id')).map((rows) => ({
+            ...rows[0],
+            deploymentItem: undefined,
+            deploymentItems: rows.map((row) => row.deploymentItem).filter(Boolean)
+        }))
 
-        return json({ data: { rows: data, meta } })
+        const nextCursor = items.length ? _.last(items)!.id : null
+
+        return json({ items, nextCursor })
     } catch (e: any) {
         if (isHttpError(e)) throw e
 
         const code = _.get(e, 'cause.code', null)
 
         switch (code) {
+            case '23505':
+                error(StatusCodes.CONFLICT, errors.DATA_CONFLICT)
+
             case '23503':
                 error(StatusCodes.UNPROCESSABLE_ENTITY, errors.FOREIGN_KEY_VIOLATION)
-                break
 
-            default:
-                error(StatusCodes.INTERNAL_SERVER_ERROR, {
-                    ...errors.INTERNAL_ERROR,
-                    message: e.message ?? errors.INTERNAL_ERROR.message
-                })
-                break
+            case '23502':
+                error(StatusCodes.BAD_REQUEST, errors.MISSING_REQUIRED_FIELD)
+
+            case '23514':
+                error(StatusCodes.UNPROCESSABLE_ENTITY, errors.CHECK_CONSTRAINT_VIOLATION)
+
+            case '22P02':
+                error(StatusCodes.BAD_REQUEST, errors.INVALID_DATA_FORMAT)
         }
+
+        error(StatusCodes.INTERNAL_SERVER_ERROR, {
+            ...errors.INTERNAL_ERROR,
+            message: e.message ?? errors.INTERNAL_ERROR.message
+        })
     }
 }
