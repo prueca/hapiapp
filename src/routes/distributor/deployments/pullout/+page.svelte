@@ -9,127 +9,132 @@
         <div class="px-4 pb-4">
             <h1 class="text-xl font-bold">Global Logistics Solutions</h1>
         </div>
-        <nav class="nav px-4">
+    </div>
+
+    <div class="bg-(--c5) p-4">
+        <nav class="nav p-4">
             <a href="/distributor">Home</a>
             <a href="/distributor/deployments">Deployments</a>
             <a href="/distributor/deployments/pullout" class="current">Pullout</a>
             <a href="/distributor/deployments/received" class="current">Received</a>
         </nav>
-    </div>
 
-    <!-- searching, sorting and filtering section -->
-    <div class="toolbar">
-        <label class="search">
-            <Icon icon="bytesize:search" width="20" />
-            <input type="search" placeholder="Search for Name or Address..." />
-        </label>
-        <button type="button" class="filter-btn" aria-label="Filter deployments">
-            <Icon icon="bi:filter" width="24" />
-        </button>
-    </div>
+        <div class="bg-gray-50">
+            <!-- searching, sorting and filtering section -->
+            <div class="toolbar">
+                <label class="search">
+                    <Icon icon="bytesize:search" width="20" />
+                    <input type="search" placeholder="Search for Name or Address..." />
+                </label>
+                <button type="button" class="filter-btn" aria-label="Filter deployments">
+                    <Icon icon="bi:filter" width="24" />
+                </button>
+            </div>
 
-    <!-- listing section -->
-    <ul class="container">
-        <li class="sub-container">
-            <div class="top-row">
-                <div class="destination-status">pullout by distributor</div>
-                <div class="deployment-date">Sep-10-2025, Thu</div>
-            </div>
-            <div class="mid-row">
-                <div class="account-name">Global Logistics Solutions</div>
-                <div class="account-type">dealer</div>
-                <div class="account-address">456 Industrial St, Detroit, MI 48201</div>
-            </div>
-            <div class="listing-row">
-                <button type="button" class="list-btn" aria-label="Toggle freezer list">
-                    <Icon icon="carbon:list-boxes" width="24" />
-                    <span class="count">5</span>
-                </button>
-                <span class="count-label">freezers</span>
-            </div>
-            <ul class="listing-freezer">
-                <li class="item" data-status="pullout">
-                    <div class="item-code">000123456789</div>
-                    <div class="item-brand">Haier - Sliding Glass Freezer</div>
-                    <div class="item-meta">12-cu-2023</div>
+            <!-- listing section -->
+            <ul class="container">
+                <li class="sub-container">
+                    <div class="top-row">
+                        <div class="destination-status">pullout by distributor</div>
+                        <div class="deployment-date">Sep-10-2025, Thu</div>
+                    </div>
+                    <div class="mid-row">
+                        <div class="account-name">Global Logistics Solutions</div>
+                        <div class="account-type">dealer</div>
+                        <div class="account-address">456 Industrial St, Detroit, MI 48201</div>
+                    </div>
+                    <div class="listing-row">
+                        <button type="button" class="list-btn" aria-label="Toggle freezer list">
+                            <Icon icon="carbon:list-boxes" width="24" />
+                            <span class="count">5</span>
+                        </button>
+                        <span class="count-label">freezers</span>
+                    </div>
+                    <ul class="listing-freezer">
+                        <li class="item" data-status="pullout">
+                            <div class="item-code">000123456789</div>
+                            <div class="item-brand">Haier - Sliding Glass Freezer</div>
+                            <div class="item-meta">12-cu-2023</div>
+                        </li>
+                        <li class="item" data-status="pullout">
+                            <div class="item-code">000123456789</div>
+                            <div class="item-brand">Haier - Sliding Glass Freezer</div>
+                            <div class="item-meta">12-cu-2023</div>
+                        </li>
+                    </ul>
+                    <div class="btn-row">
+                        <button class="btn-receive btn">Receive</button>
+                    </div>
                 </li>
-                <li class="item" data-status="pullout">
-                    <div class="item-code">000123456789</div>
-                    <div class="item-brand">Haier - Sliding Glass Freezer</div>
-                    <div class="item-meta">12-cu-2023</div>
+                <li class="sub-container">
+                    <div class="top-row">
+                        <div class="destination-status">pullout by distributor</div>
+                        <div class="deployment-date">Aug-05-2025, Thu</div>
+                    </div>
+                    <div class="mid-row">
+                        <div class="account-name">Apex Retail Systems</div>
+                        <div class="account-type">dealer</div>
+                        <div class="account-address">789 Oak Rd, Chicago, IL 60601</div>
+                    </div>
+                    <div class="listing-row">
+                        <button type="button" class="list-btn" aria-label="Toggle freezer list">
+                            <Icon icon="carbon:list-boxes" width="24" />
+                            <span class="count">5</span>
+                        </button>
+                        <span class="count-label">freezers</span>
+                    </div>
+                    <ul class="listing-freezer">
+                        <li class="item" data-status="pullout">
+                            <div class="item-code">000123456789</div>
+                            <div class="item-brand">Haier - Sliding Glass Freezer</div>
+                            <div class="item-meta">12-cu-2023</div>
+                        </li>
+                        <li class="item" data-status="pullout">
+                            <div class="item-code">000123456789</div>
+                            <div class="item-brand">Haier - Sliding Glass Freezer</div>
+                            <div class="item-meta">12-cu-2023</div>
+                        </li>
+                    </ul>
+                    <div class="btn-row">
+                        <button class="btn-receive btn">Receive</button>
+                    </div>
+                </li>
+                <li class="sub-container">
+                    <div class="top-row">
+                        <div class="destination-status">pullout by distributor</div>
+                        <div class="deployment-date">Jul-20-2025, Mon</div>
+                    </div>
+                    <div class="mid-row">
+                        <div class="account-name">Summit Peak Retail</div>
+                        <div class="account-type">dealer</div>
+                        <div class="account-address">321 Pine Ln, Los Angeles, CA 90001</div>
+                    </div>
+                    <div class="listing-row">
+                        <button type="button" class="list-btn" aria-label="Toggle freezer list">
+                            <Icon icon="carbon:list-boxes" width="24" />
+                            <span class="count">5</span>
+                        </button>
+                        <span class="count-label">freezers</span>
+                    </div>
+                    <ul class="listing-freezer">
+                        <li class="item" data-status="pullout">
+                            <div class="item-code">000123456789</div>
+                            <div class="item-brand">Haier - Sliding Glass Freezer</div>
+                            <div class="item-meta">12-cu-2023</div>
+                        </li>
+                        <li class="item" data-status="pullout">
+                            <div class="item-code">000123456789</div>
+                            <div class="item-brand">Haier - Sliding Glass Freezer</div>
+                            <div class="item-meta">12-cu-2023</div>
+                        </li>
+                    </ul>
+                    <div class="btn-row">
+                        <button class="btn-receive btn">Receive</button>
+                    </div>
                 </li>
             </ul>
-            <div class="btn-row">
-                <button class="btn-receive btn">Receive</button>
-            </div>
-        </li>
-        <li class="sub-container">
-            <div class="top-row">
-                <div class="destination-status">pullout by distributor</div>
-                <div class="deployment-date">Aug-05-2025, Thu</div>
-            </div>
-            <div class="mid-row">
-                <div class="account-name">Apex Retail Systems</div>
-                <div class="account-type">dealer</div>
-                <div class="account-address">789 Oak Rd, Chicago, IL 60601</div>
-            </div>
-            <div class="listing-row">
-                <button type="button" class="list-btn" aria-label="Toggle freezer list">
-                    <Icon icon="carbon:list-boxes" width="24" />
-                    <span class="count">5</span>
-                </button>
-                <span class="count-label">freezers</span>
-            </div>
-            <ul class="listing-freezer">
-                <li class="item" data-status="pullout">
-                    <div class="item-code">000123456789</div>
-                    <div class="item-brand">Haier - Sliding Glass Freezer</div>
-                    <div class="item-meta">12-cu-2023</div>
-                </li>
-                <li class="item" data-status="pullout">
-                    <div class="item-code">000123456789</div>
-                    <div class="item-brand">Haier - Sliding Glass Freezer</div>
-                    <div class="item-meta">12-cu-2023</div>
-                </li>
-            </ul>
-            <div class="btn-row">
-                <button class="btn-receive btn">Receive</button>
-            </div>
-        </li>
-        <li class="sub-container">
-            <div class="top-row">
-                <div class="destination-status">pullout by distributor</div>
-                <div class="deployment-date">Jul-20-2025, Mon</div>
-            </div>
-            <div class="mid-row">
-                <div class="account-name">Summit Peak Retail</div>
-                <div class="account-type">dealer</div>
-                <div class="account-address">321 Pine Ln, Los Angeles, CA 90001</div>
-            </div>
-            <div class="listing-row">
-                <button type="button" class="list-btn" aria-label="Toggle freezer list">
-                    <Icon icon="carbon:list-boxes" width="24" />
-                    <span class="count">5</span>
-                </button>
-                <span class="count-label">freezers</span>
-            </div>
-            <ul class="listing-freezer">
-                <li class="item" data-status="pullout">
-                    <div class="item-code">000123456789</div>
-                    <div class="item-brand">Haier - Sliding Glass Freezer</div>
-                    <div class="item-meta">12-cu-2023</div>
-                </li>
-                <li class="item" data-status="pullout">
-                    <div class="item-code">000123456789</div>
-                    <div class="item-brand">Haier - Sliding Glass Freezer</div>
-                    <div class="item-meta">12-cu-2023</div>
-                </li>
-            </ul>
-            <div class="btn-row">
-                <button class="btn-receive btn">Receive</button>
-            </div>
-        </li>
-    </ul>
+        </div>
+    </div>
 </div>
 
 <style lang="postcss">
@@ -168,7 +173,7 @@
 
     /* Toolbar */
     .toolbar {
-        @apply flex gap-2 border-b border-b-gray-100 p-4;
+        @apply flex gap-2 p-4 pb-1;
     }
 
     .search {
