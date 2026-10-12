@@ -21,7 +21,7 @@
 
     <!-- Content -->
     <div
-        class="overflow-hidden rounded-b border border-t-0 border-base-300 bg-base-100"
+        class="content border-base-300 bg-base-100"
         class:rounded-tl-lg={activeTab === 'B'}
         class:rounded-tr-lg={activeTab === 'A'}
     >
@@ -35,4 +35,8 @@
 
 <style lang="postcss">
     @reference 'tailwindcss';
+
+    .content {
+        @apply overflow-hidden rounded-b border border-t-0;
+    }
 </style>
