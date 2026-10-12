@@ -1,7 +1,7 @@
 <!--svelte-ignore a11y_missing_attribute -->
 <script lang="ts">
     import Icon from '@iconify/svelte'
-    import create from '../create.svelte'
+    import deployment from '../deployment.svelte'
 </script>
 
 <div class="stepper">
@@ -15,13 +15,13 @@
 
     <!-- Connector Line -->
     <div class="connector">
-        {#if create.currentStep >= 2}
+        {#if deployment.currentStep >= 2}
             <div class="active"></div>
         {/if}
     </div>
 
     <!-- Step 2: Select Account -->
-    <div class="step" class:active={create.currentStep >= 2}>
+    <div class="step" class:active={deployment.currentStep >= 2}>
         <div class="step-icon">
             <Icon icon="bi:passport-fill" width="24" />
         </div>
@@ -30,13 +30,13 @@
 
     <!-- Connector Line -->
     <div class="connector">
-        {#if create.currentStep === 3}
+        {#if deployment.currentStep === 3}
             <div class="active"></div>
         {/if}
     </div>
 
     <!-- Step 3: Select Date -->
-    <div class="step" class:active={create.currentStep === 3}>
+    <div class="step" class:active={deployment.currentStep === 3}>
         <div class="step-icon">
             <Icon icon="clarity:calendar-solid-badged" width="24" />
         </div>

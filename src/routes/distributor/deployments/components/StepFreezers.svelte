@@ -2,10 +2,10 @@
     import FreezerSearch from './FreezerSearch.svelte'
     import FreezerSearchResult from './FreezerSearchResult.svelte'
     import FreezerAdded from './FreezerAdded.svelte'
-    import create from '../create.svelte'
+    import deployment from '../deployment.svelte'
 
     const next = () => {
-        create.setCurrentStep(2)
+        deployment.setCurrentStep(2)
         window.scrollTo({ top: 0, behavior: 'smooth' })
     }
 </script>

@@ -2,15 +2,15 @@
     import AccountSearch from './AccountSearch.svelte'
     import AccountSearchResult from './AccountSearchResult.svelte'
     import AccountSelected from './AccountSelected.svelte'
-    import create from '../create.svelte'
+    import deployment from '../deployment.svelte'
 
     const next = () => {
-        create.setCurrentStep(3)
+        deployment.setCurrentStep(3)
         window.scrollTo({ top: 0, behavior: 'smooth' })
     }
 
     const back = () => {
-        create.setCurrentStep(1)
+        deployment.setCurrentStep(1)
         window.scrollTo({ top: 0, behavior: 'smooth' })
     }
 </script>

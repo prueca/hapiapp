@@ -1,9 +1,9 @@
 <script lang="ts">
     import DatePicker from './DatePicker.svelte'
-    import create from '../create.svelte'
+    import deployment from '../deployment.svelte'
 
     const back = () => {
-        create.setCurrentStep(2)
+        deployment.setCurrentStep(2)
         window.scrollTo({ top: 0, behavior: 'smooth' })
     }
 </script>
