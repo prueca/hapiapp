@@ -1,15 +1,15 @@
 <script lang="ts">
-    import TopBar from '../../components/TopBar'
-    import Dock from '../../components/Dock.svelte'
-    import TabbedContent from './components/TabbedContent.svelte'
-    import Chart from '../../components/Chart.svelte'
+    import Nav from '../components/Nav.svelte'
+    import DeploymentsOverview from '../components/DeploymentsOverview.svelte'
+    import Listings from './components/Listings.svelte'
 </script>
 
 <div class="content-wrapper">
-    <div class="pb-21">
-        <TopBar />
-        <Chart />
-        <TabbedContent />
-    </div>
-    <Dock />
+    <Nav />
+    <DeploymentsOverview />
+    <Listings />
 </div>
+
+<style lang="postcss">
+    @reference 'tailwindcss';
+</style>

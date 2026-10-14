@@ -18,7 +18,7 @@
     <!-- Nav -->
     <div class="flex items-center gap-6">
         <div class="flex items-center gap-6">
-            <a href="#" class="btn-link">
+            <a href="/distributor" class="btn-link">
                 <Icon icon="lsicon:home-outline" width="24" />
             </a>
         </div>
