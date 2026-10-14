@@ -1,8 +1,8 @@
 <script lang="ts">
-    import AccountSearch from './StepAccount/AccountSearch.svelte'
-    import AccountSearchResult from './StepAccount/AccountSearchResult.svelte'
-    import AccountSelected from './StepAccount/AccountSelected.svelte'
-    import deployment from '../../../deployment.svelte'
+    import AccountSearch from './AccountSearch.svelte'
+    import AccountSearchResult from './AccountSearchResult.svelte'
+    import AccountSelected from './AccountSelected.svelte'
+    import deployment from '../../../../deployment.svelte'
 
     const next = () => {
         deployment.setCurrentStep(3)

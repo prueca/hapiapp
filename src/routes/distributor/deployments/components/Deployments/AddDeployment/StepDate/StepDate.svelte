@@ -1,6 +1,6 @@
 <script lang="ts">
-    import DatePicker from './StepDate/DatePicker.svelte'
-    import deployment from '../../../deployment.svelte'
+    import DatePicker from './DatePicker.svelte'
+    import deployment from '../../../../deployment.svelte'
 
     const back = () => {
         deployment.setCurrentStep(2)

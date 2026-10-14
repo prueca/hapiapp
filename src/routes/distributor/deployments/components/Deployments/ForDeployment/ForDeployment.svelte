@@ -1,6 +1,6 @@
 <script lang="ts">
-    import ListItem from './ForDeployment/ListItem.svelte'
-    import Search from './ForDeployment/Search.svelte'
+    import ListItem from './ListItem.svelte'
+    import Search from './Search.svelte'
 </script>
 
 <div class="flex flex-col">

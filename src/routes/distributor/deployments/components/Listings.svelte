@@ -12,19 +12,19 @@
         <div class="tabs flex-nowrap tabs-sm">
             <!-- deployments -->
             <label class="tab">
-                <input type="radio" name="groups" bind:group={activeTab} value="1" />
+                <input type="radio" name="listings" bind:group={activeTab} value="1" />
                 <span class="px-1 md:px-4">Deployments</span>
             </label>
 
             <!-- subject for pullout -->
             <label class="tab">
-                <input type="radio" name="groups" bind:group={activeTab} value="2" />
+                <input type="radio" name="listings" bind:group={activeTab} value="2" />
                 <span class="px-1 md:px-4">Subject for Pullout</span>
             </label>
 
             <!-- pullout  -->
             <label class="tab">
-                <input type="radio" name="groups" bind:group={activeTab} value="3" />
+                <input type="radio" name="listings" bind:group={activeTab} value="3" />
                 <span class="px-1 md:px-4">Pullout</span>
             </label>
         </div>

@@ -1,8 +1,8 @@
 <script lang="ts">
-    import FreezerSearch from './StepFreezers/FreezerSearch.svelte'
-    import FreezerSearchResult from './StepFreezers/FreezerSearchResult.svelte'
-    import FreezerAdded from './StepFreezers/FreezerAdded.svelte'
-    import deployment from '../../../deployment.svelte'
+    import FreezerSearch from './FreezerSearch.svelte'
+    import FreezerSearchResult from './FreezerSearchResult.svelte'
+    import FreezerAdded from './FreezerAdded.svelte'
+    import deployment from '../../../../deployment.svelte'
 
     const next = () => {
         deployment.setCurrentStep(2)

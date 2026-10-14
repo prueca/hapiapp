@@ -1,9 +1,9 @@
 <script lang="ts">
-    import Stepper from './AddDeployment/Stepper.svelte'
-    import StepFreezers from './AddDeployment/StepFreezers.svelte'
-    import StepAccount from './AddDeployment/StepAccount.svelte'
-    import StepDate from './AddDeployment/StepDate.svelte'
-    import deployment from '../../deployment.svelte'
+    import Stepper from './Stepper.svelte'
+    import StepFreezers from './StepFreezers'
+    import StepAccount from './StepAccount'
+    import StepDate from './StepDate'
+    import deployment from '../../../deployment.svelte'
 </script>
 
 <div class="flex flex-col">

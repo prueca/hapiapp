@@ -1,7 +1,7 @@
 <!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
 <script lang="ts">
-    import ForDeployment from './ForDeployment.svelte'
-    import AddDeployment from './AddDeployment.svelte'
+    import ForDeployment from './ForDeployment'
+    import AddDeployment from './AddDeployment'
 
     let activeTab = $state('A')
 </script>
