@@ -13,15 +13,17 @@
 /* variables */
 :root {
     --font-size: 18px;
-    --font-color: #616161;
+    --font-color: var(--c8);
     --font-family: 'Geist', sans-serif;
 
     --c1: #e16660; /* red */
     --c2: #ff9671; /* orange */
     --c3: #ffc75f; /* yellow orange */
-    --c4: #f3f4f6; /* light gray */
-    --c5: #ffffff; /* white */
-    --c6: #65b8a9; /* green */
+    --c4: #65b8a9; /* green */
+    --c5: #f3f4f6; /* dark gray */
+    --c6: #f9fafb; /* light gray */
+    --c7: #ffffff; /* white */
+    --c8: #616161; /* black */
 
     --c1-shadow:
         rgba(225, 102, 96, 0.5) 0px 10px 25px -5px, rgba(225, 102, 96, 0.5) 0px 8px 10px -5px;
@@ -35,7 +37,7 @@ body {
     font-family: var(--font-family);
     min-height: 100svh;
 
-    @apply bg-(--c4);
+    @apply bg-(--c5);
 }
 
 /* overrides */

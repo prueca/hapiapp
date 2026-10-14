@@ -1,17 +1,15 @@
 <script lang="ts">
-    import Dock from '../components/Dock.svelte'
-    import TopBar from '../components/TopBar'
-    import Dashboard from './components/Dashboard.svelte'
-    import WelcomeBanner from './components/WelcomeBanner.svelte'
+    import Nav from './components/Nav.svelte'
+    import DeploymentsOverview from './components/DeploymentsOverview.svelte'
+    // import Dashboard from './components/Dashboard.svelte'
+    import DeploymentTabs from './components/DeploymentTabs.svelte'
 </script>
 
 <div class="content-wrapper">
-    <div class="mb-17">
-        <TopBar />
-        <WelcomeBanner />
-        <Dashboard />
-    </div>
-    <Dock />
+    <Nav />
+    <DeploymentsOverview />
+    <!-- <Dashboard /> -->
+    <DeploymentTabs />
 </div>
 
 <style lang="postcss">

@@ -4,7 +4,7 @@
 
     ChartJS.register(ArcElement, Tooltip, Legend)
 
-    const labels = ['Distributor', 'Dealer', 'Hapistore']
+    const labels = ['Overdue', 'For Deployment', 'For Pullout']
     const colors = ['#e16660', '#ff9671', '#ffc75f']
 
     const data = {
@@ -36,7 +36,7 @@
 </script>
 
 <div class="chart">
-    <div class="mb-2 text-lg">Graphical Chart</div>
+    <div class="mb-2">Deployments Overview</div>
     <div class="rounded bg-white p-4">
         <div class="chart-wrapper">
             <Pie {data} {options} />
@@ -56,7 +56,7 @@
     @reference 'tailwindcss';
 
     .chart {
-        @apply mb-6 px-4;
+        @apply px-4;
     }
 
     .chart-wrapper {
