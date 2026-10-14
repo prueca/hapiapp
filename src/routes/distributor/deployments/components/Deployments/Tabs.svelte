@@ -20,7 +20,11 @@
     </div>
 
     <!-- Content -->
-    <div class="content border-base-300 bg-base-100">
+    <div
+        class="content border-base-300 bg-base-100"
+        class:rounded-tr={activeTab === 'A'}
+        class:rounded-tl={activeTab === 'B'}
+    >
         {#if activeTab === 'B'}
             <AddDeployment />
         {:else}
