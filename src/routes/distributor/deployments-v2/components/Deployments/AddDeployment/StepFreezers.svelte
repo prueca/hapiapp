@@ -1,0 +1,52 @@
+<script lang="ts">
+    import FreezerSearch from './StepFreezers/FreezerSearch.svelte'
+    import FreezerSearchResult from './StepFreezers/FreezerSearchResult.svelte'
+    import FreezerAdded from './StepFreezers/FreezerAdded.svelte'
+    import deployment from '../../../deployment.svelte'
+
+    const next = () => {
+        deployment.setCurrentStep(2)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+</script>
+
+<div class="flex flex-col gap-4 bg-(--c6) p-4 md:gap-4">
+    <!-- search freezer -->
+    <div class="section bg-base-100">
+        <FreezerSearch />
+        <FreezerSearchResult />
+    </div>
+
+    <!-- freezers added -->
+    <div class="section bg-base-100">
+        <div class="mb-2">
+            <div class="label">Freezers Added</div>
+            <!-- <div class="text-xs text-gray-400">List of items set for deployment</div> -->
+        </div>
+        <div class="mb-4 overflow-hidden rounded">
+            <FreezerAdded />
+            <FreezerAdded />
+            <FreezerAdded />
+        </div>
+        <div class="flex flex-row-reverse gap-2 text-right">
+            <button type="button" class="btn btn-ghost btn-sm" onclick={next}>Next</button>
+            <button type="button" class="btn btn-ghost btn-sm">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<style lang="postcss">
+    @reference 'tailwindcss';
+
+    .section {
+        @apply rounded p-4 shadow;
+    }
+
+    .label {
+        @apply text-sm;
+    }
+
+    .btn {
+        @apply no-underline;
+    }
+</style>

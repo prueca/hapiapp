@@ -63,7 +63,7 @@
     @reference 'tailwindcss';
 
     .dashboard {
-        @apply relative p-4;
+        @apply relative p-4 md:px-0;
     }
 
     .dashboard-title {

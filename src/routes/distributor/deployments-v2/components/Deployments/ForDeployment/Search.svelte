@@ -2,8 +2,8 @@
     import Icon from '@iconify/svelte'
 </script>
 
-<div class="mb-4 rounded-lg bg-(--c7) p-4 shadow">
-    <div class="mb-2">Search deployment</div>
+<div class="bg-(--c7) p-4">
+    <div class="mb-2 text-xs text-(--font-color)/65">Search deployment</div>
     <div class="flex gap-2">
         <div class="grow">
             <label class="input w-full">

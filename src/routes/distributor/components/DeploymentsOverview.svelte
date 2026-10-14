@@ -8,7 +8,7 @@
         <span>Deployments Overview</span>
         <span class="text-xs">{moment().format('ddd, MMM DD YYYY')}</span>
     </div>
-    <div class="stats w-full grid-cols-2 bg-(--c7)">
+    <div class="stats w-full grid-cols-2 rounded bg-(--c7)">
         <div class="stat">
             <div class="stat-figure">
                 <Icon icon="andrsrxn:box-move" width="36" />
