@@ -21,9 +21,6 @@
             <a href="#" class="btn-link">
                 <Icon icon="lsicon:home-outline" width="24" />
             </a>
-            <a href="#" class="btn-link">
-                <Icon icon="reicon:truck-fast" width="24" />
-            </a>
         </div>
         <div class="right-end">
             <a href="#" class=" h-full btn-link">

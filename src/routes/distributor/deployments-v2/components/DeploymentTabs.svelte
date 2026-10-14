@@ -1,5 +1,5 @@
 <script lang="ts">
-    import ForDeployment from './for-deployment/ForDeployment.svelte'
+    import Deployments from './Deployments/List.svelte'
 
     let activeTab = $state('1')
 </script>
@@ -10,34 +10,22 @@
     <!-- Tabs -->
     <div class="scrollbar-hide overflow-x-auto">
         <div class="tabs flex-nowrap tabs-sm">
-            <!-- for deployment -->
+            <!-- deployments -->
             <label class="tab">
                 <input type="radio" name="tabs" bind:group={activeTab} value="1" />
-                <span class="px-1 md:px-4">Deploy</span>
+                <span class="px-1 md:px-4">Deployments</span>
             </label>
 
-            <!-- for pullout -->
+            <!-- subject for pullout -->
             <label class="tab">
                 <input type="radio" name="tabs" bind:group={activeTab} value="2" />
-                <span class="px-1 md:px-4">Pullout</span>
+                <span class="px-1 md:px-4">Subject for Pullout</span>
             </label>
 
-            <!-- processing  -->
+            <!-- pullout  -->
             <label class="tab">
                 <input type="radio" name="tabs" bind:group={activeTab} value="3" />
-                <span class="px-1 md:px-4">Processing</span>
-            </label>
-
-            <!-- cancelled -->
-            <label class="tab">
-                <input type="radio" name="tabs" bind:group={activeTab} value="4" />
-                <span class="px-2 md:px-4">Cancelled</span>
-            </label>
-
-            <!-- pending -->
-            <label class="tab">
-                <input type="radio" name="tabs" bind:group={activeTab} value="5" />
-                <span class="px-2 md:px-4">Pending</span>
+                <span class="px-1 md:px-4">Pullout</span>
             </label>
         </div>
     </div>
@@ -45,7 +33,7 @@
     <!-- Content -->
     <div class="content">
         {#if activeTab === '1'}
-            <ForDeployment />
+            <Deployments />
         {:else}
             <div>Lorem Ipsum</div>
         {/if}
