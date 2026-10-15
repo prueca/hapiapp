@@ -5,9 +5,10 @@ import { json, error, isHttpError } from '@sveltejs/kit'
 
 import errors from '$lib/errors'
 import userRoles from '$lib/config/user.roles'
+import { deploymentItemStatus } from '$lib/config/deployment.status'
 
 import db from '$lib/drizzle'
-import { eq, and, getTableColumns } from 'drizzle-orm'
+import { eq, and, or, isNull, getTableColumns, desc } from 'drizzle-orm'
 import * as t from '$lib/drizzle/schema'
 
 const schema = z.object({
@@ -43,12 +44,20 @@ export const POST = async ({ locals, request }) => {
         const [freezer] = await db
             .select(columns)
             .from(t.freezer)
+            .leftJoin(t.deploymentItem, eq(t.deploymentItem.freezerId, t.freezer.id))
             .where(
                 and(
                     eq(t.freezer.distributorId, authAccount.id),
-                    eq(t.freezer.barcode, data.barcode)
+                    eq(t.freezer.barcode, data.barcode),
+                    isNull(t.freezer.deletedAt),
+                    or(
+                        isNull(t.deploymentItem),
+                        eq(t.deploymentItem.status, deploymentItemStatus.HOUSED_AVAILABLE),
+                        eq(t.deploymentItem.status, deploymentItemStatus.PULLOUT)
+                    )
                 )
             )
+            .orderBy(desc(t.deploymentItem.createdAt))
             .limit(1)
 
         if (!freezer) {
