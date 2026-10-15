@@ -4,7 +4,7 @@ import z from 'zod'
 
 import db from '$lib/drizzle'
 import * as t from '$lib/drizzle/schema'
-import { freezerStatus } from '$lib/config/freezer.options'
+import { deploymentItemStatus, destinationStatus } from '$lib/config/deployment.status'
 import { originStatus } from '$lib/config/deployment.status'
 import errors from '$lib/errors'
 import _ from 'lodash'
@@ -17,7 +17,10 @@ const schema = z.object({
     status: z.string().optional()
 })
 
-const AVAILABLE_STATUSES = new Set<string>([freezerStatus.HOUSED_AVAILABLE, freezerStatus.PULLOUT])
+const AVAILABLE_STATUSES = new Set<string>([
+    deploymentItemStatus.HOUSED_AVAILABLE,
+    deploymentItemStatus.PULLOUT
+])
 
 const DEPLOYMENT_STATUS_VALUES = new Set<string>(Object.values(originStatus))
 
@@ -44,7 +47,7 @@ export const POST = async ({ request, locals }) => {
         }
 
         const resolvedStatus = (status ??
-            originStatus.FOR_DELIVERY) as (typeof t.deployment.$inferSelect)['status']
+            originStatus.FOR_DELIVERY) as (typeof t.deployment.$inferSelect)['originStatus']
 
         const root = await db.query.account.findFirst({
             where: eq(t.account.id, account.id),
@@ -78,7 +81,8 @@ export const POST = async ({ request, locals }) => {
                 .values({
                     originId: account.id,
                     destinationId,
-                    status: resolvedStatus,
+                    originStatus: resolvedStatus,
+                    destinationStatus: destinationStatus.TO_RECEIVE,
                     deploymentDate
                 })
                 .returning()
@@ -129,7 +133,7 @@ export const POST = async ({ request, locals }) => {
                         deploymentId: parent.id,
                         designationId: destinationId,
                         freezerId: freezer.id,
-                        status: freezerStatus.FOR_DEPLOYMENT
+                        status: deploymentItemStatus.FOR_DEPLOYMENT
                     })
                     .returning()
 
