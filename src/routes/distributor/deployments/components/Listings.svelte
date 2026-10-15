@@ -44,7 +44,7 @@
     @reference 'tailwindcss';
 
     .tab {
-        @apply mb-4 rounded bg-(--c7) not-last:mr-2 has-checked:bg-(--c1) has-checked:text-(--c7);
+        @apply mb-4 rounded bg-(--c7) whitespace-nowrap not-last:mr-2 has-checked:bg-(--c1) has-checked:text-(--c7);
     }
 
     .scrollbar-hide {
