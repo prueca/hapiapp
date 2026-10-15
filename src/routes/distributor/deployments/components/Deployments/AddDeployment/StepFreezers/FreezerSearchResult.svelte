@@ -10,7 +10,7 @@
     let freezer = $derived(step1.freezer)
 
     let added = $derived.by(() => {
-        return freezer ? deployment.freezers.includes(freezer.id) : false
+        return freezer ? _.some(deployment.freezers, { id: freezer.id }) : false
     })
 </script>
 
@@ -34,7 +34,7 @@
             <button
                 type="button"
                 class="add-btn btn btn-xs"
-                onclick={() => deployment.addFreezer(freezer.id)}
+                onclick={() => deployment.addFreezer(freezer)}
             >
                 <div class="icon">
                     <Icon icon="boxicons:check-square-filled" />

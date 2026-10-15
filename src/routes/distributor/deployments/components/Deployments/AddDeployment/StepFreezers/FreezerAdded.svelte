@@ -1,16 +1,28 @@
 <!--svelte-ignore  a11y_missing_attribute -->
 <!--svelte-ignore  a11y_invalid_attribute -->
 <script lang="ts">
+    import _ from 'lodash'
     import Icon from '@iconify/svelte'
+    import deployment from '../../../../deployment.svelte'
+
+    let { freezer } = $props()
 </script>
 
 <div class="freezer-added">
     <div class="mb-4 flex flex-col gap-1">
-        <div class="font-medium">929991192693409444629843</div>
-        <div class="text-gray-400">Aucma - Curved Sliding Glass Lighted</div>
-        <div class="text-gray-400">12 • cu • 2022</div>
+        <div class="font-medium">{freezer.barcode}</div>
+        <div class="text-gray-400">
+            {_.upperFirst(freezer.brand)} - {_.startCase(freezer.model)}
+        </div>
+        <div class="text-gray-400">
+            {freezer.capacity} • {freezer.unit} • {freezer.yearModel}
+        </div>
     </div>
-    <button type="button" class="remove-btn btn btn-xs">
+    <button
+        type="button"
+        class="remove-btn btn btn-xs"
+        onclick={() => deployment.removeFreezer(freezer.id)}
+    >
         <div class="icon">
             <Icon icon="boxicons:minus-square-filled" />
         </div>

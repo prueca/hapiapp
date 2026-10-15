@@ -23,13 +23,19 @@
             <div class="label">Freezers Added</div>
             <!-- <div class="text-xs text-gray-400">List of items set for deployment</div> -->
         </div>
-        <div class="mb-4 overflow-hidden rounded">
-            <FreezerAdded />
-            <FreezerAdded />
-            <FreezerAdded />
-        </div>
+        {#if deployment.freezers.length === 0}
+            <div class="italic">Search and add freezers to your deployment</div>
+        {:else}
+            <div class="mb-4 overflow-hidden rounded">
+                {#each deployment.freezers as freezer (freezer.id)}
+                    <FreezerAdded {freezer} />
+                {/each}
+            </div>
+        {/if}
         <div class="flex flex-row-reverse gap-2 text-right">
-            <button type="button" class="btn btn-ghost btn-sm" onclick={next}>Next</button>
+            {#if deployment.freezers.length > 0}
+                <button type="button" class="btn btn-ghost btn-sm" onclick={next}>Next</button>
+            {/if}
             <button type="button" class="btn btn-ghost btn-sm">Cancel</button>
         </div>
     </div>
