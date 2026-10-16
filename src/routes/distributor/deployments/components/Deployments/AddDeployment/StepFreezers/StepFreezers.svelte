@@ -24,7 +24,7 @@
             <!-- <div class="text-xs text-gray-400">List of items set for deployment</div> -->
         </div>
         {#if deployment.freezers.length === 0}
-            <div class="italic">Search and add freezers to your deployment</div>
+            <div class="text-gray-400 italic">Search and add freezers to your deployment</div>
         {:else}
             <div class="mb-4 overflow-hidden rounded">
                 {#each deployment.freezers as freezer (freezer.id)}
