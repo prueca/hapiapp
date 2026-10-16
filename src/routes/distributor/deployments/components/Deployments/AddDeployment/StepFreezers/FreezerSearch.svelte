@@ -5,20 +5,13 @@
 
 <div>
     <p class="label">Search freezer</p>
-    <div class="join w-full">
+    <div class="flex items-center justify-between gap-2">
         <!-- input -->
-        <label class="input grow pl-0">
-            <input type="text" placeholder="Enter barcode" bind:value={step1.barcode} />
-            <button
-                class="cursor-pointer"
-                class:hidden={!step1.barcode}
-                onclick={() => step1.clear()}
-            >
-                <Icon class="text-gray-400" icon="flowbite:close-circle-solid" width="18" />
-            </button>
-        </label>
+        <input class="input" type="search" placeholder="Enter barcode" bind:value={step1.barcode} />
         <!-- search button -->
-        <button class="btn join-item" onclick={() => step1.searchFreezer()}>Search</button>
+        <button class="btn" onclick={() => step1.searchFreezer()}>
+            <Icon icon="icon-park-outline:search" width="18" />
+        </button>
     </div>
     <p class="label mt-2 text-xs" class:hidden={!step1.message}>{step1.message}</p>
 </div>
@@ -31,7 +24,7 @@
     }
 
     .input {
-        @apply rounded-l;
+        @apply grow rounded;
     }
 
     .btn {
