@@ -3,6 +3,8 @@ class Create {
 
     freezers: Json[] = $state([])
 
+    destinationAccount: Json | null = $state(null)
+
     setCurrentStep(step: 1 | 2 | 3) {
         this.currentStep = step
     }
@@ -13,6 +15,10 @@ class Create {
 
     removeFreezer(freezerId: string) {
         this.freezers = this.freezers.filter((freezer) => freezer.id !== freezerId)
+    }
+
+    setDestinationAccount(account: Json | null) {
+        this.destinationAccount = account
     }
 }
 

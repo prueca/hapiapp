@@ -2,6 +2,7 @@
     import AccountSearch from './AccountSearch.svelte'
     import AccountSearchResult from './AccountSearchResult.svelte'
     import AccountSelected from './AccountSelected.svelte'
+    import step2 from '../../../../step2.svelte'
     import deployment from '../../../../deployment.svelte'
 
     const next = () => {
@@ -20,21 +21,24 @@
     <div class="section bg-base-100">
         <AccountSearch />
         <div class="overflow-hidden rounded">
-            <AccountSearchResult selected />
-            <AccountSearchResult />
-            <AccountSearchResult />
+            {#each step2.accounts as account (account.id)}
+                <AccountSearchResult {account} />
+            {/each}
         </div>
     </div>
 
     <!-- destination account -->
     <div class="section bg-base-100">
-        <div class="mb-4">
-            <div class="mb-1 text-lg">Destination Account</div>
-            <div class="text-xs text-gray-400">Selected account</div>
-        </div>
-        <AccountSelected />
+        <p class="label">Destination account</p>
+        {#if !deployment.destinationAccount}
+            <div class="text-gray-400 italic">Search and select destination account</div>
+        {:else}
+            <AccountSelected />
+        {/if}
         <div class="flex flex-row-reverse gap-2 text-right">
-            <button type="button" class="btn btn-ghost btn-sm" onclick={next}>Next</button>
+            {#if deployment.destinationAccount}
+                <button type="button" class="btn btn-ghost btn-sm" onclick={next}>Next</button>
+            {/if}
             <button type="button" class="btn btn-ghost btn-sm" onclick={back}>Back</button>
         </div>
     </div>
@@ -45,6 +49,10 @@
 
     .section {
         @apply rounded p-4 shadow;
+    }
+
+    .label {
+        @apply mb-2 text-sm;
     }
 
     .btn {
