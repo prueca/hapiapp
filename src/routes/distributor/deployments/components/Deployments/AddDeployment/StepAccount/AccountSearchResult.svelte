@@ -2,14 +2,17 @@
     import _ from 'lodash'
     import Icon from '@iconify/svelte'
     import { getDisplayText } from '$lib/config/account.types'
+    import deployment from '../../../../deployment.svelte'
 
-    let { selected = false } = $props()
+    let { account } = $props()
 
-    let account = {
-        name: 'Wancavino',
-        type: 'dealer',
-        address: 'Montalban, Rizal'
-    }
+    let selected = $derived.by(() => {
+        return (
+            account &&
+            deployment.destinationAccount &&
+            account.id === deployment.destinationAccount.id
+        )
+    })
 </script>
 
 <div class="account-search-result">
@@ -29,7 +32,11 @@
     {#if selected}
         <div class="selected badge badge-sm">Selected</div>
     {:else}
-        <button type="button" class="set-btn btn btn-xs">
+        <button
+            type="button"
+            class="set-btn btn btn-xs"
+            onclick={() => deployment.setDestinationAccount(account)}
+        >
             <div class="icon">
                 <Icon icon="boxicons:check-square-filled" />
             </div>

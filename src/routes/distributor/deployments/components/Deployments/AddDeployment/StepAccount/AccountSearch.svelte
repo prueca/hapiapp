@@ -1,39 +1,37 @@
 <script lang="ts">
     import Icon from '@iconify/svelte'
+    import step2 from '../../../../step2.svelte'
 
-    let query = $state('')
-    let clear = () => {
-        query = ''
+    const searchAccount = (event: KeyboardEvent) => {
+        if (event.key === 'Enter') {
+            step2.searchAccount()
+        }
     }
 </script>
 
-<fieldset class="fieldset">
-    <div>
-        <legend class="fieldset-legend">Search Account</legend>
-        <!-- <p class="label">Select destination account to deploy to</p> -->
-    </div>
-    <div class="join">
+<div class="mb-4">
+    <p class="label">Search account</p>
+    <div class="flex items-center justify-between gap-2">
         <!-- input -->
-        <label class="input grow pl-0">
-            <input type="text" placeholder="Enter account ID or name" bind:value={query} />
-            <button class="cursor-pointer" class:hidden={!query} onclick={() => clear()}>
-                <Icon class="text-gray-400" icon="flowbite:close-circle-solid" width="18" />
-            </button>
-        </label>
+        <input
+            class="input grow"
+            type="search"
+            placeholder="Enter account ID or name"
+            bind:value={step2.query}
+            onkeydown={searchAccount}
+        />
         <!-- search button -->
-        <button class="btn join-item">Search</button>
+        <button class="btn join-item" type="button" onclick={() => step2.searchAccount()}>
+            <Icon icon="icon-park-outline:search" width="18" />
+        </button>
     </div>
-</fieldset>
+</div>
 
 <style lang="postcss">
     @reference 'tailwindcss';
 
-    .fieldset {
-        @apply mb-4;
-    }
-
-    .fieldset-legend {
-        @apply pt-0 text-lg font-normal text-(--font-color);
+    .label {
+        @apply mb-2 text-sm;
     }
 
     .input {

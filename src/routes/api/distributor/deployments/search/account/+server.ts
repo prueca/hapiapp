@@ -1,101 +1,61 @@
-import { json, error, isHttpError } from '@sveltejs/kit'
+import { json, error } from '@sveltejs/kit'
 import { StatusCodes } from 'http-status-codes'
+import accountTypes from '$lib/config/account.types'
 import z from 'zod'
+import _ from 'lodash'
 
 import db from '$lib/drizzle'
+import { eq, or, and, getTableColumns, desc, asc, isNull, ilike } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
 import * as t from '$lib/drizzle/schema'
-import accountTypes from '$lib/config/account.types'
 import errors from '$lib/errors'
-import _ from 'lodash'
-import { asc, eq, ilike, and, or, inArray, isNull } from 'drizzle-orm'
-
-const DESIGNATION_TYPES = [accountTypes.DEALER, accountTypes.DIRECT_STORE]
 
 const schema = z.object({
-    query: z.string().optional(),
-    type: z.enum([accountTypes.DEALER, accountTypes.DIRECT_STORE]).optional()
+    query: z.string().optional()
 })
 
-export const POST = async ({ request, locals }) => {
-    try {
-        const account = locals.account!
-        const payload = await request.json()
-        const validation = schema.safeParse(payload)
+export const POST = async ({ locals, request }) => {
+    const authAccount = locals.account!
 
-        if (!validation.success) {
-            return json(
-                { message: errors.INVALID_DATA_FORMAT.message },
-                { status: StatusCodes.BAD_REQUEST }
-            )
-        }
+    // Check access
 
-        const { query, type } = validation.data
-
-        if (account.type !== accountTypes.DISTRIBUTOR) {
-            error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
-        }
-
-        const root = await db.query.account.findFirst({
-            where: eq(t.account.id, account.id),
-            columns: { id: true },
-            with: {
-                childAccounts: {
-                    columns: { id: true },
-                    with: {
-                        childAccounts: {
-                            columns: { id: true }
-                        }
-                    }
-                }
-            }
-        })
-
-        const childIds = (root?.childAccounts ?? []).map((child) => child.id)
-        const grandChildIds = (root?.childAccounts ?? []).flatMap((child) =>
-            (child.childAccounts ?? []).map((grand) => grand.id)
-        )
-
-        const ids = _.uniq([...childIds, ...grandChildIds]).filter((id) => id !== account.id)
-
-        if (!ids.length) {
-            return json({ data: { items: [] } })
-        }
-
-        const q = _.trim(query)
-
-        const items = await db
-            .select()
-            .from(t.account)
-            .where(
-                and(
-                    inArray(t.account.id, ids),
-                    inArray(t.account.type, DESIGNATION_TYPES),
-                    q ? or(ilike(t.account.name, `%${q}%`), eq(t.account.id, q)) : undefined,
-                    type ? eq(t.account.type, type) : undefined,
-                    isNull(t.account.deletedAt)
-                )
-            )
-            .orderBy(asc(t.account.createdAt), asc(t.account.name))
-
-        return json({
-            data: { items }
-        })
-    } catch (e: any) {
-        if (isHttpError(e)) throw e
-
-        const code = _.get(e, 'cause.code', null)
-
-        switch (code) {
-            case '23503':
-                error(StatusCodes.UNPROCESSABLE_ENTITY, errors.FOREIGN_KEY_VIOLATION)
-                break
-
-            default:
-                error(StatusCodes.INTERNAL_SERVER_ERROR, {
-                    ...errors.INTERNAL_ERROR,
-                    message: e.message ?? errors.INTERNAL_ERROR.message
-                })
-                break
-        }
+    if (authAccount.type !== accountTypes.DISTRIBUTOR) {
+        error(StatusCodes.UNAUTHORIZED, errors.UNAUTHORIZED)
     }
+
+    // Validate payload
+
+    const payload = await request.json()
+    const { data, success } = schema.safeParse(payload)
+
+    if (!success) {
+        error(StatusCodes.BAD_REQUEST, errors.INVALID_DATA_FORMAT)
+    }
+
+    // `query` can be account id or name
+
+    const { query } = data
+    const queryCondition = query
+        ? or(ilike(t.account.name, `%${query}%`), eq(t.account.id, query))
+        : undefined
+
+    const parent = alias(t.account, 'parent')
+
+    const items = await db
+        .select({ ...getTableColumns(t.account) })
+        .from(t.account)
+        .leftJoin(parent, eq(parent.id, t.account.parentId))
+        .where(
+            and(
+                isNull(t.account.deletedAt),
+                eq(t.account.active, true),
+                or(eq(t.account.parentId, authAccount.id), eq(parent.parentId, authAccount.id)),
+                queryCondition
+            )
+        )
+        .orderBy(desc(t.account.createdAt), asc(t.account.name))
+
+    return json({
+        data: { items }
+    })
 }
