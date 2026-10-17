@@ -1,13 +1,25 @@
 <script lang="ts">
     import Icon from '@iconify/svelte'
     import step1 from '../../../../step1.svelte'
+
+    const searchFreezer = (event: KeyboardEvent) => {
+        if (event.key === 'Enter') {
+            step1.searchFreezer()
+        }
+    }
 </script>
 
 <div>
     <p class="label">Search freezer</p>
     <div class="flex items-center justify-between gap-2">
         <!-- input -->
-        <input class="input" type="search" placeholder="Enter barcode" bind:value={step1.barcode} />
+        <input
+            class="input"
+            type="search"
+            placeholder="Enter barcode"
+            bind:value={step1.barcode}
+            onkeydown={searchFreezer}
+        />
         <!-- search button -->
         <button class="btn" onclick={() => step1.searchFreezer()}>
             <Icon icon="icon-park-outline:search" width="18" />
