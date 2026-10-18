@@ -27,7 +27,7 @@
         {/if}
         <div class="flex flex-row-reverse gap-2 text-right">
             {#if isComplete}
-                <button type="button" class="btn btn-ghost btn-sm">Create</button>
+                <button type="button" class="btn btn-ghost btn-sm">Submit</button>
             {/if}
             <button type="button" class="btn btn-ghost btn-sm" onclick={back}>Back</button>
         </div>

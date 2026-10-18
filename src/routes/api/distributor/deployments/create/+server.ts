@@ -129,7 +129,7 @@ export const POST = async ({ request, locals }) => {
                 )
                 .returning()
 
-            return _.assign(deployment, { deploymentItems })
+            return _.assign(deployment, { destinationAccount, deploymentItems })
         })
 
         return json({ data: result })
