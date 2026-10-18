@@ -21,7 +21,7 @@ export default {
     },
     NOT_FOUND: {
         code: 'NOT_FOUND',
-        message: 'The requested resource was not found.'
+        message: 'No record was found matching your request.'
     },
     UNAUTHORIZED: {
         code: 'UNAUTHORIZED',

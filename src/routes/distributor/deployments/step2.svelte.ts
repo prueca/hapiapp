@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import api from '$lib/api'
 import errors from '$lib/errors'
 import { StatusCodes } from 'http-status-codes'
@@ -31,17 +32,23 @@ class Step2 {
             this.accounts = items ?? []
             this.loading = false
             this.message = null
+
+            if (_.isArray(this.accounts) && _.isEmpty(this.accounts)) {
+                this.message = errors.NOT_FOUND.message
+            }
         } catch (e: any) {
             this.loading = false
 
             switch (e.name) {
                 case 'HTTPError':
+                    this.message = `Error ${e.data?.code}`
+
                     if (e.response.status === StatusCodes.NOT_FOUND) {
                         if (e.data?.code !== errors.NOT_FOUND.code) {
                             // This means the api url does not exists
                             this.message = `Error ${errors.NOT_FOUND.code}`
                         } else {
-                            this.message = 'No match was found'
+                            this.message = errors.NOT_FOUND.message
                         }
                     }
 

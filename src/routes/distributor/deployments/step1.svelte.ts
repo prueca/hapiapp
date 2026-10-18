@@ -38,12 +38,14 @@ class Step1 {
 
             switch (e.name) {
                 case 'HTTPError':
+                    this.message = `Error ${e.data?.code}`
+
                     if (e.response.status === StatusCodes.NOT_FOUND) {
                         if (e.data?.code !== errors.NOT_FOUND.code) {
                             // This means the api url does not exists
                             this.message = `Error ${errors.NOT_FOUND.code}`
                         } else {
-                            this.message = 'Freezer was not found'
+                            this.message = errors.NOT_FOUND.message
                         }
                     }
 
