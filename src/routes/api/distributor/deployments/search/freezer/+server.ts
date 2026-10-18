@@ -39,33 +39,51 @@ export const POST = async ({ locals, request }) => {
             error(StatusCodes.BAD_REQUEST, errors.INVALID_DATA_FORMAT)
         }
 
-        // The query below results to freezer with its latest `deploymentItem`
-        // if exists. Otherwise `deploymentItem` will be null.
+        // Freezer status depends on the last associated
+        // `deploymentItem` record.
         //
-        // In PostgreSQL, null value is treated as larger than non-null values.
-        // So when sorted in descending order, freezer with `deploymentItem: null`
-        // will come first. This means the freezer has never been deployed to
-        // any account.
+        // Other than `barcode` and `distributorId`, a freezer must meet either
+        // of the following conditions:
+        //
+        // - `lastDeployment: null`
+        // - `lastDeployment.status: housed-available`
+        // - `lastDeployment.status: pullout`
+
+        const lastDeployment = db
+            .selectDistinctOn([t.deploymentItem.freezerId])
+            .from(t.deploymentItem)
+            .where(isNull(t.deploymentItem.deletedAt))
+            .orderBy(
+                t.deploymentItem.freezerId,
+                desc(t.deploymentItem.createdAt),
+                desc(t.deploymentItem.id)
+            )
+            .as('lastDeployment')
 
         const columns = _.omit(getTableColumns(t.freezer), ['createdAt', 'updatedAt', 'deletedAt'])
 
         const [freezer] = await db
-            .select(columns)
+            .select({
+                ...columns,
+                lastDeployment: {
+                    id: lastDeployment.id,
+                    status: lastDeployment.status
+                }
+            })
             .from(t.freezer)
-            .leftJoin(t.deploymentItem, eq(t.deploymentItem.freezerId, t.freezer.id))
+            .leftJoin(lastDeployment, eq(lastDeployment.freezerId, t.freezer.id))
             .where(
                 and(
-                    eq(t.freezer.distributorId, authAccount.id),
                     eq(t.freezer.barcode, data.barcode),
+                    eq(t.freezer.distributorId, authAccount.id),
                     isNull(t.freezer.deletedAt),
                     or(
-                        isNull(t.deploymentItem),
-                        eq(t.deploymentItem.status, deploymentItemStatus.HOUSED_AVAILABLE),
-                        eq(t.deploymentItem.status, deploymentItemStatus.PULLOUT)
+                        isNull(lastDeployment.id),
+                        eq(lastDeployment.status, deploymentItemStatus.HOUSED_AVAILABLE),
+                        eq(lastDeployment.status, deploymentItemStatus.PULLOUT)
                     )
                 )
             )
-            .orderBy(desc(t.deploymentItem.createdAt))
             .limit(1)
 
         if (!freezer) {
@@ -74,6 +92,7 @@ export const POST = async ({ locals, request }) => {
 
         return json({ data: freezer })
     } catch (e: any) {
+        console.log(e)
         if (isHttpError(e)) throw e
 
         const code = _.get(e, 'cause.code', null)

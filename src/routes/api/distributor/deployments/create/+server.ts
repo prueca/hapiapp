@@ -82,33 +82,59 @@ export const POST = async ({ request, locals }) => {
                 error(StatusCodes.INTERNAL_SERVER_ERROR, errors.INTERNAL_ERROR)
             }
 
-            // The fetch query below selects freezers with its `deploymentItem`.
+            // Freezer status depends on the last associated
+            // `deploymentItem` record.
             //
-            // It includes freezers with:
-            // - `deploymentItem: null`
-            // - `deploymentItem.status: housed-available`
-            // - `deploymentItem.status: pullout`
+            // The query below resolves to freezers that matches
+            // either of the following:
+            //
+            // - `lastDeployment: null`
+            // - `lastDeployment.status: housed-available`
+            // - `lastDeployment.status: pullout`
+            //
+            // Also, a freezer must be owned by the authenticated
+            // distributor account.
             //
             // A freezer that is filtered out means it is not
             // eligible for deployment.
 
+            const lastDeployment = txn
+                .selectDistinctOn([t.deploymentItem.freezerId], {
+                    ...getTableColumns(t.deploymentItem)
+                })
+                .from(t.deploymentItem)
+                .where(isNull(t.deploymentItem.deletedAt))
+                .orderBy(
+                    t.deploymentItem.freezerId,
+                    desc(t.deploymentItem.createdAt),
+                    desc(t.deploymentItem.id)
+                )
+                .as('lastDeployment')
+
             const selectedFreezers = await txn
-                .select({ ...getTableColumns(t.freezer), deploymentItem: t.deploymentItem })
+                .selectDistinctOn([t.freezer.id], {
+                    ...getTableColumns(t.freezer),
+                    lastDeployment: {
+                        id: lastDeployment.id,
+                        status: lastDeployment.status
+                    }
+                })
                 .from(t.freezer)
-                .leftJoin(t.deploymentItem, eq(t.deploymentItem.freezerId, t.freezer.id))
+                .leftJoin(lastDeployment, eq(lastDeployment.freezerId, t.freezer.id))
                 .where(
                     and(
                         eq(t.freezer.distributorId, authAccount.id),
                         isNull(t.freezer.deletedAt),
                         inArray(t.freezer.id, freezerIds),
                         or(
-                            isNull(t.deploymentItem),
-                            eq(t.deploymentItem.status, deploymentItemStatus.HOUSED_AVAILABLE),
-                            eq(t.deploymentItem.status, deploymentItemStatus.PULLOUT)
+                            isNull(lastDeployment.id),
+                            inArray(lastDeployment.status, [
+                                deploymentItemStatus.HOUSED_AVAILABLE,
+                                deploymentItemStatus.PULLOUT
+                            ])
                         )
                     )
                 )
-                .orderBy(desc(t.deploymentItem.createdAt))
 
             if (!selectedFreezers.length) {
                 error(StatusCodes.NOT_FOUND, errors.NOT_FOUND)
