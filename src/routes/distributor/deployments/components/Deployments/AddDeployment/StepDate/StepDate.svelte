@@ -1,4 +1,5 @@
 <script lang="ts">
+    import moment from 'moment'
     import DatePicker from './DatePicker.svelte'
     import deployment from '../../../../deployment.svelte'
 
@@ -6,6 +7,8 @@
         deployment.setCurrentStep(2)
         window.scrollTo({ top: 0, behavior: 'smooth' })
     }
+
+    const date = $derived(moment(deployment.deploymentDate).format('ddd, MMM DD YYYY'))
 </script>
 
 <div class="flex flex-col gap-4 bg-(--c6) p-4 md:gap-4">
@@ -13,8 +16,12 @@
         <DatePicker />
     </div>
     <div class="section bg-base-100">
-        <div class="label">Deployment Date</div>
-        <div class="deployment-date">Mon, Oct 12 2026</div>
+        <div class="label">Deployment date</div>
+        {#if !deployment.deploymentDate}
+            <div class="text-gray-400 italic">Select deployment schedule</div>
+        {:else}
+            <div class="deployment-date">{date}</div>
+        {/if}
         <div class="flex flex-row-reverse gap-2 text-right">
             <button type="button" class="btn btn-ghost btn-sm">Submit</button>
             <button type="button" class="btn btn-ghost btn-sm" onclick={back}>Back</button>
@@ -34,7 +41,7 @@
     }
 
     .deployment-date {
-        @apply mb-4 text-xl font-medium text-(--c1) md:text-xl;
+        @apply mb-4 text-xl font-medium text-(--c8) md:text-xl;
     }
 
     .btn {

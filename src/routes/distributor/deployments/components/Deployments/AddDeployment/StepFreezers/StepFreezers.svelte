@@ -20,7 +20,7 @@
     <!-- freezers added -->
     <div class="section bg-base-100">
         <div class="mb-2">
-            <div class="label">Freezers Added</div>
+            <div class="label">Freezers added</div>
             <!-- <div class="text-xs text-gray-400">List of items set for deployment</div> -->
         </div>
         {#if deployment.freezers.length === 0}
