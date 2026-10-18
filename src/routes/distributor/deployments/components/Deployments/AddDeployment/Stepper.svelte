@@ -1,17 +1,36 @@
-<!--svelte-ignore a11y_missing_attribute -->
+<!--svelte-ignore a11y_invalid_attribute -->
 <script lang="ts">
     import Icon from '@iconify/svelte'
     import deployment from '../../../deployment.svelte'
+
+    const navigate = (step: number) => {
+        switch (step) {
+            case 3:
+                if (deployment.freezers.length && deployment.destinationAccount) {
+                    deployment.setCurrentStep(3)
+                }
+                break
+
+            case 2:
+                if (deployment.freezers.length) {
+                    deployment.setCurrentStep(2)
+                }
+                break
+
+            default:
+                deployment.setCurrentStep(1)
+        }
+    }
 </script>
 
 <div class="stepper">
     <!-- Step 1: Select Freezer -->
-    <div class="step active">
+    <button type="button" class="step active btn btn-link" onclick={() => navigate(1)}>
         <div class="step-icon">
             <Icon icon="reicon:fridge-filled" width="24" />
         </div>
         <span class="step-label">Freezers</span>
-    </div>
+    </button>
 
     <!-- Connector Line -->
     <div class="connector">
@@ -21,12 +40,17 @@
     </div>
 
     <!-- Step 2: Select Account -->
-    <div class="step" class:active={deployment.currentStep >= 2}>
+    <button
+        type="button"
+        class="step btn btn-link"
+        class:active={deployment.currentStep >= 2}
+        onclick={() => navigate(2)}
+    >
         <div class="step-icon">
             <Icon icon="bi:passport-fill" width="24" />
         </div>
         <span class="step-label">Account</span>
-    </div>
+    </button>
 
     <!-- Connector Line -->
     <div class="connector">
@@ -36,12 +60,17 @@
     </div>
 
     <!-- Step 3: Select Date -->
-    <div class="step" class:active={deployment.currentStep === 3}>
+    <button
+        type="button"
+        class="step btn btn-link"
+        class:active={deployment.currentStep === 3}
+        onclick={() => navigate(3)}
+    >
         <div class="step-icon">
             <Icon icon="clarity:calendar-solid-badged" width="24" />
         </div>
         <span class="step-label">Date</span>
-    </div>
+    </button>
 </div>
 
 <style lang="postcss">
@@ -54,14 +83,10 @@
     }
 
     .step {
-        @apply flex h-auto flex-1 flex-col items-center text-gray-300;
+        @apply flex h-auto flex-1 flex-col items-center text-gray-300 no-underline;
 
         &.active {
             @apply text-(--active-color);
-        }
-
-        .step-icon {
-            @apply mb-2;
         }
 
         .step-label {
