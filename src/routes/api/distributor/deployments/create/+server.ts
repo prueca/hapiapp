@@ -1,5 +1,6 @@
 import { json, error, isHttpError } from '@sveltejs/kit'
 import { StatusCodes } from 'http-status-codes'
+import moment from 'moment'
 import z from 'zod'
 import _ from 'lodash'
 
@@ -14,7 +15,7 @@ import { originStatus } from '$lib/config/deployment.status'
 import { deploymentItemStatus, destinationStatus } from '$lib/config/deployment.status'
 
 const schema = z.object({
-    freezers: z.array(z.record(z.string(), z.any())).nonempty(),
+    freezerIds: z.array(z.ulid()).nonempty(),
     destinationId: z.string().nonempty(),
     deploymentDate: z.coerce.date(),
     status: z.enum(_.values(originStatus)).optional()
@@ -39,7 +40,7 @@ export const POST = async ({ request, locals }) => {
             error(StatusCodes.BAD_REQUEST, errors.INVALID_DATA_FORMAT)
         }
 
-        const { freezers, destinationId, deploymentDate, status } = validation.data
+        const { freezerIds, destinationId, deploymentDate, status } = validation.data
 
         // Destination account should be a descendant of the authenticated
         // distributor account.
@@ -99,7 +100,7 @@ export const POST = async ({ request, locals }) => {
                     and(
                         eq(t.freezer.distributorId, authAccount.id),
                         isNull(t.freezer.deletedAt),
-                        inArray(t.freezer.id, _.map(freezers, 'id')),
+                        inArray(t.freezer.id, freezerIds),
                         or(
                             isNull(t.deploymentItem),
                             eq(t.deploymentItem.status, deploymentItemStatus.HOUSED_AVAILABLE),
@@ -129,7 +130,11 @@ export const POST = async ({ request, locals }) => {
                 )
                 .returning()
 
-            return _.assign(deployment, { destinationAccount, deploymentItems })
+            return _.assign(deployment, {
+                destinationAccount,
+                deploymentItems,
+                deploymentDate: moment(deployment.deploymentDate).format('ddd, MMM DD YYYY')
+            })
         })
 
         return json({ data: result })

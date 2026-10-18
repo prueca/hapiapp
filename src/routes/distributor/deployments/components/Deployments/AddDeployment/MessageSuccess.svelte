@@ -14,11 +14,15 @@
                     <div class="flex flex-col gap-4">
                         <div>
                             <div class="mb-1 text-xs text-gray-400">Destination Account</div>
-                            <div class="text-sm font-medium">{deployment.data?.name}</div>
+                            <div class="text-sm font-medium">
+                                {deployment.data?.destinationAccount.name}
+                            </div>
                         </div>
                         <div>
                             <div class="mb-1 text-xs text-gray-400">Account Address</div>
-                            <div class="text-sm font-medium">{deployment.data?.address}</div>
+                            <div class="text-sm font-medium">
+                                {deployment.data?.destinationAccount.address}
+                            </div>
                         </div>
                         <div>
                             <div class="mb-1 text-xs text-gray-400">Deployment Date</div>
