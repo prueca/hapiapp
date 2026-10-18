@@ -9,7 +9,7 @@
     }
 </script>
 
-<div class="mb-4">
+<div>
     <p class="label">Search account</p>
     <div class="flex items-center justify-between gap-2">
         <!-- input -->
@@ -25,6 +25,7 @@
             <Icon icon="icon-park-outline:search" width="18" />
         </button>
     </div>
+    <p class="label mt-2 text-xs" class:hidden={!step2.message}>{step2.message}</p>
 </div>
 
 <style lang="postcss">

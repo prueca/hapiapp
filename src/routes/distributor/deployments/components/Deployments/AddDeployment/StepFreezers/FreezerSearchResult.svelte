@@ -15,7 +15,7 @@
 </script>
 
 {#if step1.loading}
-    <Skeleton class="mt-2 h-34 w-full" />
+    <Skeleton class="h-34 w-full" />
 {:else if freezer}
     <div class="freezer-search-result">
         <div class="mb-4 flex flex-col gap-1">

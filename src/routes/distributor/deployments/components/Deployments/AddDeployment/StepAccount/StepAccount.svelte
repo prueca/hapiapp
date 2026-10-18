@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Skeleton from '../../../../../../components/Skeleton.svelte'
     import AccountSearch from './AccountSearch.svelte'
     import AccountSearchResult from './AccountSearchResult.svelte'
     import AccountSelected from './AccountSelected.svelte'
@@ -20,11 +21,15 @@
     <!-- search account -->
     <div class="section bg-base-100">
         <AccountSearch />
-        <div class="overflow-hidden rounded">
-            {#each step2.accounts as account (account.id)}
-                <AccountSearchResult {account} />
-            {/each}
-        </div>
+        {#if step2.loading}
+            <Skeleton class="h-34 w-full" />
+        {:else if step2.accounts?.length}
+            <div class="mt-4 overflow-hidden rounded">
+                {#each step2.accounts as account (account.id)}
+                    <AccountSearchResult {account} />
+                {/each}
+            </div>
+        {/if}
     </div>
 
     <!-- destination account -->

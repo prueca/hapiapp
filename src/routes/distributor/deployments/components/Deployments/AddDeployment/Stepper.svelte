@@ -95,7 +95,7 @@
     }
 
     .connector {
-        @apply mx-2 hidden h-0.5 flex-1 bg-gray-300 md:block;
+        @apply mx-2 hidden h-px flex-1 bg-gray-300 md:block;
 
         .active {
             @apply h-full bg-(--active-color);

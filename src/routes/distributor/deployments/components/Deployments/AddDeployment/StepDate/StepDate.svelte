@@ -9,6 +9,9 @@
     }
 
     const date = $derived(moment(deployment.deploymentDate).format('ddd, MMM DD YYYY'))
+    const isComplete = $derived(
+        deployment.freezers.length && deployment.destinationAccount && deployment.deploymentDate
+    )
 </script>
 
 <div class="flex flex-col gap-4 bg-(--c6) p-4 md:gap-4">
@@ -23,7 +26,9 @@
             <div class="deployment-date">{date}</div>
         {/if}
         <div class="flex flex-row-reverse gap-2 text-right">
-            <button type="button" class="btn btn-ghost btn-sm">Submit</button>
+            {#if isComplete}
+                <button type="button" class="btn btn-ghost btn-sm">Create</button>
+            {/if}
             <button type="button" class="btn btn-ghost btn-sm" onclick={back}>Back</button>
         </div>
     </div>
