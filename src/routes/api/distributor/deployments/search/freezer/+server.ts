@@ -39,6 +39,14 @@ export const POST = async ({ locals, request }) => {
             error(StatusCodes.BAD_REQUEST, errors.INVALID_DATA_FORMAT)
         }
 
+        // The query below results to freezer with its latest `deploymentItem`
+        // if exists. Otherwise `deploymentItem` will be null.
+        //
+        // In PostgreSQL, null value is treated as larger than non-null values.
+        // So when sorted in descending order, freezer with `deploymentItem: null`
+        // will come first. This means the freezer has never been deployed to
+        // any account.
+
         const columns = _.omit(getTableColumns(t.freezer), ['createdAt', 'updatedAt', 'deletedAt'])
 
         const [freezer] = await db
