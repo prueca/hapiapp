@@ -14,12 +14,19 @@ import accountTypes from '$lib/config/account.types'
 import { originStatus } from '$lib/config/deployment.status'
 import { deploymentItemStatus, destinationStatus } from '$lib/config/deployment.status'
 
-const schema = z.object({
-    freezerIds: z.array(z.ulid()).nonempty(),
-    destinationId: z.string().nonempty(),
-    deploymentDate: z.coerce.date(),
-    status: z.enum(_.values(originStatus)).optional()
-})
+const schema = z
+    .object({
+        freezerIds: z.array(z.ulid()).nonempty(),
+        destinationId: z.string().nonempty(),
+        deploymentDate: z.coerce.date(),
+        status: z.enum(_.values(originStatus)).optional()
+    })
+    .refine((data) => {
+        const deploymentDate = moment(data.deploymentDate)
+        const isBehind = deploymentDate.isBefore(moment(), 'day')
+
+        return !isBehind
+    })
 
 export const POST = async ({ request, locals }) => {
     try {
