@@ -38,7 +38,7 @@
 </div>
 
 <div class="modal" class:modal-open={create.open}>
-    <div class="modal-box">
+    <div class="modal-box max-h-svh">
         <div class="heading">
             <p class="mb-4 text-xl font-medium">Create an account</p>
         </div>

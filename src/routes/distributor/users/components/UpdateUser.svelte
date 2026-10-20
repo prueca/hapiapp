@@ -8,7 +8,7 @@
 </script>
 
 <div class="modal" class:modal-open={update.open}>
-    <div class="modal-box">
+    <div class="modal-box max-h-svh">
         <div class="heading">
             <p class="mb-4 text-xl font-medium">Update user</p>
         </div>
