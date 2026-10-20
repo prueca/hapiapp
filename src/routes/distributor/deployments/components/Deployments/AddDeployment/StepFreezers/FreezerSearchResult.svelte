@@ -4,8 +4,8 @@
     import _ from 'lodash'
     import Icon from '@iconify/svelte'
     import Skeleton from '../../../../../../components/Skeleton.svelte'
-    import step1 from '../../../../step1.svelte'
-    import deployment from '../../../../deployment.svelte'
+    import step1 from '../step1.svelte'
+    import deployment from '../deployment.svelte'
 
     let freezer = $derived(step1.freezer)
 

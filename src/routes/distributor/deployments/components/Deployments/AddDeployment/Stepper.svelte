@@ -1,7 +1,7 @@
 <!--svelte-ignore a11y_invalid_attribute -->
 <script lang="ts">
     import Icon from '@iconify/svelte'
-    import deployment from '../../../deployment.svelte'
+    import deployment from './deployment.svelte'
 
     const navigate = (step: number) => {
         switch (step) {

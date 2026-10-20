@@ -1,7 +1,7 @@
 <script lang="ts">
     import moment from 'moment'
     import DatePicker from './DatePicker.svelte'
-    import deployment from '../../../../deployment.svelte'
+    import deployment from '../deployment.svelte'
 
     const back = () => {
         deployment.setCurrentStep(2)

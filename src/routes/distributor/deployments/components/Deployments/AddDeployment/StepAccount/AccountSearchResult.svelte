@@ -2,7 +2,7 @@
     import _ from 'lodash'
     import Icon from '@iconify/svelte'
     import { getDisplayText } from '$lib/config/account.types'
-    import deployment from '../../../../deployment.svelte'
+    import deployment from '../deployment.svelte'
 
     let { account } = $props()
 

@@ -1,6 +1,6 @@
 <script lang="ts">
     import Icon from '@iconify/svelte'
-    import step1 from '../../../../step1.svelte'
+    import step1 from '../step1.svelte'
 
     const searchFreezer = (event: KeyboardEvent) => {
         if (event.key === 'Enter') {

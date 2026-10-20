@@ -1,5 +1,5 @@
 <script lang="ts">
-    import deployment from '../../../deployment.svelte'
+    import deployment from './deployment.svelte'
 </script>
 
 <div class="modal" class:modal-open={deployment.loading}>

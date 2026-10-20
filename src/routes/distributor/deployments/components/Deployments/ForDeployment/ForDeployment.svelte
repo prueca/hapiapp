@@ -3,7 +3,7 @@
     import ListItem from './ListItem.svelte'
     import Search from './Search.svelte'
     import Skeleton from '../../../../../components/Skeleton.svelte'
-    import deploymentList from '../../../deployment.list.svelte'
+    import deploymentList from './deployment.list.svelte'
 
     onMount(() => deploymentList.fetch())
 </script>

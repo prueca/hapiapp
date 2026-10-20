@@ -1,7 +1,7 @@
 <script lang="ts">
     import _ from 'lodash'
     import Icon from '@iconify/svelte'
-    import deployment from '../../../deployment.svelte'
+    import deployment from './deployment.svelte'
 </script>
 
 <div class="modal" class:modal-open={deployment.success}>

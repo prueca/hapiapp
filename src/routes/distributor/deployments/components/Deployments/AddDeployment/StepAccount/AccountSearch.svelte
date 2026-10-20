@@ -1,6 +1,6 @@
 <script lang="ts">
     import Icon from '@iconify/svelte'
-    import step2 from '../../../../step2.svelte'
+    import step2 from '../step2.svelte'
 
     const searchAccount = (event: KeyboardEvent) => {
         if (event.key === 'Enter') {

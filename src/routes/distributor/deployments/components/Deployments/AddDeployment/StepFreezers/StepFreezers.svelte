@@ -2,7 +2,7 @@
     import FreezerSearch from './FreezerSearch.svelte'
     import FreezerSearchResult from './FreezerSearchResult.svelte'
     import FreezerAdded from './FreezerAdded.svelte'
-    import deployment from '../../../../deployment.svelte'
+    import deployment from '../deployment.svelte'
 
     const next = () => {
         deployment.setCurrentStep(2)

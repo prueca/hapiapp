@@ -3,7 +3,7 @@
 <script lang="ts">
     import _ from 'lodash'
     import Icon from '@iconify/svelte'
-    import deployment from '../../../../deployment.svelte'
+    import deployment from '../deployment.svelte'
 
     let { freezer } = $props()
 </script>

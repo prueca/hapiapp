@@ -1,6 +1,6 @@
 <script lang="ts">
     import moment from 'moment'
-    import deployment from '../../../../deployment.svelte'
+    import deployment from '../deployment.svelte'
 </script>
 
 <div>

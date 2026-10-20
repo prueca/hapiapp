@@ -6,7 +6,7 @@
     import MessageLoading from './MessageLoading.svelte'
     import MessageSuccess from './MessageSuccess.svelte'
     import MessageError from './MessageError.svelte'
-    import deployment from '../../../deployment.svelte'
+    import deployment from './deployment.svelte'
 </script>
 
 <MessageLoading />

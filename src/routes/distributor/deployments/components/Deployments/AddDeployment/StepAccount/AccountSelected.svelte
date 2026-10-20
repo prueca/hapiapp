@@ -1,7 +1,7 @@
 <script lang="ts">
     import _ from 'lodash'
     import { getDisplayText } from '$lib/config/account.types'
-    import deployment from '../../../../deployment.svelte'
+    import deployment from '../deployment.svelte'
 </script>
 
 {#if deployment.destinationAccount}
