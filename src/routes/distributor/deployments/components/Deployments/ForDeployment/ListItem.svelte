@@ -4,23 +4,6 @@
     import Icon from '@iconify/svelte'
     import Freezer from './Freezer.svelte'
 
-    // let { data } = $props()
-    // let freezerListOpen = $state(false)
-    // let status = $derived(_.startCase(data.status))
-    // let deploymentDate = $derived(moment(data.deploymentDate).format('MMM-DD-YYYY ddd'))
-
-    // let freezerListOpen = $state(false)
-
-    // const data = {
-    //     destination: {
-    //         name: 'Wancavino',
-    //         address: 'Montalban, Rizal'
-    //     },
-    //     status: 'For Deployment',
-    //     deploymentDate: 'Fri, Oct 17 2026',
-    //     deploymentItemCount: 5
-    // }
-
     let { deployment } = $props()
 
     let status = $derived(_.startCase(deployment.originStatus))
@@ -33,7 +16,12 @@
 <div class="list-item">
     <div class="details">
         <div class="flex-1 font-semibold">{deployment.destination.name}</div>
-        <div class="status-badge badge badge-xs">{status}</div>
+        <div class="flex items-center gap-2">
+            <div class="status-badge badge badge-xs">{status}</div>
+            {#if deployment.overdue}
+                <div class="status-badge overdue badge badge-xs">Overdue</div>
+            {/if}
+        </div>
         <div class="text-xs text-gray-400">{deployment.destination.address}</div>
         <div class="text-xs text-gray-400">{deploymentDate}</div>
     </div>
@@ -86,6 +74,10 @@
     }
 
     .status-badge {
-        @apply mb-1 rounded border-none bg-(--c1) text-white;
+        @apply mb-1 rounded border-none bg-(--c4) text-white;
+
+        &.overdue {
+            @apply bg-(--c1);
+        }
     }
 </style>

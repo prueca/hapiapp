@@ -2,6 +2,7 @@ import _ from 'lodash'
 import z from 'zod'
 import { StatusCodes } from 'http-status-codes'
 import { json, error, isHttpError } from '@sveltejs/kit'
+import moment from 'moment'
 import errors from '$lib/errors'
 import { originStatus } from '$lib/config/deployment.status'
 
@@ -126,6 +127,16 @@ export const POST = async ({ locals, request }) => {
             deploymentItem: undefined,
             deploymentItems: rows.map((row) => row.deploymentItem).filter(Boolean)
         }))
+
+        /**
+         * Iterate over items to check if deployment is overdue or not
+         */
+
+        items = _.map(items, (x) => {
+            x.overdue = moment().isAfter(moment(x.deploymentDate), 'day')
+
+            return x
+        })
 
         const nextCursor = items.length ? _.last(items)!.id : null
 
