@@ -63,6 +63,7 @@ export const POST = async ({ locals, request }) => {
         const origin = alias(t.account, 'origin')
         const destination = alias(t.account, 'destination')
         const deploymentItem = alias(t.deploymentItem, 'deploymentItem')
+        const freezer = alias(t.freezer, 'freezer')
 
         const conditions = [eq(t.deployment.originId, authAccount.id)]
         let sort = [desc(t.deployment.createdAt)]
@@ -104,12 +105,13 @@ export const POST = async ({ locals, request }) => {
                 ...getTableColumns(t.deployment),
                 origin,
                 destination,
-                deploymentItem
+                deploymentItem: { ...deploymentItem, freezer }
             })
             .from(t.deployment)
             .innerJoin(origin, eq(origin.id, t.deployment.originId))
             .innerJoin(destination, eq(destination.id, t.deployment.destinationId))
             .leftJoin(deploymentItem, eq(deploymentItem.deploymentId, t.deployment.id))
+            .innerJoin(freezer, eq(freezer.id, deploymentItem.freezerId))
             .where(conditions.length === 1 ? conditions[0] : and(...conditions))
             .orderBy(...sort)
             .limit(LIMIT)
@@ -127,7 +129,9 @@ export const POST = async ({ locals, request }) => {
 
         const nextCursor = items.length ? _.last(items)!.id : null
 
-        return json({ items, nextCursor })
+        return json({
+            data: { items, nextCursor }
+        })
     } catch (e: any) {
         if (isHttpError(e)) throw e
 

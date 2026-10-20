@@ -9,25 +9,33 @@
     // let status = $derived(_.startCase(data.status))
     // let deploymentDate = $derived(moment(data.deploymentDate).format('MMM-DD-YYYY ddd'))
 
-    let freezerListOpen = $state(false)
+    // let freezerListOpen = $state(false)
 
-    const data = {
-        destination: {
-            name: 'Wancavino',
-            address: 'Montalban, Rizal'
-        },
-        status: 'For Deployment',
-        deploymentDate: 'Fri, Oct 17 2026',
-        deploymentItemCount: 5
-    }
+    // const data = {
+    //     destination: {
+    //         name: 'Wancavino',
+    //         address: 'Montalban, Rizal'
+    //     },
+    //     status: 'For Deployment',
+    //     deploymentDate: 'Fri, Oct 17 2026',
+    //     deploymentItemCount: 5
+    // }
+
+    let { deployment } = $props()
+
+    let status = $derived(_.startCase(deployment.originStatus))
+
+    let deploymentDate = $derived(moment(deployment.deploymentDate).format('ddd, MMM DD YYYY'))
+
+    let freezerListOpen = $state(false)
 </script>
 
 <div class="list-item">
     <div class="details">
-        <div class="flex-1 font-semibold">{data.destination.name}</div>
-        <div class="status-badge badge badge-xs">{data.status}</div>
-        <div class="text-xs text-gray-400">{data.destination.address}</div>
-        <div class="text-xs text-gray-400">{data.deploymentDate}</div>
+        <div class="flex-1 font-semibold">{deployment.destination.name}</div>
+        <div class="status-badge badge badge-xs">{status}</div>
+        <div class="text-xs text-gray-400">{deployment.destination.address}</div>
+        <div class="text-xs text-gray-400">{deploymentDate}</div>
     </div>
     <div class="actions">
         <div class="flex items-center">
@@ -47,15 +55,16 @@
         >
             <Icon icon="carbon:list-boxes" />
             <div class="badge rounded bg-(--c1) badge-sm text-white">
-                {data.deploymentItemCount}
+                {deployment.deploymentItems.length}
             </div>
         </button>
     </div>
     <div class="collapse rounded-none" class:collapse-open={freezerListOpen}>
         <div class="collapse-content p-0">
             <div class="flex flex-col gap-2 border-t border-gray-200 p-2">
-                <Freezer />
-                <Freezer />
+                {#each deployment.deploymentItems as deploymentItem (deploymentItem.id)}
+                    <Freezer {deploymentItem} />
+                {/each}
             </div>
         </div>
     </div>

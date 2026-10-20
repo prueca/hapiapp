@@ -1,23 +1,18 @@
 <script lang="ts">
     import _ from 'lodash'
-    import Icon from '@iconify/svelte'
 
-    let data = {
-        barcode: '982675644385781919917342',
-        brand: 'Aucma',
-        model: 'Swing Up Freezer',
-        capacity: '18',
-        unit: 'cu',
-        yearModel: 2021
-    }
+    let { deploymentItem } = $props()
 
-    let brandModel = $derived(`${data.brand} - ${data.model}`)
-    let meta = $derived(`${data.capacity}${data.unit} • ${data.yearModel}`)
+    let freezer = $derived(deploymentItem.freezer)
+
+    let brandModel = $derived(`${freezer.brand} - ${freezer.model}`)
+
+    let meta = $derived(`${freezer.capacity}${freezer.unit} • ${freezer.yearModel}`)
 </script>
 
 <div class="rounded bg-gray-50 p-4">
     <div class="flex flex-col gap-2">
-        <div class="text-sm font-medium">{data.barcode}</div>
+        <div class="text-sm font-medium">{freezer.barcode}</div>
         <div class="text-xs text-gray-400">{brandModel}</div>
         <div class="text-xs text-gray-400">{meta}</div>
     </div>
