@@ -10,18 +10,13 @@
     onMount(() => accounts.load())
 </script>
 
-<div class="px-4">
+<div class="px-4 md:px-0">
     <div class="mb-2 flex items-center justify-between">
         <span class="text-lg">Accounts</span>
         <div class="flex items-center">
-            <!-- <button type="button" class="delete-account btn btn-ghost btn-xs">
-                <span>&minus;</span>
-                <span>Delete</span>
-            </button>
-            <div class="divider-sm divider mx-0 mt-0.5 divider-horizontal h-5"></div> -->
             <button
                 type="button"
-                class="create-account btn btn-ghost btn-xs"
+                class="create-account btn btn-link btn-xs"
                 onclick={() => create.toggle()}
             >
                 <span class="-mt-0.5">&plus;</span>
@@ -64,8 +59,7 @@
 <style lang="postcss">
     @reference 'tailwindcss';
 
-    .create-account,
-    .delete-account {
-        @apply flex items-center gap-2 rounded text-sm;
+    .create-account {
+        @apply flex items-center gap-2 rounded px-0 text-sm no-underline;
     }
 </style>

@@ -10,13 +10,13 @@
     onMount(() => users.load())
 </script>
 
-<div class="px-4 text-justify">
+<div class="px-4 text-justify md:px-0">
     <div class="mb-2 flex items-center justify-between">
         <span class="text-lg">Users</span>
         <div class="flex items-center">
             <button
                 type="button"
-                class="create-user btn btn-ghost btn-xs"
+                class="create-user btn btn-link btn-xs"
                 onclick={() => create.toggle(true)}
             >
                 <span class="-mt-0.5">&plus;</span>
@@ -58,6 +58,6 @@
     @reference 'tailwindcss';
 
     .create-user {
-        @apply flex items-center gap-2 text-sm;
+        @apply flex items-center gap-2 px-0 text-sm no-underline;
     }
 </style>

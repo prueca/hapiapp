@@ -12,6 +12,6 @@
     @reference 'tailwindcss';
 
     .center {
-        @apply flex h-screen items-center justify-center;
+        @apply flex h-svh items-center justify-center;
     }
 </style>

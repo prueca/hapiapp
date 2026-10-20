@@ -1,25 +1,17 @@
 <script lang="ts">
-    import Dock from '../../components/Dock.svelte'
-    import TopBar from '../../components/TopBar'
-    import AccountName from '../../components/AccountName.svelte'
+    import Nav from '../components/Nav.svelte'
     import AccountList from './components/AccountList.svelte'
-    import Chart from '../../components/Chart.svelte'
     import CreateAccount from './components/CreateAccount.svelte'
     import DeleteAccount from './components/DeleteAccount.svelte'
     import UpdateAccount from './components/UpdateAccount.svelte'
 </script>
 
 <div class="content-wrapper">
-    <div class="pb-21">
-        <TopBar />
-        <AccountName />
-        <Chart />
-        <AccountList />
-        <CreateAccount />
-        <DeleteAccount />
-        <UpdateAccount />
-    </div>
-    <Dock />
+    <Nav />
+    <AccountList />
+    <CreateAccount />
+    <DeleteAccount />
+    <UpdateAccount />
 </div>
 
 <style lang="postcss">

@@ -1,8 +1,5 @@
 <script lang="ts">
-    import Dock from '../../components/Dock.svelte'
-    import TopBar from '../../components/TopBar'
-    import AccountName from '../../components/AccountName.svelte'
-    import Chart from '../../components/Chart.svelte'
+    import Nav from '../components/Nav.svelte'
     import UserList from './components/UserList.svelte'
     import CreateUser from './components/CreateUser.svelte'
     import UpdateUser from './components/UpdateUser.svelte'
@@ -10,16 +7,11 @@
 </script>
 
 <div class="content-wrapper">
-    <div class="pb-21">
-        <TopBar />
-        <AccountName />
-        <Chart />
-        <UserList />
-        <CreateUser />
-        <UpdateUser />
-        <DeleteUser />
-    </div>
-    <Dock />
+    <Nav />
+    <UserList />
+    <CreateUser />
+    <UpdateUser />
+    <DeleteUser />
 </div>
 
 <style lang="postcss">

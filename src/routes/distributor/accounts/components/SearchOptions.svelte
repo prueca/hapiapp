@@ -84,10 +84,10 @@
 
         input,
         select {
-            @apply rounded-lg;
+            @apply rounded;
         }
     }
     .close-btn {
-        @apply cursor-pointer rounded-lg;
+        @apply cursor-pointer rounded;
     }
 </style>
